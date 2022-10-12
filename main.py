@@ -6,3 +6,4 @@ def main():
 if __name__ == '__main__':
     teacherReginaldo = Teacher ("Reginaldo R.K.", [])
     print(teacherReginaldo.name)
+    input("Digite enter para finalizar.")
