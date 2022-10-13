@@ -139,11 +139,20 @@ def loadBlocksOfCurricularComponentWithTeachers():
 def getClassesCopy():
     return __classes.copy()
 
+def getClasses():     #cuidado com efeito colateral!
+    return __classes
+
 def getTeachersCopy():
     return __teachers.copy()
 
+def getTeachers():    #cuidado com efeito colateral!
+    return __teachers
+
 def getBlocksOfCCsWithTeachersCopy():
     return __blocksOfCCsWithTeachers.copy()
+
+def getBlocksOfCCsWithTeachers():     #cuidado com efeito colateral!
+    return __blocksOfCCsWithTeachers
 
 def addTeacher(teacherNameArg, availabilitiesArg):
     __teachers[teacherNameArg] = Teacher(teacherNameArg, availabilitiesArg)
