@@ -16,8 +16,22 @@ if __name__ == '__main__':
     print(dataLoader.getBlocksOfCCsWithTeachersCopy()[0].teacher.name)
     print(dataLoader.getBlocksOfCCsWithTeachersCopy()[0].teacher == dataLoader.__blocksOfCCsWithTeachers[1].teacher)
     
+    #Teste efeito colateral para matriz
     period1MorningTimeTable = dataLoader.getClassesCopy()[0].timeTable.copy()
     period1MorningTimeTable[0][0] = 1
     print(period1MorningTimeTable) 
     print(dataLoader.getClassesCopy()[0].timeTable) 
-    #input("Digite enter para finalizar.")
+
+    #teste de indice do vetor de blocos do dataLoader
+    firstBlock = dataLoader.getBlocksOfCCsWithTeachersCopy()[0]
+    indexOfBlock = dataLoader.getBlocksOfCCsWithTeachersCopy().index(firstBlock)
+    print(indexOfBlock)
+
+    secondBlock = dataLoader.getBlocksOfCCsWithTeachersCopy()[1]
+    indexOfBlock = dataLoader.getBlocksOfCCsWithTeachersCopy().index(secondBlock)
+    print(indexOfBlock)
+    
+    print(firstBlock == secondBlock)
+    print(firstBlock is secondBlock)
+    print(firstBlock == dataLoader.getBlocksOfCCsWithTeachersCopy()[0])
+    print(firstBlock is dataLoader.getBlocksOfCCsWithTeachersCopy()[0])
