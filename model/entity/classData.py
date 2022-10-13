@@ -8,7 +8,7 @@ class ClassData:
         self,
         semesterNumberArg,
         shiftArg,  #turno: MORNING, AFTERNOON ou NIGHT
-        timeTableArg=constructClassTable(),
+        timeTableArg = constructClassTable(),
     ):
         self.semesterNumber = semesterNumberArg
         self.shift = shiftArg    #turno: MORNING, AFTERNOON ou NIGHT

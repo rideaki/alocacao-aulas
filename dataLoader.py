@@ -1,4 +1,4 @@
-from model.business.dataLoaderBusiness import addTeacher, constructBlockOfTwoHours
+from numpy import array
 from model.entity.classData import ClassData
 from model.entity.teacher import Teacher
 from model.entity.blockOfTwoHoursAllocation import BlockOfTwoHoursAllocation
@@ -14,6 +14,7 @@ def loadClasses():
     __classes.append(ClassData(2, AFTERNOON))
     __classes.append(ClassData(3, MORNING))
     __classes.append(ClassData(3, AFTERNOON))
+
 
 __teachers = {}
 
@@ -36,7 +37,6 @@ def loadTeachers():
 __blocksOfCCsWithTeachers = []
 
 def loadBlocksOfCurricularComponentWithTeachers():
-    
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("APC", 1, MORNING, "Gilvan"))
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("APC", 1, MORNING, "Gilvan"))
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("APC", 1, AFTERNOON, "Gilvan"))
@@ -132,3 +132,31 @@ def loadBlocksOfCurricularComponentWithTeachers():
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EPF", 3, AFTERNOON, "Albertina"))
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EPF", 3, AFTERNOON, "Albertina"))
 
+#####################################################################################################
+#### AUXILIAR FUNCTIONS #############################################################################
+#####################################################################################################
+
+def getClassesCopy():
+    return __classes.copy()
+
+def getTeachersCopy():
+    return __teachers.copy()
+
+def getBlocksOfCCsWithTeachersCopy():
+    return __blocksOfCCsWithTeachers.copy()
+
+def addTeacher(teacherNameArg, availabilitiesArg):
+    __teachers[teacherNameArg] = Teacher(teacherNameArg, availabilitiesArg)
+
+def searchTeacher(teacherNameArg):
+    if (teacherNameArg not in __teachers):
+        print("ERRO! Professor(a) " + teacherNameArg +
+              " não cadastrado(a)!!!!!!!!!!!!!!!!!!!!!!!!!")
+        input("Digite a tecla <ENTER> para encerrar.")
+        exit()
+    else:
+        return __teachers[teacherNameArg]
+
+def constructBlockOfTwoHours(curricularComponentNameArg, semesterNumberArg, shiftArg, teacherNameArg):
+    teacher = searchTeacher(teacherNameArg)
+    return BlockOfTwoHoursAllocation(curricularComponentNameArg, semesterNumberArg, shiftArg, teacher)
