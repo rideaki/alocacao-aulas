@@ -1,4 +1,4 @@
-from model.utils.shifts import MORNING
+from model.business.tableFactory import constructClassTable
 
 #Classe relativa aos dados de cada turma
 class ClassData:
@@ -8,10 +8,10 @@ class ClassData:
         self,
         semesterNumberArg,
         shiftArg,  #turno: MORNING, AFTERNOON ou NIGHT
-        timeTableArg=[[None, None, None, None, None],
-                      [None, None, None, None, None],
-                      [None, None, None, None, None]],
+        timeTableArg=constructClassTable(),
     ):
         self.semesterNumber = semesterNumberArg
         self.shift = shiftArg    #turno: MORNING, AFTERNOON ou NIGHT
         self.timeTable = timeTableArg
+
+    

@@ -5,10 +5,10 @@ from model.utils.daysOfWeek import FRIDAY, MONDAY, SATURDAY, THURSDAY, TUESDAY, 
 
 if __name__ == '__main__':
     loadClasses()
-    print(dataLoader.classes)
+    print(dataLoader.__classes)
     loadTeachers()
-    print(dataLoader.teachers["Reginaldo"].availabilities)
+    print(dataLoader.__teachers["Reginaldo"].availabilities)
     loadBlocksOfCurricularComponentWithTeachers()
-    print(dataLoader.blocksOfCCsWithTeachers[0].teacher.name)
-    print(dataLoader.blocksOfCCsWithTeachers[0].teacher == dataLoader.blocksOfCCsWithTeachers[1].teacher)
+    print(dataLoader.__blocksOfCCsWithTeachers[0].teacher.name)
+    print(dataLoader.__blocksOfCCsWithTeachers[0].teacher == dataLoader.__blocksOfCCsWithTeachers[1].teacher)
     #input("Digite enter para finalizar.")
