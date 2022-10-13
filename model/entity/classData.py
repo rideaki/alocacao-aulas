@@ -1,4 +1,4 @@
-from model.utils.periods import MORNING_PERIOD
+from model.utils.shifts import MORNING
 
 #Classe relativa aos dados de cada turma
 class ClassData:
@@ -7,11 +7,11 @@ class ClassData:
     def __init__(
         self,
         semesterNumberArg,
-        periodArg,
+        shiftArg,  #turno: MORNING, AFTERNOON ou NIGHT
         timeTableArg=[[None, None, None, None, None],
                       [None, None, None, None, None],
                       [None, None, None, None, None]],
     ):
         self.semesterNumber = semesterNumberArg
-        self.period = periodArg
+        self.shift = shiftArg    #turno: MORNING, AFTERNOON ou NIGHT
         self.timeTable = timeTableArg

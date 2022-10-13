@@ -2,132 +2,148 @@ from model.entity.classData import ClassData
 from model.entity.teacher import Teacher
 from model.entity.blockOfTwoHoursAllocation import BlockOfTwoHoursAllocation
 from model.utils.daysOfWeek import FRIDAY, MONDAY, THURSDAY, TUESDAY, WEDNESDAY
-from model.utils.periods import AFTERNOON_PERIOD, MORNING_PERIOD
+from model.utils.shifts import AFTERNOON, MORNING
+
+classes = []
 
 def loadClasses():
-    classes = []
-    classes.append(ClassData(1, MORNING_PERIOD))
-    classes.append(ClassData(1, AFTERNOON_PERIOD))
-    classes.append(ClassData(2, MORNING_PERIOD))
-    classes.append(ClassData(2, AFTERNOON_PERIOD))
-    classes.append(ClassData(3, MORNING_PERIOD))
-    classes.append(ClassData(3, AFTERNOON_PERIOD))
-    return classes
+    classes.append(ClassData(1, MORNING))
+    classes.append(ClassData(1, AFTERNOON))
+    classes.append(ClassData(2, MORNING))
+    classes.append(ClassData(2, AFTERNOON))
+    classes.append(ClassData(3, MORNING))
+    classes.append(ClassData(3, AFTERNOON))
+
+def addTeacher(teacherNameArg, availabilitiesArg):
+    teachers[teacherNameArg] = Teacher(teacherNameArg, availabilitiesArg)
+
+teachers = {}
 
 def loadTeachers():
-    teachers = []
-    teachers.append(Teacher ("Albertina", [MONDAY, TUESDAY, THURSDAY]))	
-    teachers.append(Teacher ("Bruno", [WEDNESDAY, THURSDAY,FRIDAY]))	
-    teachers.append(Teacher ("Edival", [WEDNESDAY, THURSDAY]))	
-    teachers.append(Teacher ("Eluã", [MONDAY, WEDNESDAY, FRIDAY])) 	
-    teachers.append(Teacher ("Ely", [WEDNESDAY, THURSDAY, FRIDAY]))	
-    teachers.append(Teacher ("Erivelton", [WEDNESDAY]))	
-    teachers.append(Teacher ("Fabiano", [WEDNESDAY, THURSDAY, FRIDAY]))	
-    teachers.append(Teacher ("Gabriela", [WEDNESDAY, THURSDAY, FRIDAY]))	
-    teachers.append(Teacher ("Gilvan", [MONDAY, TUESDAY, WEDNESDAY]))	
-    teachers.append(Teacher ("Leonardo", [MONDAY, TUESDAY, WEDNESDAY]))	
-    teachers.append(Teacher ("Patrícia", [MONDAY, WEDNESDAY]))	
-    teachers.append(Teacher ("Paulo", [TUESDAY, WEDNESDAY, THURSDAY]))	
-    teachers.append(Teacher ("Reginaldo", [WEDNESDAY, THURSDAY, FRIDAY]))	
-    teachers.append(Teacher ("Verônica", [WEDNESDAY, THURSDAY]))	
-    return teachers
+    addTeacher("Albertina", [MONDAY, TUESDAY, THURSDAY])	
+    addTeacher("Bruno", [WEDNESDAY, THURSDAY,FRIDAY])	
+    addTeacher("Edival", [WEDNESDAY, THURSDAY])	
+    addTeacher("Eluã", [MONDAY, WEDNESDAY, FRIDAY]) 	
+    addTeacher("Ely", [WEDNESDAY, THURSDAY, FRIDAY])	
+    addTeacher("Erivelton", [WEDNESDAY])	
+    addTeacher("Fabiano", [WEDNESDAY, THURSDAY, FRIDAY])	
+    addTeacher("Gabriela", [WEDNESDAY, THURSDAY, FRIDAY])	
+    addTeacher("Gilvan", [MONDAY, TUESDAY, WEDNESDAY])	
+    addTeacher("Leonardo", [MONDAY, TUESDAY, WEDNESDAY])	
+    addTeacher("Patrícia", [MONDAY, WEDNESDAY])	
+    addTeacher("Paulo", [TUESDAY, WEDNESDAY, THURSDAY])	
+    addTeacher("Reginaldo", [WEDNESDAY, THURSDAY, FRIDAY])	
+    addTeacher("Verônica", [WEDNESDAY, THURSDAY])	
 
+
+def searchTeacher(teacherNameArg):
+    if (teacherNameArg not in teachers):
+        print("ERRO! Professor(a) " + teacherNameArg +
+              " não cadastrado(a)!!!!!!!!!!!!!!!!!!!!!!!!!")
+        input("Digite a tecla <ENTER> para encerrar.")
+        exit()
+    else:
+        return teachers[teacherNameArg];
+
+def constructBlockOfTwoHours(curricularComponentNameArg, semesterNumberArg, shiftArg, teacherNameArg):
+    teacher = searchTeacher(teacherNameArg)
+    return BlockOfTwoHoursAllocation(curricularComponentNameArg, semesterNumberArg, shiftArg, teacher)
+
+blocksOfCCsWithTeachers = []
 def loadBlocksOfCurricularComponentWithTeachers():
-    blocksOfCCsWithTeachers = []
     
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("APC", 1, MORNING_PERIOD, "Gilvan"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("APC", 1, MORNING_PERIOD, "Gilvan"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("APC", 1, AFTERNOON_PERIOD, "Gilvan"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("APC", 1, AFTERNOON_PERIOD, "Gilvan"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("APC", 1, MORNING, "Gilvan"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("APC", 1, MORNING, "Gilvan"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("APC", 1, AFTERNOON, "Gilvan"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("APC", 1, AFTERNOON, "Gilvan"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("MDCOO", 1, MORNING_PERIOD, "Bruno"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("MDCOO", 1, MORNING_PERIOD, "Bruno"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("MDCOO", 1, MORNING_PERIOD, "Bruno"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("MDCOO", 1, AFTERNOON_PERIOD, "Bruno"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("MDCOO", 1, AFTERNOON_PERIOD, "Bruno"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("MDCOO", 1, AFTERNOON_PERIOD, "Bruno"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MDCOO", 1, MORNING, "Bruno"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MDCOO", 1, MORNING, "Bruno"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MDCOO", 1, MORNING, "Bruno"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MDCOO", 1, AFTERNOON, "Bruno"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MDCOO", 1, AFTERNOON, "Bruno"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MDCOO", 1, AFTERNOON, "Bruno"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("OC", 1, MORNING_PERIOD, "Gilvan"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("OC", 1, MORNING_PERIOD, "Gilvan"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("OC", 1, AFTERNOON_PERIOD, "Gilvan"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("OC", 1, AFTERNOON_PERIOD, "Gilvan"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("OC", 1, MORNING, "Gilvan"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("OC", 1, MORNING, "Gilvan"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("OC", 1, AFTERNOON, "Gilvan"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("OC", 1, AFTERNOON, "Gilvan"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC1", 1, MORNING_PERIOD, "Fabiano"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC1", 1, MORNING_PERIOD, "Fabiano"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC1", 1, MORNING_PERIOD, "Fabiano"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC1", 1, AFTERNOON_PERIOD, "Fabiano"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC1", 1, AFTERNOON_PERIOD, "Fabiano"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC1", 1, AFTERNOON_PERIOD, "Fabiano"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC1", 1, MORNING, "Fabiano"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC1", 1, MORNING, "Fabiano"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC1", 1, MORNING, "Fabiano"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC1", 1, AFTERNOON, "Fabiano"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC1", 1, AFTERNOON, "Fabiano"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC1", 1, AFTERNOON, "Fabiano"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("MPCCD", 1, MORNING_PERIOD, "Patrícia"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("MPCCD", 1, MORNING_PERIOD, "Patrícia"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("MPCCD", 1, AFTERNOON_PERIOD, "Patrícia"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("MPCCD", 1, AFTERNOON_PERIOD, "Patrícia"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MPCCD", 1, MORNING, "Patrícia"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MPCCD", 1, MORNING, "Patrícia"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MPCCD", 1, AFTERNOON, "Patrícia"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MPCCD", 1, AFTERNOON, "Patrícia"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("EI", 1, MORNING_PERIOD, "Verônica"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("EI", 1, MORNING_PERIOD, "Verônica"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("EI", 1, AFTERNOON_PERIOD, "Verônica"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("EI", 1, AFTERNOON_PERIOD, "Verônica"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EI", 1, MORNING, "Verônica"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EI", 1, MORNING, "Verônica"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EI", 1, AFTERNOON, "Verônica"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EI", 1, AFTERNOON, "Verônica"))
     
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PIBD", 2, MORNING_PERIOD, "Ely"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PIBD", 2, MORNING_PERIOD, "Ely"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PIBD", 2, AFTERNOON_PERIOD, "Ely"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PIBD", 2, AFTERNOON_PERIOD, "Ely"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PIBD", 2, MORNING, "Ely"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PIBD", 2, MORNING, "Ely"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PIBD", 2, AFTERNOON, "Ely"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PIBD", 2, AFTERNOON, "Ely"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("ISI", 2, MORNING_PERIOD, "Bruno"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("ISI", 2, MORNING_PERIOD, "Bruno"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("ISI", 2, AFTERNOON_PERIOD, "Bruno"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("ISI", 2, AFTERNOON_PERIOD, "Bruno"))    
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("ISI", 2, MORNING, "Bruno"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("ISI", 2, MORNING, "Bruno"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("ISI", 2, AFTERNOON, "Bruno"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("ISI", 2, AFTERNOON, "Bruno"))    
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC2", 2, MORNING_PERIOD, "Edival"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC2", 2, MORNING_PERIOD, "Edival"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC2", 2, AFTERNOON_PERIOD, "Edival"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC2", 2, AFTERNOON_PERIOD, "Edival")) 
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC2", 2, MORNING, "Edival"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC2", 2, MORNING, "Edival"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC2", 2, AFTERNOON, "Edival"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC2", 2, AFTERNOON, "Edival")) 
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PBE1", 2, MORNING_PERIOD, "Leonardo"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PBE1", 2, MORNING_PERIOD, "Leonardo"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PBE1", 2, AFTERNOON_PERIOD, "Leonardo"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PBE1", 2, AFTERNOON_PERIOD, "Leonardo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE1", 2, MORNING, "Leonardo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE1", 2, MORNING, "Leonardo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE1", 2, AFTERNOON, "Leonardo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE1", 2, AFTERNOON, "Leonardo"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PFE1", 2, MORNING_PERIOD, "Reginaldo"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PFE1", 2, MORNING_PERIOD, "Reginaldo"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PFE1", 2, AFTERNOON_PERIOD, "Reginaldo"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PFE1", 2, AFTERNOON_PERIOD, "Reginaldo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PFE1", 2, MORNING, "Reginaldo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PFE1", 2, MORNING, "Reginaldo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PFE1", 2, AFTERNOON, "Reginaldo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PFE1", 2, AFTERNOON, "Reginaldo"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("IFEI", 2, MORNING_PERIOD, "Gabriela"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("IFEI", 2, AFTERNOON_PERIOD, "Gabriela"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("IFEI", 2, MORNING, "Gabriela"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("IFEI", 2, AFTERNOON, "Gabriela"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PFE2", 3, MORNING_PERIOD, "Reginaldo"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PFE2", 3, MORNING_PERIOD, "Reginaldo"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PFE2", 3, AFTERNOON_PERIOD, "Reginaldo"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PFE2", 3, AFTERNOON_PERIOD, "Reginaldo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PFE2", 3, MORNING, "Reginaldo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PFE2", 3, MORNING, "Reginaldo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PFE2", 3, AFTERNOON, "Reginaldo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PFE2", 3, AFTERNOON, "Reginaldo"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PBE2", 3, MORNING_PERIOD, "Eluã"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PBE2", 3, MORNING_PERIOD, "Eluã"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PBE2", 3, AFTERNOON_PERIOD, "Eluã"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("PBE2", 3, AFTERNOON_PERIOD, "Eluã"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE2", 3, MORNING, "Eluã"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE2", 3, MORNING, "Eluã"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE2", 3, AFTERNOON, "Eluã"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE2", 3, AFTERNOON, "Eluã"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC3", 3, MORNING_PERIOD, "Eluã"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC3", 3, MORNING_PERIOD, "Eluã"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC3", 3, AFTERNOON_PERIOD, "Eluã"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("RC3", 3, AFTERNOON_PERIOD, "Eluã"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC3", 3, MORNING, "Eluã"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC3", 3, MORNING, "Eluã"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC3", 3, AFTERNOON, "Eluã"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("RC3", 3, AFTERNOON, "Eluã"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("GSTI", 3, MORNING_PERIOD, "Paulo"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("GSTI", 3, MORNING_PERIOD, "Paulo"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("GSTI", 3, AFTERNOON_PERIOD, "Paulo"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("GSTI", 3, AFTERNOON_PERIOD, "Paulo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("GSTI", 3, MORNING, "Paulo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("GSTI", 3, MORNING, "Paulo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("GSTI", 3, AFTERNOON, "Paulo"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("GSTI", 3, AFTERNOON, "Paulo"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("SI", 3, MORNING_PERIOD, "Verônica"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("SI", 3, MORNING_PERIOD, "Verônica"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("SI", 3, AFTERNOON_PERIOD, "Verônica"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("SI", 3, AFTERNOON_PERIOD, "Verônica"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("SI", 3, MORNING, "Verônica"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("SI", 3, MORNING, "Verônica"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("SI", 3, AFTERNOON, "Verônica"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("SI", 3, AFTERNOON, "Verônica"))
     
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("IFE2", 3, MORNING_PERIOD, "Gabriela"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("IFE2", 3, AFTERNOON_PERIOD, "Gabriela"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("IFE2", 3, MORNING, "Gabriela"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("IFE2", 3, AFTERNOON, "Gabriela"))
 
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("EPF", 3, MORNING_PERIOD, "Albertina"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("EPF", 3, MORNING_PERIOD, "Albertina"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("EPF", 3, AFTERNOON_PERIOD, "Albertina"))
-    blocksOfCCsWithTeachers.append(BlockOfTwoHoursAllocation("EPF", 3, AFTERNOON_PERIOD, "Albertina"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EPF", 3, MORNING, "Albertina"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EPF", 3, MORNING, "Albertina"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EPF", 3, AFTERNOON, "Albertina"))
+    blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EPF", 3, AFTERNOON, "Albertina"))
 
-    return blocksOfCCsWithTeachers

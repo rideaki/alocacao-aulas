@@ -1,9 +1,13 @@
+import dataLoader
+
 class BlockOfTwoHoursAllocation():
 
     #Constructor
-    def __init__(self, curricularComponentNameArg, semesterNumberArg, periodArg, teacherNameArg):
+    def __init__(self, curricularComponentNameArg, semesterNumberArg, shiftArg, teacherArg):
         self.curricularComponentName = curricularComponentNameArg
         self.semesterNumber = semesterNumberArg
-        self.period = periodArg
-        self.teacherName = teacherNameArg
+        self.shift = shiftArg       #turno: MORNING, AFTERNOON ou NIGHT
+        self.teacher = teacherArg
+
+    
         
