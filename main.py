@@ -20,7 +20,8 @@ if __name__ == "__main__":
     blocksIndexesOf2Afternoon = filter.filterBlocksIndexesBySemesterAndShift(dataLoader.getBlocks(), 3, AFTERNOON)
     print(blocksIndexesOf1Morning)
 
-    blocksOfGilvan1Morning = filter.filterBlocksIndexesByTeacher(block)
+    blocksOfGilvan1Morning = filter.filterBlocksIndexesByTeacher(blocksIndexesOf1Morning, "Gilvan")
+    print(blocksOfGilvan1Morning)
 
     # alocando aulas
     # period1MorningTimeTable = dataLoader.getClassesCopy()[0].timeTable.copy()
