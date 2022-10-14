@@ -1,5 +1,3 @@
-import dataLoader
-
 class BlockOfTwoHoursAllocation():
 
     #Constructor

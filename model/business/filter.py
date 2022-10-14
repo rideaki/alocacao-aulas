@@ -10,8 +10,10 @@ def filterBlocksIndexesBySemesterAndShift(blocksArg, semesterNumberArg=1, shiftA
     return filteredIndexes
 
 def filterBlocksIndexesByTeacher(blocksIndexesArg, teacherNameArg):
+    print(blocksIndexesArg)
     filteredIndexes = []
-    for i in range(len(blocksIndexesArg)):
-        if dataLoader.getBlocks()[blocksIndexesArg[i]].teacher.name == teacherNameArg:
-            filteredIndexes.append(i)
+    for blockIndex in blocksIndexesArg:
+        if dataLoader.getBlocks()[blockIndex].teacher.name == teacherNameArg:
+            filteredIndexes.append(blockIndex)
+    print(filteredIndexes)
     return filteredIndexes

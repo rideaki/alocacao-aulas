@@ -1,4 +1,3 @@
-from numpy import array
 from model.entity.classData import ClassData
 from model.entity.teacher import Teacher
 from model.entity.blockOfTwoHoursAllocation import BlockOfTwoHoursAllocation
