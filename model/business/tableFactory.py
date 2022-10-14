@@ -1,17 +1,28 @@
-from numpy import *
+import numpy 
 
+########################################################################
+# BlockOf2Hours  MONDAY=0, TUESDAY=1, WEDNESDAY=2, THURSDAY=3, FRIDAY=4
+########################################################################
+#      0
+#      1
+#      2
+########################################################################
 def constructClassTable():                      
-    return array(                               # BlockOf2Hours  MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY
-           [[None, None, None, None, None],     #      0
-            [None, None, None, None, None],     #      1
-            [None, None, None, None, None]]     #      2
-    )    
-                                                       
-def constructTeacherTable():                          #                MORNING     |    AFTERNOON 
-    return array(                                     #              0    1     2  |  3     4     5
-           [[None, None, None, None, None, None],     #   MONDAY                   
-            [None, None, None, None, None, None],     #   TUESDAY
-            [None, None, None, None, None, None],     #   WEDNESDAY
-            [None, None, None, None, None, None],     #   THURSDAY
-            [None, None, None, None, None, None]]     #   FRIDAY
-    )
+    return [[None, None, None, None, None],     
+            [None, None, None, None, None],     
+            [None, None, None, None, None]]     
+
+########################################################################
+# BlockOf2Hours  MONDAY=0, TUESDAY=1, WEDNESDAY=2, THURSDAY=3, FRIDAY=4
+########################################################################
+#          0
+#MORNING   1
+#          2
+#-----------------------------------------------------------------------
+#          3
+#AFTERNNON 4
+#          5                                                      
+########################################################################
+def constructTeacherTable():
+    #axis=0 -> contatenação vertical                          
+    return numpy.concatenate((constructClassTable(), constructClassTable()), axis=0) 

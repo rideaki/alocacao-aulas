@@ -1,6 +1,7 @@
 from array import array
 from numpy import *
 import dataLoader
+from model.business import tableFactory
 from dataLoader import (loadBlocksOfCurricularComponentWithTeachers,
                         loadClasses, loadTeachers)
 from model.entity.teacher import Teacher
@@ -9,19 +10,9 @@ from model.utils.daysOfWeek import (FRIDAY, MONDAY, SATURDAY, THURSDAY,
 
 if __name__ == '__main__':
     loadClasses()
-    print(dataLoader.getClassesCopy())
     loadTeachers()
-    print(dataLoader.getTeachersCopy()["Reginaldo"].availabilities)
     loadBlocksOfCurricularComponentWithTeachers()
-    print(dataLoader.getBlocksOfCCsWithTeachersCopy()[0].teacher.name)
-    print(dataLoader.getBlocksOfCCsWithTeachersCopy()[0].teacher == dataLoader.__blocksOfCCsWithTeachers[1].teacher)
     
-    #Teste efeito colateral para matriz
-    period1MorningTimeTable = dataLoader.getClassesCopy()[0].timeTable.copy()
-    period1MorningTimeTable[0][0] = 1
-    print(period1MorningTimeTable) 
-    print(dataLoader.getClassesCopy()[0].timeTable) 
-
     #teste de indice do vetor de blocos do dataLoader
     firstBlock = dataLoader.getBlocksOfCCsWithTeachersCopy()[0]
     indexOfBlock = dataLoader.getBlocksOfCCsWithTeachersCopy().index(firstBlock)
@@ -35,3 +26,9 @@ if __name__ == '__main__':
     print(firstBlock is secondBlock)
     print(firstBlock == dataLoader.getBlocksOfCCsWithTeachersCopy()[0])
     print(firstBlock is dataLoader.getBlocksOfCCsWithTeachersCopy()[0])
+
+    #alocando aulas
+    #period1MorningTimeTable = dataLoader.getClassesCopy()[0].timeTable.copy()
+    period1MorningTimeTable = [[None, None, None, None, None],     
+                               [  10, None, None, None, None],     
+                               [   0, None, None, None, None]]
