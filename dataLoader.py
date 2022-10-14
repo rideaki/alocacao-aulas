@@ -20,7 +20,7 @@ __teachers = {}
 
 def loadTeachers():
     addTeacher("Albertina", [MONDAY, TUESDAY, THURSDAY])	
-    addTeacher("Bruno", [WEDNESDAY, THURSDAY,FRIDAY])	
+    addTeacher("Bruno", [WEDNESDAY, THURSDAY, FRIDAY])	
     addTeacher("Edival", [WEDNESDAY, THURSDAY])	
     addTeacher("Eluã", [MONDAY, WEDNESDAY, FRIDAY]) 	
     addTeacher("Ely", [WEDNESDAY, THURSDAY, FRIDAY])	
@@ -44,8 +44,6 @@ def loadBlocksOfCurricularComponentWithTeachers():
 
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MDCOO", 1, MORNING, "Bruno"))
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MDCOO", 1, MORNING, "Bruno"))
-    __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MDCOO", 1, MORNING, "Bruno"))
-    __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MDCOO", 1, AFTERNOON, "Bruno"))
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MDCOO", 1, AFTERNOON, "Bruno"))
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MDCOO", 1, AFTERNOON, "Bruno"))
 
@@ -67,8 +65,6 @@ def loadBlocksOfCurricularComponentWithTeachers():
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("MPCCD", 1, AFTERNOON, "Patrícia"))
 
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EI", 1, MORNING, "Verônica"))
-    __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EI", 1, MORNING, "Verônica"))
-    __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EI", 1, AFTERNOON, "Verônica"))
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EI", 1, AFTERNOON, "Verônica"))
     
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PIBD", 2, MORNING, "Ely"))
@@ -88,6 +84,8 @@ def loadBlocksOfCurricularComponentWithTeachers():
 
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE1", 2, MORNING, "Leonardo"))
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE1", 2, MORNING, "Leonardo"))
+    __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE1", 2, MORNING, "Leonardo"))
+    __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE1", 2, AFTERNOON, "Leonardo"))
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE1", 2, AFTERNOON, "Leonardo"))
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("PBE1", 2, AFTERNOON, "Leonardo"))
 
@@ -129,6 +127,8 @@ def loadBlocksOfCurricularComponentWithTeachers():
 
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EPF", 3, MORNING, "Albertina"))
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EPF", 3, MORNING, "Albertina"))
+    __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EPF", 3, MORNING, "Albertina"))
+    __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EPF", 3, AFTERNOON, "Albertina"))
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EPF", 3, AFTERNOON, "Albertina"))
     __blocksOfCCsWithTeachers.append(constructBlockOfTwoHours("EPF", 3, AFTERNOON, "Albertina"))
 
@@ -148,7 +148,7 @@ def getTeachersCopy():
 def getTeachers():    #cuidado com efeito colateral!
     return __teachers
 
-def getBlocksOfCCsWithTeachersCopy():
+def getBlocks():
     return __blocksOfCCsWithTeachers.copy()
 
 def getBlocksOfCCsWithTeachers():     #cuidado com efeito colateral!
