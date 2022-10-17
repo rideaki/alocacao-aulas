@@ -7,7 +7,7 @@ from model.utils.shifts import AFTERNOON, MORNING
 # TURMAS ###############################################################################################################
 __classes = []       
 
-def _loadClasses():   # semestre (1, 2, ...) e periodo (MORNING, AFTERNOON, NIGHT)
+def _loadClasses():   # semestre (1, 2, ...) e turno (MORNING, AFTERNOON, NIGHT)
     __classes.append(ClassData(1, MORNING))
     __classes.append(ClassData(1, AFTERNOON))
     __classes.append(ClassData(2, MORNING))
@@ -38,7 +38,7 @@ def _loadTeachers():  # nome e disponibilidade [MONDAY, TUESDAY, WEDNESDAY, THUR
 __blocksOfCCsWithTeachers = []
 
 def _loadCurricularComponentTeachers():  
-    # semestre, nome_da_disciplina, periodo(MORNING, AFTERNOON, NIGHT), carga_horaria_semanal e nome_do_professor         
+    # semestre, nome_da_disciplina, turno(MORNING, AFTERNOON, NIGHT), carga_horaria_semanal e nome_do_professor         
     __addBlock(1, "APC", MORNING, 4, "Gilvan")
     __addBlock(1, "APC", AFTERNOON, 4, "Gilvan")
 
