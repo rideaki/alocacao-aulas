@@ -58,5 +58,5 @@ class Teacher:
         return numpy.array(self.__availabilities).copy()
 
     def getAllSortedBlocksCopy(self):
-        return dict(self.__sortedBlocks)    #cópia do dicionário para evitar efeito colateral
+        return self.__sortedBlocks.copy()    #cópia do dicionário para evitar efeito colateral
     

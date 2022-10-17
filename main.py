@@ -1,32 +1,39 @@
-from unicodedata import name
 import dataLoader
 import random
 from model.business import filter
-from dataLoader import _loadCurricularComponentTeachers, _loadClasses, _loadTeachers, loadAllData
-from model.utils.shifts import AFTERNOON, MORNING
+from model.business.tableFactory import constructClassTable
 
-globalSolution = {}   #dicionario: blocksIndexesByClass[dataClass] = indices dos blocos na tabela horária de cada turma (class)
+globalSolution = {}   #dicionario: dicionario[dataClass] = tabela horária de cada turma (dataClass)
 globalSolutionPenalty = float('inf')  # penalidades positivas. Objetivo: MINIMIZAR penalty
 
 def heusristicConstruct():
-    blocksIndexesByClass = {}
+    timeTables = {}
+    filteredBlocksIndexesByClass = {}
     # Para cada turma
     for dataClass in dataLoader.getClassesCopy():
-        blocksIndexesByClass[dataClass] = filter.filterBlocksIndexesBySemesterAndShift(
+        timeTables[dataClass] = constructClassTable()
+        filteredBlocksIndexesByClass[dataClass] = filter.filterBlocksIndexesBySemesterAndShift(
             dataLoader.getBlocks(), dataClass.semesterNumber, dataClass.shift)
         
         #Para cada professor
         teachers =  dataLoader.getTeachersCopy()
         while (len(teachers) > 0):
-            print(blocksIndexesByClass[dataClass])
             teacher = teachers.pop(random.choice(list(teachers)))
-            teacherBlocksToBeAllocated = filter.filterBlocksIndexesByTeacher(blocksIndexesByClass[dataClass], teacher.name)
-            if(len(teacherBlocksToBeAllocated) > 0):
-                #teacher to be alocated
-                print("--------------------------------------------------------------------")
+            teacherBlocksToBeAllocated = filter.filterBlocksIndexesByTeacher(filteredBlocksIndexesByClass[dataClass], teacher.name)
+            while(len(teacherBlocksToBeAllocated) > 0):
                 print(teacher.name)
                 print(teacherBlocksToBeAllocated)
-                #for teacherAvailableBlock in teacher.get
+                availableTeacherBlocksByShift = teacher.getAllSortedBlocksCopy()[dataClass.shift]
+                print(availableTeacherBlocksByShift)
+                for teacherAvailableBlock in availableTeacherBlocksByShift:
+                    print(teacherAvailableBlock)
+                    print(filteredBlocksIndexesByClass[dataClass])
+                    print(timeTables[dataClass])
+                    if(timeTables[dataClass][teacherAvailableBlock[0]][teacherAvailableBlock[1]] == None):
+                        #alocar aula
+                        timeTables[dataClass][teacherAvailableBlock[0]][teacherAvailableBlock[1]] = teacherBlocksToBeAllocated.pop(0)
+                        availableTeacherBlocksByShift.remove(teacherAvailableBlock)
+
 
 if __name__ == "__main__":
     dataLoader.loadAllData()

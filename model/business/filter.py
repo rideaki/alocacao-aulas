@@ -1,6 +1,5 @@
 import dataLoader
-import numpy
-from model.utils.shifts import MORNING
+from model.utils.shifts import *
 
 def filterBlocksIndexesBySemesterAndShift(blocksArg, semesterNumberArg=1, shiftArg = MORNING):
     filteredIndexes = []
