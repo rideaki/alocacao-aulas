@@ -1,19 +1,20 @@
 from model.entity.classData import ClassData
 from model.entity.teacher import Teacher
 from model.entity.blockOfTwoHoursAllocation import BlockOfTwoHoursAllocation
-from model.utils.daysOfWeek import FRIDAY, MONDAY, THURSDAY, TUESDAY, WEDNESDAY
-from model.utils.shifts import AFTERNOON, MORNING
+from model.utils.daysOfWeek import *
+from model.utils.periods import *
+from model.utils.shifts import *
 
 # TURMAS ###############################################################################################################
 __classes = []       
 
 def _loadClasses():   # semestre (1, 2, ...) e turno (MORNING, AFTERNOON, NIGHT)
-    __classes.append(ClassData(1, MORNING))
-    __classes.append(ClassData(1, AFTERNOON))
-    __classes.append(ClassData(2, MORNING))
-    __classes.append(ClassData(2, AFTERNOON))
-    __classes.append(ClassData(3, MORNING))
-    __classes.append(ClassData(3, AFTERNOON))
+    __classes.append(ClassData(PERIOD_1, MORNING))
+    __classes.append(ClassData(PERIOD_1, AFTERNOON))
+    __classes.append(ClassData(PERIOD_2, MORNING))
+    __classes.append(ClassData(PERIOD_2, AFTERNOON))
+    __classes.append(ClassData(PERIOD_3, MORNING))
+    __classes.append(ClassData(PERIOD_3, AFTERNOON))
 
 # PROFESSORES ##########################################################################################################
 __teachers = {}
@@ -39,62 +40,62 @@ __blocksOfCCsWithTeachers = []
 
 def _loadCurricularComponentTeachers():  
     # semestre, nome_da_disciplina, turno(MORNING, AFTERNOON, NIGHT), carga_horaria_semanal e nome_do_professor         
-    __addBlock(1, "APC", MORNING, 4, "Gilvan")
-    __addBlock(1, "APC", AFTERNOON, 4, "Gilvan")
+    __addBlock(PERIOD_1, "APC", MORNING, 4, "Gilvan")
+    __addBlock(PERIOD_1, "APC", AFTERNOON, 4, "Gilvan")
 
-    __addBlock(1, "MDCOO", MORNING, 4, "Bruno")
-    __addBlock(1, "MDCOO", AFTERNOON, 4, "Bruno")
+    __addBlock(PERIOD_1, "MDCOO", MORNING, 4, "Bruno")
+    __addBlock(PERIOD_1, "MDCOO", AFTERNOON, 4, "Bruno")
 
-    __addBlock(1, "OC", MORNING, 4, "Gilvan")
-    __addBlock(1, "OC", AFTERNOON, 4, "Gilvan")
+    __addBlock(PERIOD_1, "OC", MORNING, 4, "Gilvan")
+    __addBlock(PERIOD_1, "OC", AFTERNOON, 4, "Gilvan")
 
-    __addBlock(1, "RC1", MORNING, 6, "Fabiano")
-    __addBlock(1, "RC1", AFTERNOON, 6, "Fabiano")
+    __addBlock(PERIOD_1, "RC1", MORNING, 6, "Fabiano")
+    __addBlock(PERIOD_1, "RC1", AFTERNOON, 6, "Fabiano")
 
-    __addBlock(1, "MPCCD", MORNING, 4, "Patrícia")
-    __addBlock(1, "MPCCD", AFTERNOON, 4, "Patrícia")
+    __addBlock(PERIOD_1, "MPCCD", MORNING, 4, "Patrícia")
+    __addBlock(PERIOD_1, "MPCCD", AFTERNOON, 4, "Patrícia")
 
-    __addBlock(1, "EI", MORNING, 2, "Verônica")
-    __addBlock(1, "EI", AFTERNOON, 2, "Verônica")
+    __addBlock(PERIOD_1, "EI", MORNING, 2, "Verônica")
+    __addBlock(PERIOD_1, "EI", AFTERNOON, 2, "Verônica")
     
-    __addBlock(2, "PIBD", MORNING, 4, "Ely")
-    __addBlock(2, "PIBD", AFTERNOON, 4, "Ely")
+    __addBlock(PERIOD_2, "PIBD", MORNING, 4, "Ely")
+    __addBlock(PERIOD_2, "PIBD", AFTERNOON, 4, "Ely")
 
-    __addBlock(2, "ISI", MORNING, 4, "Bruno")
-    __addBlock(2, "ISI", AFTERNOON, 4, "Bruno")
+    __addBlock(PERIOD_2, "ISI", MORNING, 4, "Bruno")
+    __addBlock(PERIOD_2, "ISI", AFTERNOON, 4, "Bruno")
 
-    __addBlock(2, "RC2", MORNING, 4, "Edival")
-    __addBlock(2, "RC2", AFTERNOON, 4, "Edival")
+    __addBlock(PERIOD_2, "RC2", MORNING, 4, "Edival")
+    __addBlock(PERIOD_2, "RC2", AFTERNOON, 4, "Edival")
 
-    __addBlock(2, "PBE1", MORNING, 6, "Leonardo")
-    __addBlock(2, "PBE1", AFTERNOON, 6, "Leonardo")
+    __addBlock(PERIOD_2, "PBE1", MORNING, 6, "Leonardo")
+    __addBlock(PERIOD_2, "PBE1", AFTERNOON, 6, "Leonardo")
 
-    __addBlock(2, "PFE1", MORNING, 4, "Reginaldo")
-    __addBlock(2, "PFE1", AFTERNOON, 4, "Reginaldo")
+    __addBlock(PERIOD_2, "PFE1", MORNING, 4, "Reginaldo")
+    __addBlock(PERIOD_2, "PFE1", AFTERNOON, 4, "Reginaldo")
 
-    __addBlock(2, "IFEI", MORNING, 2, "Gabriela")
-    __addBlock(2, "IFEI", AFTERNOON, 2, "Gabriela")
+    __addBlock(PERIOD_2, "IFEI", MORNING, 2, "Gabriela")
+    __addBlock(PERIOD_2, "IFEI", AFTERNOON, 2, "Gabriela")
 
-    __addBlock(3, "PFE2",MORNING, 4, "Reginaldo")
-    __addBlock(3, "PFE2",AFTERNOON, 4, "Reginaldo")
+    __addBlock(PERIOD_3, "PFE2",MORNING, 4, "Reginaldo")
+    __addBlock(PERIOD_3, "PFE2",AFTERNOON, 4, "Reginaldo")
 
-    __addBlock(3, "PBE2", MORNING, 4, "Eluã")
-    __addBlock(3, "PBE2", AFTERNOON, 4, "Eluã")
+    __addBlock(PERIOD_3, "PBE2", MORNING, 4, "Eluã")
+    __addBlock(PERIOD_3, "PBE2", AFTERNOON, 4, "Eluã")
 
-    __addBlock(3, "RC3", MORNING, 4, "Eluã")
-    __addBlock(3, "RC3", AFTERNOON, 4, "Eluã")
+    __addBlock(PERIOD_3, "RC3", MORNING, 4, "Eluã")
+    __addBlock(PERIOD_3, "RC3", AFTERNOON, 4, "Eluã")
 
-    __addBlock(3, "GSTI", MORNING, 4, "Paulo")
-    __addBlock(3, "GSTI", AFTERNOON, 4, "Paulo")
+    __addBlock(PERIOD_3, "GSTI", MORNING, 4, "Paulo")
+    __addBlock(PERIOD_3, "GSTI", AFTERNOON, 4, "Paulo")
 
-    __addBlock(3, "SI", MORNING, 4, "Verônica")
-    __addBlock(3, "SI", AFTERNOON, 4, "Verônica")
+    __addBlock(PERIOD_3, "SI", MORNING, 4, "Verônica")
+    __addBlock(PERIOD_3, "SI", AFTERNOON, 4, "Verônica")
     
-    __addBlock(3, "IFE2", MORNING, 2, "Gabriela")
-    __addBlock(3, "IFE2", AFTERNOON, 2, "Gabriela")
+    __addBlock(PERIOD_3, "IFE2", MORNING, 2, "Gabriela")
+    __addBlock(PERIOD_3, "IFE2", AFTERNOON, 2, "Gabriela")
 
-    __addBlock(3, "EPF", MORNING, 6, "Albertina")
-    __addBlock(3, "EPF", AFTERNOON, 6, "Albertina")
+    __addBlock(PERIOD_3, "EPF", MORNING, 6, "Albertina")
+    __addBlock(PERIOD_3, "EPF", AFTERNOON, 6, "Albertina")
 
 #####################################################################################################
 #### AUXILIAR FUNCTIONS #############################################################################
