@@ -3,13 +3,20 @@ import numpy
 from copyreg import constructor
 
 from model.utils.daysOfWeek import FRIDAY, MONDAY, THURSDAY, TUESDAY, WEDNESDAY
-from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
+from model.utils.shifts import AFTERNOON, MORNING, NIGHT, NUMBER_OF_BLOCKS_IN_SHIFT
 
 
 class Teacher:
     
-    def constructSortedBlocks(self, isMorning):
-        sortedBlocks = []
+    def __constructAllSortedBlocks(self):
+        allSortedBlocks = {}
+        shifts = [MORNING, AFTERNOON, NIGHT]
+        for shift in shifts:
+            allSortedBlocks[shift] = self.__constructSortedBlocksByShift(shift == MORNING)
+        return allSortedBlocks
+
+    def __constructSortedBlocksByShift(self, isMorning):
+        sortedBlocksByShift = []
 
         #Se professor tem disponibilidade a segunda-feira, então percorre disponibilidade em ordem crescente
         # caso contrário em ordem decrescente
@@ -21,16 +28,16 @@ class Teacher:
         #Dias disponibilizados pelo professor   
         for availableDayOfWeek in sortedAvailabilitiesDays:
             daysOfWeekToBeIncluded.remove(availableDayOfWeek)
-            self.includeBlocks(isMorning, sortedBlocks, availableDayOfWeek)
+            self.__includeBlocks(isMorning, sortedBlocksByShift, availableDayOfWeek)
 
         #Dias NÃO disponibilizados pelo professor -> ficará no final da lista de blocos disponíveis 
         #Necessário, caso a alocação não seja possível
         while(len(daysOfWeekToBeIncluded) > 0):
             dayOfWeekToBeIncluded = daysOfWeekToBeIncluded.pop(0)
-            self.includeBlocks(isMorning, sortedBlocks, dayOfWeekToBeIncluded)
-        return sortedBlocks
+            self.__includeBlocks(isMorning, sortedBlocksByShift, dayOfWeekToBeIncluded)
+        return sortedBlocksByShift
 
-    def includeBlocks(self, isMorning, sortedBlocks, dayOfWeek):
+    def __includeBlocks(self, isMorning, sortedBlocks, dayOfWeek):
         if isMorning: 
             for i in range(NUMBER_OF_BLOCKS_IN_SHIFT-1, -1, -1):   #2, 1, 0
                 sortedBlocks.append([i, dayOfWeek])
@@ -42,23 +49,14 @@ class Teacher:
     def __init__(self, nameArg, availabilitiesArg):
         self.name = nameArg
         self.__availabilities = availabilitiesArg
-        self.__morningSortedBlocks = self.constructSortedBlocks(True)
-        self.__afternoonSortedBlocks = self.constructSortedBlocks(False)
-        self.__nightSortedBlocks = self.__afternoonSortedBlocks.copy()
+        self.__sortedBlocks = self.__constructAllSortedBlocks()
         print(self.name)
         print(self.__availabilities)
-        print(self.__morningSortedBlocks)
-        print(self.__afternoonSortedBlocks)
-        print(self.__nightSortedBlocks)
+        print(self.__sortedBlocks)
 
     def getAvailabilitiesCopy(self):
         return numpy.array(self.__availabilities).copy()
 
-    def getMorningSortedBlocksCopy(self):
-        return numpy.array(self.__morningSortedBlocks).copy()
+    def getAllSortedBlocksCopy(self):
+        return dict(self.__sortedBlocks)    #cópia do dicionário para evitar efeito colateral
     
-    def getAfternoonSortedBlocksCopy(self):
-        return numpy.array(self.__afternoonSortedBlocks).copy()
-
-    def getNightSortedBlocksCopy(self):
-        return numpy.array(self.__nightSortedBlocks).copy()

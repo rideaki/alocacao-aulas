@@ -20,13 +20,13 @@ def heusristicConstruct():
         while (len(teachers) > 0):
             print(blocksIndexesByClass[dataClass])
             teacher = teachers.pop(random.choice(list(teachers)))
-            teacherBlocks = filter.filterBlocksIndexesByTeacher(blocksIndexesByClass[dataClass], teacher.name)
-            if(len(teacherBlocks) > 0):
+            teacherBlocksToBeAllocated = filter.filterBlocksIndexesByTeacher(blocksIndexesByClass[dataClass], teacher.name)
+            if(len(teacherBlocksToBeAllocated) > 0):
                 #teacher to be alocated
-
-                print(teacher.name)
-                print(teacherBlocks)
                 print("--------------------------------------------------------------------")
+                print(teacher.name)
+                print(teacherBlocksToBeAllocated)
+                #for teacherAvailableBlock in teacher.get
 
 if __name__ == "__main__":
     dataLoader.loadAllData()
