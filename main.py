@@ -1,3 +1,4 @@
+from unittest import skip
 import dataLoader
 import random
 from model.business import filter
@@ -33,6 +34,7 @@ def heusristicConstruct():
                         #alocar aula
                         timeTables[dataClass][teacherAvailableBlock[0]][teacherAvailableBlock[1]] = teacherBlocksToBeAllocated.pop(0)
                         availableTeacherBlocksByShift.remove(teacherAvailableBlock)
+                        break  #sai do laco -> teacherAvailableBlock in availableTeacherBlocksByShift:
 
 
 if __name__ == "__main__":
