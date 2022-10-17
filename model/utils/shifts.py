@@ -4,3 +4,5 @@ from typing import Final
 MORNING: Final = "MORNING"
 AFTERNOON: Final = "AFTERNOON"
 NIGHT: Final = "NIGHT"
+
+NUMBER_OF_BLOCKS_IN_SHIFT = 3

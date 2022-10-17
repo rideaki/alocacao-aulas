@@ -100,7 +100,7 @@ def _loadCurricularComponentTeachers():
 #####################################################################################################
 #### AUXILIAR FUNCTIONS #############################################################################
 #####################################################################################################
-def loadData():
+def loadAllData():
     _loadClasses()
     _loadTeachers()
     _loadCurricularComponentTeachers()
@@ -117,7 +117,7 @@ def getTeachersCopy():
 def getTeachers():    #cuidado com efeito colateral!
     return __teachers
 
-def getBlocks():
+def getBlocksCopy():
     return __blocksOfCCsWithTeachers.copy()
 
 def getBlocks():     #cuidado com efeito colateral!
