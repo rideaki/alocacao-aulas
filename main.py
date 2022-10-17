@@ -1,13 +1,11 @@
 import dataLoader
 import random
 from model.business import filter
-from dataLoader import loadBlocksOfCurricularComponentWithTeachers, loadClasses, loadTeachers
+from dataLoader import _loadCurricularComponentTeachers, _loadClasses, _loadTeachers, loadData
 from model.utils.shifts import AFTERNOON, MORNING
 
 if __name__ == "__main__":
-    loadClasses()
-    loadTeachers()
-    loadBlocksOfCurricularComponentWithTeachers()
+    loadData()
 
     blocksIndexesByClass = {}
     # Para cada turma
@@ -23,10 +21,3 @@ if __name__ == "__main__":
         
         blocksOfGilvan1Morning = filter.filterBlocksIndexesByTeacher(blocksIndexesByClass[dataClass], "Gilvan")
 
-    # alocando aulas
-    # period1MorningTimeTable = dataLoader.getClassesCopy()[0].timeTable.copy()
-    period1MorningTimeTable = [
-        [None, None, None, None, None],
-        [10, None, None, None, None],
-        [0, None, None, None, None],
-    ]
