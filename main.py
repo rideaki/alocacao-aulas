@@ -23,6 +23,7 @@ def heusristicConstruct():
             teacherBlocks = filter.filterBlocksIndexesByTeacher(blocksIndexesByClass[dataClass], teacher.name)
             if(len(teacherBlocks) > 0):
                 #teacher to be alocated
+
                 print(teacher.name)
                 print(teacherBlocks)
                 print("--------------------------------------------------------------------")
