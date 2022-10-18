@@ -1,6 +1,6 @@
 from typing import Final
 
-# Periodo: pode ser semestre ou ano
+#Periodo: pode ser semestre ou ano
 PERIOD_1: Final = 1
 PERIOD_2: Final = 2
 PERIOD_3: Final = 3

@@ -1,3 +1,6 @@
+from ast import Constant
+
+
 from typing import Final
 
 MONDAY: Final = 0
