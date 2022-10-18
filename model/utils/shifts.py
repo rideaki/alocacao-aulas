@@ -1,6 +1,6 @@
 from typing import Final
 
-#Turno
+# Turno
 MORNING: Final = "MORNING"
 AFTERNOON: Final = "AFTERNOON"
 NIGHT: Final = "NIGHT"

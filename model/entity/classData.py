@@ -1,17 +1,16 @@
-from model.business.tableFactory import constructClassTable
+from model.business.tableFactory import construct_class_table
 
-#Classe relativa aos dados de cada turma
+
+# Classe relativa aos dados de cada turma
 class ClassData:
 
     # Constructor
     def __init__(
-        self,
-        semesterNumberArg,
-        shiftArg,  #turno: MORNING, AFTERNOON ou NIGHT
-        timeTableArg = constructClassTable(),
+            self,
+            semester_number_arg,
+            shift_arg,  # turno: MORNING, AFTERNOON ou NIGHT
+            time_table_arg=construct_class_table(),
     ):
-        self.semesterNumber = semesterNumberArg
-        self.shift = shiftArg    #turno: MORNING, AFTERNOON ou NIGHT
-        self.timeTable = timeTableArg
-
-    
+        self.semesterNumber = semester_number_arg
+        self.shift = shift_arg  # turno: MORNING, AFTERNOON ou NIGHT
+        self.timeTable = time_table_arg
