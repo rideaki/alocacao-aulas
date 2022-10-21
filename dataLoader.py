@@ -8,13 +8,13 @@ from model.utils.shifts import *
 # TURMAS ###############################################################################################################
 __classes = []       
 
-def _loadClasses():   # semestre (1, 2, ...) e turno (MORNING, AFTERNOON, NIGHT)
-    __classes.append(ClassData(PERIOD_1, MORNING))
-    __classes.append(ClassData(PERIOD_1, AFTERNOON))
-    __classes.append(ClassData(PERIOD_2, MORNING))
-    __classes.append(ClassData(PERIOD_2, AFTERNOON))
-    __classes.append(ClassData(PERIOD_3, MORNING))
-    __classes.append(ClassData(PERIOD_3, AFTERNOON))
+def _loadClasses():   # nome do curso, semestre ou ano (1, 2, ...) e turno (MORNING, AFTERNOON, NIGHT)
+    __classes.append(ClassData("Técnico em Informática para Internet", PERIOD_1, MORNING))
+    __classes.append(ClassData("Técnico em Informática para Internet", PERIOD_1, AFTERNOON))
+    __classes.append(ClassData("Técnico em Informática para Internet", PERIOD_2, MORNING))
+    __classes.append(ClassData("Técnico em Informática para Internet", PERIOD_2, AFTERNOON))
+    __classes.append(ClassData("Técnico em Informática para Internet", PERIOD_3, MORNING))
+    __classes.append(ClassData("Técnico em Informática para Internet", PERIOD_3, AFTERNOON))
 
 # PROFESSORES ##########################################################################################################
 __teachers = {}
