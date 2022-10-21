@@ -5,17 +5,6 @@ from model.utils.daysOfWeek import *
 from model.utils.periods import *
 from model.utils.shifts import *
 
-# TURMAS ###############################################################################################################
-__classes = []       
-
-def _loadClasses():   # nome do curso, semestre ou ano (1, 2, ...) e turno (MORNING, AFTERNOON, NIGHT)
-    __classes.append(ClassData("Técnico em Informática para Internet", PERIOD_1, MORNING))
-    __classes.append(ClassData("Técnico em Informática para Internet", PERIOD_1, AFTERNOON))
-    __classes.append(ClassData("Técnico em Informática para Internet", PERIOD_2, MORNING))
-    __classes.append(ClassData("Técnico em Informática para Internet", PERIOD_2, AFTERNOON))
-    __classes.append(ClassData("Técnico em Informática para Internet", PERIOD_3, MORNING))
-    __classes.append(ClassData("Técnico em Informática para Internet", PERIOD_3, AFTERNOON))
-
 # PROFESSORES ##########################################################################################################
 __teachers = {}
 
@@ -35,75 +24,94 @@ def _loadTeachers():  # nome e disponibilidade [MONDAY, TUESDAY, WEDNESDAY, THUR
     __addTeacher("Reginaldo", [WEDNESDAY, THURSDAY, FRIDAY])	
     __addTeacher("Verônica", [WEDNESDAY, THURSDAY])	
 
+# TURMAS ###############################################################################################################
+__classes = []       
 # COMPONENTES CURRICULARES ####################################################################################
 __blocksOfCCsWithTeachers = []
 
-def _loadCurricularComponentTeachers():  
-    # semestre, nome_da_disciplina, turno(MORNING, AFTERNOON, NIGHT), carga_horaria_semanal e nome_do_professor         
-    __addBlock(PERIOD_1, "APC", MORNING, 4, "Gilvan")
-    __addBlock(PERIOD_1, "APC", AFTERNOON, 4, "Gilvan")
-
-    __addBlock(PERIOD_1, "MDCOO", MORNING, 4, "Bruno")
-    __addBlock(PERIOD_1, "MDCOO", AFTERNOON, 4, "Bruno")
-
-    __addBlock(PERIOD_1, "OC", MORNING, 4, "Gilvan")
-    __addBlock(PERIOD_1, "OC", AFTERNOON, 4, "Gilvan")
-
-    __addBlock(PERIOD_1, "RC1", MORNING, 6, "Fabiano")
-    __addBlock(PERIOD_1, "RC1", AFTERNOON, 6, "Fabiano")
-
-    __addBlock(PERIOD_1, "MPCCD", MORNING, 4, "Patrícia")
-    __addBlock(PERIOD_1, "MPCCD", AFTERNOON, 4, "Patrícia")
-
-    __addBlock(PERIOD_1, "EI", MORNING, 2, "Verônica")
-    __addBlock(PERIOD_1, "EI", AFTERNOON, 2, "Verônica")
+def _loadClassesAndBlocks():
+    # 1° PERIODO ###############################################################################################
+    classTecinfoPeriod1Morning = ClassData("Técnico em Informática para Internet", PERIOD_1, MORNING)
+    __classes.append(classTecinfoPeriod1Morning)
+    classTecinfoPeriod1Afternoon = ClassData("Técnico em Informática para Internet", PERIOD_1, AFTERNOON)
+    __classes.append(classTecinfoPeriod1Afternoon)
     
-    __addBlock(PERIOD_2, "PIBD", MORNING, 4, "Ely")
-    __addBlock(PERIOD_2, "PIBD", AFTERNOON, 4, "Ely")
+    # turma(dataClass), nome_da_disciplina, carga_horaria_semanal e nome_do_professor         
+    __addBlock(classTecinfoPeriod1Morning, "APC", 4, "Gilvan")
+    __addBlock(classTecinfoPeriod1Afternoon, "APC", 4, "Gilvan")
 
-    __addBlock(PERIOD_2, "ISI", MORNING, 4, "Bruno")
-    __addBlock(PERIOD_2, "ISI", AFTERNOON, 4, "Bruno")
+    __addBlock(classTecinfoPeriod1Morning, "MDCOO", 4, "Bruno")
+    __addBlock(classTecinfoPeriod1Afternoon, "MDCOO", 4, "Bruno")
 
-    __addBlock(PERIOD_2, "RC2", MORNING, 4, "Edival")
-    __addBlock(PERIOD_2, "RC2", AFTERNOON, 4, "Edival")
+    __addBlock(classTecinfoPeriod1Morning, "OC", 4, "Gilvan")
+    __addBlock(classTecinfoPeriod1Afternoon, "OC", 4, "Gilvan")
 
-    __addBlock(PERIOD_2, "PBE1", MORNING, 6, "Leonardo")
-    __addBlock(PERIOD_2, "PBE1", AFTERNOON, 6, "Leonardo")
+    __addBlock(classTecinfoPeriod1Morning, "RC1", 6, "Fabiano")
+    __addBlock(classTecinfoPeriod1Afternoon, "RC1", 6, "Fabiano")
 
-    __addBlock(PERIOD_2, "PFE1", MORNING, 4, "Reginaldo")
-    __addBlock(PERIOD_2, "PFE1", AFTERNOON, 4, "Reginaldo")
+    __addBlock(classTecinfoPeriod1Morning, "MPCCD", 4, "Patrícia")
+    __addBlock(classTecinfoPeriod1Afternoon, "MPCCD", 4, "Patrícia")
 
-    __addBlock(PERIOD_2, "IFEI", MORNING, 2, "Gabriela")
-    __addBlock(PERIOD_2, "IFEI", AFTERNOON, 2, "Gabriela")
-
-    __addBlock(PERIOD_3, "PFE2",MORNING, 4, "Reginaldo")
-    __addBlock(PERIOD_3, "PFE2",AFTERNOON, 4, "Reginaldo")
-
-    __addBlock(PERIOD_3, "PBE2", MORNING, 4, "Eluã")
-    __addBlock(PERIOD_3, "PBE2", AFTERNOON, 4, "Eluã")
-
-    __addBlock(PERIOD_3, "RC3", MORNING, 4, "Eluã")
-    __addBlock(PERIOD_3, "RC3", AFTERNOON, 4, "Eluã")
-
-    __addBlock(PERIOD_3, "GSTI", MORNING, 4, "Paulo")
-    __addBlock(PERIOD_3, "GSTI", AFTERNOON, 4, "Paulo")
-
-    __addBlock(PERIOD_3, "SI", MORNING, 4, "Verônica")
-    __addBlock(PERIOD_3, "SI", AFTERNOON, 4, "Verônica")
+    __addBlock(classTecinfoPeriod1Morning, "EI", 2, "Verônica")
+    __addBlock(classTecinfoPeriod1Afternoon, "EI", 2, "Verônica")
     
-    __addBlock(PERIOD_3, "IFE2", MORNING, 2, "Gabriela")
-    __addBlock(PERIOD_3, "IFE2", AFTERNOON, 2, "Gabriela")
+    # 2° PERIODO ##############################################################################################    
+    classTecinfoPeriod2Morning = ClassData("Técnico em Informática para Internet", PERIOD_2, MORNING)
+    __classes.append(classTecinfoPeriod2Morning)
+    classTecinfoPeriod2Afternoon = ClassData("Técnico em Informática para Internet", PERIOD_2, AFTERNOON)
+    __classes.append(classTecinfoPeriod2Afternoon)
 
-    __addBlock(PERIOD_3, "EPF", MORNING, 6, "Albertina")
-    __addBlock(PERIOD_3, "EPF", AFTERNOON, 6, "Albertina")
+    __addBlock(classTecinfoPeriod2Morning, "PIBD", 4, "Ely")
+    __addBlock(classTecinfoPeriod2Afternoon, "PIBD", 4, "Ely")
+
+    __addBlock(classTecinfoPeriod2Morning, "ISI", 4, "Bruno")
+    __addBlock(classTecinfoPeriod2Afternoon, "ISI", 4, "Bruno")
+
+    __addBlock(classTecinfoPeriod2Morning, "RC2", 4, "Edival")
+    __addBlock(classTecinfoPeriod2Afternoon, "RC2", 4, "Edival")
+
+    __addBlock(classTecinfoPeriod2Morning, "PBE1", 6, "Leonardo")
+    __addBlock(classTecinfoPeriod2Afternoon, "PBE1", 6, "Leonardo")
+
+    __addBlock(classTecinfoPeriod2Morning, "PFE1", 4, "Reginaldo")
+    __addBlock(classTecinfoPeriod2Afternoon, "PFE1", 4, "Reginaldo")
+
+    __addBlock(classTecinfoPeriod2Morning, "IFEI", 2, "Gabriela")
+    __addBlock(classTecinfoPeriod2Afternoon, "IFEI", 2, "Gabriela")
+
+    # 3° PERIODO ########################################################################################
+    classTecinfoPeriod3Morning = ClassData("Técnico em Informática para Internet", PERIOD_3, MORNING)
+    __classes.append(classTecinfoPeriod3Morning)
+    classTecinfoPeriod3Afternoon = ClassData("Técnico em Informática para Internet", PERIOD_3, AFTERNOON)
+    __classes.append(classTecinfoPeriod3Afternoon)
+
+    __addBlock(classTecinfoPeriod3Morning, "PFE2", 4, "Reginaldo")
+    __addBlock(classTecinfoPeriod3Afternoon, "PFE2", 4, "Reginaldo")
+
+    __addBlock(classTecinfoPeriod3Morning, "PBE2", 4, "Eluã")
+    __addBlock(classTecinfoPeriod3Afternoon, "PBE2", 4, "Eluã")
+
+    __addBlock(classTecinfoPeriod3Morning, "RC3", 4, "Eluã")
+    __addBlock(classTecinfoPeriod3Afternoon, "RC3", 4, "Eluã")
+
+    __addBlock(classTecinfoPeriod3Morning, "GSTI", 4, "Paulo")
+    __addBlock(classTecinfoPeriod3Afternoon, "GSTI", 4, "Paulo")
+
+    __addBlock(classTecinfoPeriod3Morning, "SI", 4, "Verônica")
+    __addBlock(classTecinfoPeriod3Afternoon, "SI", 4, "Verônica")
+    
+    __addBlock(classTecinfoPeriod3Morning, "IFE2", 2, "Gabriela")
+    __addBlock(classTecinfoPeriod3Afternoon, "IFE2", 2, "Gabriela")
+
+    __addBlock(classTecinfoPeriod3Morning, "EPF", 6, "Albertina")
+    __addBlock(classTecinfoPeriod3Afternoon, "EPF", 6, "Albertina")
 
 #####################################################################################################
 #### AUXILIAR FUNCTIONS #############################################################################
 #####################################################################################################
 def loadAllData():
-    _loadClasses()
     _loadTeachers()
-    _loadCurricularComponentTeachers()
+    _loadClassesAndBlocks()
 
 def getClassesCopy():
     return __classes.copy()
@@ -126,18 +134,17 @@ def getBlocks():     #cuidado com efeito colateral!
 def __addTeacher(teacherNameArg, availabilitiesArg):
     __teachers[teacherNameArg] = Teacher(teacherNameArg, availabilitiesArg)
 
-def __addBlock(semesterNumberArg, curricularComponentNameArg, shiftArg, weeklyHoursArg, teacherNameArg):
+def __addBlock(classDataArg, curricularComponentNameArg, weeklyHoursArg, teacherNameArg):
     if(weeklyHoursArg % 2 != 0):
-        print ("Carga horária da disciplina " + curricularComponentNameArg + " do " + str(semesterNumberArg) + " não é par.")
+        print ("Carga horária da disciplina " + curricularComponentNameArg + " não é par.")
         exit()
     blocksPerWeek = weeklyHoursArg // 2    #divisão inteira (trunca)
     for i in range(blocksPerWeek):
-        __blocksOfCCsWithTeachers.append(__constructBlockOfTwoHours(semesterNumberArg, curricularComponentNameArg, shiftArg, teacherNameArg))
+        __blocksOfCCsWithTeachers.append(__constructBlockOfTwoHours(classDataArg, curricularComponentNameArg, teacherNameArg))
 
-
-def __constructBlockOfTwoHours(semesterNumberArg, curricularComponentNameArg, shiftArg, teacherNameArg):
+def __constructBlockOfTwoHours(classDataArg, curricularComponentNameArg, teacherNameArg):
     teacher = __searchTeacher(teacherNameArg)
-    return BlockOfTwoHoursAllocation(curricularComponentNameArg, semesterNumberArg, shiftArg, teacher)
+    return BlockOfTwoHoursAllocation(classDataArg, curricularComponentNameArg, teacher)
 
 def __searchTeacher(teacherNameArg):
     if (teacherNameArg not in __teachers):

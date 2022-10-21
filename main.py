@@ -11,28 +11,28 @@ def heusristicConstruct():
     timeTables = {}
     filteredBlocksIndexesByClass = {}
     # Para cada turma
-    for dataClass in dataLoader.getClassesCopy():
-        timeTables[dataClass] = constructClassTable()
-        filteredBlocksIndexesByClass[dataClass] = filter.filterBlocksIndexesBySemesterAndShift(
-            dataLoader.getBlocks(), dataClass.semesterNumber, dataClass.shift)
+    for classData in dataLoader.getClassesCopy():
+        timeTables[classData] = constructClassTable()
+        filteredBlocksIndexesByClass[classData] = filter.filterBlocksIndexesByClassData(
+            dataLoader.getBlocks(), classData)
         
         #Para cada professor
         teachers =  dataLoader.getTeachersCopy()
         while (len(teachers) > 0):
             teacher = teachers.pop(random.choice(list(teachers)))
-            teacherBlocksToBeAllocated = filter.filterBlocksIndexesByTeacher(filteredBlocksIndexesByClass[dataClass], teacher.name)
+            teacherBlocksToBeAllocated = filter.filterBlocksIndexesByTeacher(filteredBlocksIndexesByClass[classData], teacher.name)
             while(len(teacherBlocksToBeAllocated) > 0):
                 print(teacher.name)
                 print(teacherBlocksToBeAllocated)
-                availableTeacherBlocksByShift = teacher.getAllSortedBlocksCopy()[dataClass.shift]
+                availableTeacherBlocksByShift = teacher.getAllSortedBlocksCopy()[classData.shift]
                 print(availableTeacherBlocksByShift)
                 for teacherAvailableBlock in availableTeacherBlocksByShift:
                     print(teacherAvailableBlock)
-                    print(filteredBlocksIndexesByClass[dataClass])
-                    print(timeTables[dataClass])
-                    if(timeTables[dataClass][teacherAvailableBlock[0]][teacherAvailableBlock[1]] == None):
+                    print(filteredBlocksIndexesByClass[classData])
+                    print(timeTables[classData])
+                    if(timeTables[classData][teacherAvailableBlock[0]][teacherAvailableBlock[1]] == None):
                         #alocar aula
-                        timeTables[dataClass][teacherAvailableBlock[0]][teacherAvailableBlock[1]] = teacherBlocksToBeAllocated.pop(0)
+                        timeTables[classData][teacherAvailableBlock[0]][teacherAvailableBlock[1]] = teacherBlocksToBeAllocated.pop(0)
                         availableTeacherBlocksByShift.remove(teacherAvailableBlock)
                         break  #sai do laco -> teacherAvailableBlock in availableTeacherBlocksByShift:
 

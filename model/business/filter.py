@@ -1,11 +1,11 @@
 import dataLoader
 from model.utils.shifts import *
 
-def filterBlocksIndexesBySemesterAndShift(blocksArg, semesterNumberArg=1, shiftArg = MORNING):
+def filterBlocksIndexesByClassData(blocksArg, classDataArg):
     filteredIndexes = []
     blocksCopy = blocksArg.copy()
     for i in range(len(blocksCopy)):
-        if blocksCopy[i].semesterNumber == semesterNumberArg and blocksCopy[i].shift == shiftArg:
+        if blocksCopy[i].classData == classDataArg:
             filteredIndexes.append(i)
     return filteredIndexes
 
