@@ -8,6 +8,18 @@ from model.utils.shifts import AFTERNOON, MORNING, NIGHT, NUMBER_OF_BLOCKS_IN_SH
 
 class Teacher:
     
+    #Constructor
+    def __init__(self, nameArg, availabilitiesArg):
+        self.name = nameArg
+        self.__availabilities = availabilitiesArg
+        self.__sortedBlocks = self.__constructAllSortedBlocks()
+
+    def getAvailabilitiesCopy(self):
+        return numpy.array(self.__availabilities).copy()
+
+    def getAllSortedBlocksCopy(self):
+        return self.__sortedBlocks.copy()    #cópia do dicionário para evitar efeito colateral
+
     def __constructAllSortedBlocks(self):
         allSortedBlocks = {}
         shifts = [MORNING, AFTERNOON, NIGHT]
@@ -45,18 +57,5 @@ class Teacher:
             for i in range(NUMBER_OF_BLOCKS_IN_SHIFT):   #0, 1, 2
                 sortedBlocks.append([i, dayOfWeek])
 
-    #Constructor
-    def __init__(self, nameArg, availabilitiesArg):
-        self.name = nameArg
-        self.__availabilities = availabilitiesArg
-        self.__sortedBlocks = self.__constructAllSortedBlocks()
-        print(self.name)
-        print(self.__availabilities)
-        print(self.__sortedBlocks)
-
-    def getAvailabilitiesCopy(self):
-        return numpy.array(self.__availabilities).copy()
-
-    def getAllSortedBlocksCopy(self):
-        return self.__sortedBlocks.copy()    #cópia do dicionário para evitar efeito colateral
+    
     

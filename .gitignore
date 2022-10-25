@@ -2,6 +2,11 @@
 __pycache__/
 *.py[cod]
 
+#CSV and Excel Sheet Files
+*.csv
+*.xls
+*.xlsx
+
 # C extensions
 *.so
 
