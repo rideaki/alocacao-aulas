@@ -21,7 +21,7 @@ def _loadTeachers():  # nome e disponibilidade [MONDAY, TUESDAY, WEDNESDAY, THUR
     __addTeacher("Leonardo", [MONDAY, TUESDAY, WEDNESDAY])	
     __addTeacher("Patrícia", [MONDAY, WEDNESDAY])	
     __addTeacher("Paulo", [TUESDAY, WEDNESDAY, THURSDAY])	
-    __addTeacher("Reginaldo", [WEDNESDAY, THURSDAY, FRIDAY])	
+    __addTeacher("Reginaldo", [MONDAY, TUESDAY, WEDNESDAY])	
     __addTeacher("Verônica", [WEDNESDAY, THURSDAY])	
 
 # TURMAS ###############################################################################################################
