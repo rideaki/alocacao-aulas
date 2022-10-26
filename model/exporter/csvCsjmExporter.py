@@ -1,5 +1,6 @@
 import dataLoader
 
+# Exporter especifico para o CSV do Campus São João de Meriti
 def exportToCSJMCsvFile(timeTables):
 
     classes = dataLoader.getClassesCopy()

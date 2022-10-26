@@ -1,5 +1,6 @@
 import dataLoader
 from model.exporter.csvCsjmExporter import exportToCSJMCsvFile
+from model.exporter.csvGenericExporter import exportToGenericCsvFile
 from model.heuristic.heuristicConstructor import heusristicConstruct
 
 globalSolution = {}   #dicionario: dicionario[dataClass] = tabela horária de cada turma (dataClass)
@@ -10,5 +11,5 @@ if __name__ == "__main__":
     dataLoader.loadAllData()
     globalSolution = heusristicConstruct().copy()
 
-    exportToCSJMCsvFile(globalSolution)  # Export para o arquiv outputTimeTable.csv na pasta raiz do projeto.
+    exportToGenericCsvFile(globalSolution)  # Export para o arquiv outputTimeTable.csv na pasta raiz do projeto.
 
