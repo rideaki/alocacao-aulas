@@ -1,5 +1,8 @@
 import dataLoader
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
+from typing import Final
+
+MAX_CELL_SIZE: Final = 20
 
 # Exporter que pode ser utilizado por qualquer campus
 def exportToGenericCsvFile(timeTables):
@@ -12,7 +15,7 @@ def exportToGenericCsvFile(timeTables):
         csvString += ", Turma: " + str(classData.semesterNumber) + " - Curso: " + classData.courseName + " - " + classData.shift + "\n"
         classTimeTable = timeTables[classData]
         for blockNumber in range(NUMBER_OF_BLOCKS_IN_SHIFT): #3 blocos por periodo
-            csvString += "Aula " + str(blockNumber) + ","
+            csvString += "Aula " + str(blockNumber) + ", "
             for dayOfWeek in range(5):  #5 dias uteis por semana (segunda a sexta)
                 csvString += blockIndexToString(classTimeTable[blockNumber][dayOfWeek])
             csvString += " \n"
@@ -28,7 +31,7 @@ def exportToGenericCsvFile(timeTables):
 def blockIndexToString(index):
     blocks = dataLoader.getBlocksCopy()
     if((index == None) or (index >= len(blocks)) or (blocks[index] == None)):
-        return "TV / TV, "  # Tempo Vago
+        return ("TV / TV").ljust(MAX_CELL_SIZE) + ", "  # Tempo Vago
     else:
-        return blocks[index].curricularComponentName + " / " + blocks[index].teacher.name + ","
+        return (blocks[index].curricularComponentName + " / " + blocks[index].teacher.name).ljust(MAX_CELL_SIZE) + ", "
 
