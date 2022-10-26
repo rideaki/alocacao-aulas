@@ -1,7 +1,5 @@
 import numpy
 
-from copyreg import constructor
-
 from model.utils.daysOfWeek import FRIDAY, MONDAY, THURSDAY, TUESDAY, WEDNESDAY
 from model.utils.shifts import AFTERNOON, MORNING, NIGHT, NUMBER_OF_BLOCKS_IN_SHIFT
 

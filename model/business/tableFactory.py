@@ -7,10 +7,10 @@ import numpy
 #      1
 #      2
 ########################################################################
-def constructClassTable():                      
-    return [[None, None, None, None, None],     
-            [None, None, None, None, None],     
-            [None, None, None, None, None]]     
+def constructClassTable(initialValue = None):                      
+    return [[initialValue, initialValue, initialValue, initialValue, initialValue],     
+            [initialValue, initialValue, initialValue, initialValue, initialValue],     
+            [initialValue, initialValue, initialValue, initialValue, initialValue]]     
 
 ########################################################################
 # BlockOf2Hours  MONDAY=0, TUESDAY=1, WEDNESDAY=2, THURSDAY=3, FRIDAY=4
