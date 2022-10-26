@@ -6,8 +6,12 @@ from model.business.tableFactory import constructClassTable
 def heusristicConstruct():
     timeTables = {}
     filteredBlocksIndexesByClass = {}
+    
     # Para cada turma
-    for classData in dataLoader.getClassesCopy():
+    classes = dataLoader.getClassesCopy()
+    while (len(classes) > 0):
+        classData = random.choice(classes)
+        classes.remove(classData) 
         timeTables[classData] = constructClassTable()
         filteredBlocksIndexesByClass[classData] = filter.filterBlocksIndexesByClassData(
             dataLoader.getBlocks(), classData)
