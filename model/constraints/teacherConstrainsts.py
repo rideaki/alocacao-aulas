@@ -20,20 +20,7 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela h
         penaltiesTablesDict[dataClass] = constructClassTable(0)
         penaltyTable = penaltiesTablesDict[dataClass]
 
-        #VERIFICACAO DE DISCIPLINA COM 3 BLOCOS SEGUIDOS NO MESMO DIA
-        for dayOfWeek in range(5):
-            if((timeTable[0][dayOfWeek] != None) and (timeTable[1][dayOfWeek] != None) and (timeTable[2][dayOfWeek] != None)):
-                firstBlockIndex =  timeTable[0][dayOfWeek]
-                firstCurricularComponentName = blocks[firstBlockIndex].curricularComponentName
-                secondBlockIndex = timeTable[1][dayOfWeek]
-                secondCurricularComponentName = blocks[secondBlockIndex].curricularComponentName
-                thirdBlockIndex = timeTable[2][dayOfWeek]
-                thirdCurricularComponentName = blocks[thirdBlockIndex].curricularComponentName
-                if(firstCurricularComponentName == secondCurricularComponentName == thirdCurricularComponentName):
-                    #disciplina de 3 blocos está no mesmo dia
-                    penaltyTable[0][dayOfWeek] += THREE_CONSECUTIVE_BLOCKS_PENALTY//2 #trunca o resultado
-                    penaltyTable[2][dayOfWeek] += THREE_CONSECUTIVE_BLOCKS_PENALTY//2
-                    penaltiesTotalValue += THREE_CONSECUTIVE_BLOCKS_PENALTY
+        penaltiesTotalValue += __returnConsecutivesThreeBlocksPenalty(blocks, timeTable, penaltyTable)
 
         #para cada bloco de cada do timeTable da turma
         for indexesPair, blockAllocation in numpy.ndenumerate(timeTable):
@@ -45,25 +32,51 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela h
             allocatedTeacher = allocatedTeachers[teacherName]
             allocationTable = allocatedTeacher.allocationsTables[block.classData.shift]
             
-            # VERIFICACAO DE CONFLITO
-            if (allocationTable[indexesPair[0]][indexesPair[1]] != None):  #conflito: horário já alocado para o professor!
-                penaltyTable[indexesPair[0]][indexesPair[1]] += CONFLICT_PENALTY
-                penaltiesTotalValue += CONFLICT_PENALTY
-            else:
-                allocationTable[indexesPair[0]][indexesPair[1]] = block
-            
-            # VERIFICACAO DE ALOCACAO FORA DA DISPONIBILIDADE DO PROFESSOR
-            dayOfWeekAllocated = indexesPair[1]
-            if (dayOfWeekAllocated not in teacher.getAvailabilitiesCopy()):
-                print(teacherName)
-                print(dayOfWeekAllocated)
-                penaltyTable[indexesPair[0]][indexesPair[1]] += AVAILABILITY_PENALTY
-                penaltiesTotalValue += AVAILABILITY_PENALTY
+            penaltiesTotalValue += __returnConflictPenalty(penaltyTable, indexesPair, block, allocationTable)
+            penaltiesTotalValue += __returnUnavailableDayPenalty(penaltyTable, indexesPair, teacher, teacherName)
     
     print(penaltiesTablesDict)
     print(penaltiesTotalValue)
 
     return penaltiesTablesDict, penaltiesTotalValue
+
+#VERIFICACAO DE DISCIPLINA COM 3 BLOCOS SEGUIDOS NO MESMO TURNO
+def __returnConsecutivesThreeBlocksPenalty(blocks, timeTable, penaltyTable):
+    penaltiesLocalValue = 0
+    for dayOfWeek in range(5):
+        if((timeTable[0][dayOfWeek] != None) and (timeTable[1][dayOfWeek] != None) and (timeTable[2][dayOfWeek] != None)):
+            firstBlockIndex =  timeTable[0][dayOfWeek]
+            firstCurricularComponentName = blocks[firstBlockIndex].curricularComponentName
+            secondBlockIndex = timeTable[1][dayOfWeek]
+            secondCurricularComponentName = blocks[secondBlockIndex].curricularComponentName
+            thirdBlockIndex = timeTable[2][dayOfWeek]
+            thirdCurricularComponentName = blocks[thirdBlockIndex].curricularComponentName
+            if(firstCurricularComponentName == secondCurricularComponentName == thirdCurricularComponentName):
+                    #disciplina de 3 blocos está no mesmo dia
+                penaltyTable[0][dayOfWeek] += THREE_CONSECUTIVE_BLOCKS_PENALTY//2 #trunca o resultado
+                penaltyTable[2][dayOfWeek] += THREE_CONSECUTIVE_BLOCKS_PENALTY//2
+                penaltiesLocalValue += THREE_CONSECUTIVE_BLOCKS_PENALTY
+    return penaltiesLocalValue
+
+# VERIFICACAO DE CONFLITO e ATUALIZA TABELA DE ALOCACAO DO PROFESSOR
+def __returnConflictPenalty(penaltyTable, indexesPair, block, allocationTable):
+    if (allocationTable[indexesPair[0]][indexesPair[1]] != None):  #conflito: horário já alocado para o professor!
+        penaltyTable[indexesPair[0]][indexesPair[1]] += CONFLICT_PENALTY
+        return CONFLICT_PENALTY
+    else: #aloca bloco na allocationTable do professor
+        allocationTable[indexesPair[0]][indexesPair[1]] = block
+        return 0
+
+# VERIFICACAO DE ALOCACAO FORA DA DISPONIBILIDADE DO PROFESSOR
+def __returnUnavailableDayPenalty(penaltyTable, indexesPair, teacher, teacherName):
+    dayOfWeekAllocated = indexesPair[1]
+    if (dayOfWeekAllocated in teacher.getAvailabilitiesCopy()):
+        return 0    
+    print(teacherName)
+    print(dayOfWeekAllocated)
+    penaltyTable[indexesPair[0]][indexesPair[1]] += AVAILABILITY_PENALTY
+    return AVAILABILITY_PENALTY
+
 
 
 def __returnEmptyAllocationsTeachersDict():
