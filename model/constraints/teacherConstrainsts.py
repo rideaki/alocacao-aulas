@@ -5,6 +5,7 @@ from model.business.tableFactory import constructClassTable
 from model.constraints.entity.allocatedTeacher import AllocatedTeacher
 
 CONFLICT_PENALTY = 1000
+THREE_CONSECUTIVE_BLOCKS_PENALTY = 30
 AVAILABILITY_PENALTY = 10
 
 def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela horária de cada turma (dataClass)
@@ -18,6 +19,21 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela h
     for dataClass, timeTable in timeTablesDict.items():
         penaltiesTablesDict[dataClass] = constructClassTable(0)
         penaltyTable = penaltiesTablesDict[dataClass]
+
+        #VERIFICACAO DE DISCIPLINA COM 3 BLOCOS SEGUIDOS NO MESMO DIA
+        for dayOfWeek in range(5):
+            if((timeTable[0][dayOfWeek] != None) and (timeTable[1][dayOfWeek] != None) and (timeTable[2][dayOfWeek] != None)):
+                firstBlockIndex =  timeTable[0][dayOfWeek]
+                firstCurricularComponentName = blocks[firstBlockIndex].curricularComponentName
+                secondBlockIndex = timeTable[1][dayOfWeek]
+                secondCurricularComponentName = blocks[secondBlockIndex].curricularComponentName
+                thirdBlockIndex = timeTable[2][dayOfWeek]
+                thirdCurricularComponentName = blocks[thirdBlockIndex].curricularComponentName
+                if(firstCurricularComponentName == secondCurricularComponentName == thirdCurricularComponentName):
+                    #disciplina de 3 blocos está no mesmo dia
+                    penaltyTable[0][dayOfWeek] += THREE_CONSECUTIVE_BLOCKS_PENALTY//2 #trunca o resultado
+                    penaltyTable[2][dayOfWeek] += THREE_CONSECUTIVE_BLOCKS_PENALTY//2
+                    penaltiesTotalValue += THREE_CONSECUTIVE_BLOCKS_PENALTY
 
         #para cada bloco de cada do timeTable da turma
         for indexesPair, blockAllocation in numpy.ndenumerate(timeTable):
