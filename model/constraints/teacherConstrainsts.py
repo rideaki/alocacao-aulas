@@ -11,13 +11,15 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela h
     penaltiesTablesDict = {} #retorna dicionario[dataClass] = tabela de penalidades de cada turma (dataClass)
     penaltiesTotalValue = 0 
 
-    allocatedTeachers = returnEmptyAllocationsTeachersDict()
+    allocatedTeachers = __returnEmptyAllocationsTeachersDict()
     blocks = dataLoader.getBlocksCopy()
 
+    #para cada timeTable de cada turma
     for dataClass, timeTable in timeTablesDict.items():
         penaltiesTablesDict[dataClass] = constructClassTable(0)
         penaltyTable = penaltiesTablesDict[dataClass]
 
+        #para cada bloco de cada do timeTable da turma
         for indexesPair, blockAllocation in numpy.ndenumerate(timeTable):
             if(blockAllocation == None):
                 continue #pula a iteração atual
@@ -28,27 +30,33 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela h
             allocationTable = allocatedTeacher.allocationsTables[block.classData.shift]
             
             # VERIFICACAO DE CONFLITO
-            if (allocationTable[indexesPair[0]][indexesPair[1]] != None):  #conflito: horário já alocado para o professor!
-                penaltyTable[indexesPair[0]][indexesPair[1]] += CONFLICT_PENALTY
-                penaltiesTotalValue += CONFLICT_PENALTY
-            else:
-                allocationTable[indexesPair[0]][indexesPair[1]] = block
+            __checkConflict(penaltiesTotalValue, penaltyTable, indexesPair, block, allocationTable)
             
             # VERIFICACAO DE ALOCACAO FORA DA DISPONIBILIDADE DO PROFESSOR
-            dayOfWeekAllocated = indexesPair[1]
-            if (dayOfWeekAllocated not in teacher.getAvailabilitiesCopy()):
-                print(teacherName)
-                print(dayOfWeekAllocated)
-                penaltyTable[indexesPair[0]][indexesPair[1]] += AVAILABILITY_PENALTY
-                penaltiesTotalValue += AVAILABILITY_PENALTY
+            __checkUnavailableDay(penaltiesTotalValue, penaltyTable, indexesPair, teacher, teacherName)
     
     print(penaltiesTablesDict)
     print(penaltiesTotalValue)
 
-    return penaltiesTotalValue, penaltiesTotalValue
+    return penaltiesTablesDict, penaltiesTotalValue
 
 
-def returnEmptyAllocationsTeachersDict():
+def __checkConflict(penaltiesTotalValue, penaltyTable, indexesPair, block, allocationTable):
+    if (allocationTable[indexesPair[0]][indexesPair[1]] != None):  #conflito: horário já alocado para o professor!
+        penaltyTable[indexesPair[0]][indexesPair[1]] += CONFLICT_PENALTY
+        penaltiesTotalValue += CONFLICT_PENALTY
+    else:
+        allocationTable[indexesPair[0]][indexesPair[1]] = block
+
+def __checkUnavailableDay(penaltiesTotalValue, penaltyTable, indexesPair, teacher, teacherName):
+    dayOfWeekAllocated = indexesPair[1]
+    if (dayOfWeekAllocated not in teacher.getAvailabilitiesCopy()):
+        print(teacherName)
+        print(dayOfWeekAllocated)
+        penaltyTable[indexesPair[0]][indexesPair[1]] += AVAILABILITY_PENALTY
+        penaltiesTotalValue += AVAILABILITY_PENALTY
+
+def __returnEmptyAllocationsTeachersDict():
     empytAllocatedTeachers = {}
     teachers =  dataLoader.getTeachersCopy()
     for teacherName, teacher in teachers.items():
