@@ -30,31 +30,25 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela h
             allocationTable = allocatedTeacher.allocationsTables[block.classData.shift]
             
             # VERIFICACAO DE CONFLITO
-            __checkConflict(penaltiesTotalValue, penaltyTable, indexesPair, block, allocationTable)
+            if (allocationTable[indexesPair[0]][indexesPair[1]] != None):  #conflito: horário já alocado para o professor!
+                penaltyTable[indexesPair[0]][indexesPair[1]] += CONFLICT_PENALTY
+                penaltiesTotalValue += CONFLICT_PENALTY
+            else:
+                allocationTable[indexesPair[0]][indexesPair[1]] = block
             
             # VERIFICACAO DE ALOCACAO FORA DA DISPONIBILIDADE DO PROFESSOR
-            __checkUnavailableDay(penaltiesTotalValue, penaltyTable, indexesPair, teacher, teacherName)
+            dayOfWeekAllocated = indexesPair[1]
+            if (dayOfWeekAllocated not in teacher.getAvailabilitiesCopy()):
+                print(teacherName)
+                print(dayOfWeekAllocated)
+                penaltyTable[indexesPair[0]][indexesPair[1]] += AVAILABILITY_PENALTY
+                penaltiesTotalValue += AVAILABILITY_PENALTY
     
     print(penaltiesTablesDict)
     print(penaltiesTotalValue)
 
     return penaltiesTablesDict, penaltiesTotalValue
 
-
-def __checkConflict(penaltiesTotalValue, penaltyTable, indexesPair, block, allocationTable):
-    if (allocationTable[indexesPair[0]][indexesPair[1]] != None):  #conflito: horário já alocado para o professor!
-        penaltyTable[indexesPair[0]][indexesPair[1]] += CONFLICT_PENALTY
-        penaltiesTotalValue += CONFLICT_PENALTY
-    else:
-        allocationTable[indexesPair[0]][indexesPair[1]] = block
-
-def __checkUnavailableDay(penaltiesTotalValue, penaltyTable, indexesPair, teacher, teacherName):
-    dayOfWeekAllocated = indexesPair[1]
-    if (dayOfWeekAllocated not in teacher.getAvailabilitiesCopy()):
-        print(teacherName)
-        print(dayOfWeekAllocated)
-        penaltyTable[indexesPair[0]][indexesPair[1]] += AVAILABILITY_PENALTY
-        penaltiesTotalValue += AVAILABILITY_PENALTY
 
 def __returnEmptyAllocationsTeachersDict():
     empytAllocatedTeachers = {}
