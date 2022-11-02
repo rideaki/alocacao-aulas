@@ -6,9 +6,10 @@ from model.business.tableFactory import constructClassTable
 from model.constraints.entity.allocatedTeacher import AllocatedTeacher
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 
-CONFLICT_PENALTY = 1000
-THREE_CONSECUTIVE_BLOCKS_PENALTY = 30
-AVAILABILITY_PENALTY = 10
+CONFLICT_PENALTY = 1000000
+THREE_CONSECUTIVE_BLOCKS_PENALTY = 300
+AVAILABILITY_PENALTY = 100
+SPARSE_DAYS_PENALTY = 2
 
 def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela horária de cada turma (dataClass)
     penaltiesTablesDict = {} #retorna dicionario[dataClass] = tabela de penalidades de cada turma (dataClass)
@@ -47,16 +48,22 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela h
 
 #VERIFICA SE A DISTRIBUIÇÃO DE ALOCAÇÕES SE ESPALHOU POR MUITOS DIAS PARA O PROFESSOR
 def __returnSparseDaysPenalty(penaltyTable, allocatedTeachers):
+    #para cada professor alocado
     for teacherName, allocatedTeacher in allocatedTeachers.items():
         concatenatedAllocationTable = __concatenateShiftsAllocationTables(allocatedTeacher)
         numberOfBlocksAllocated = numpy.where(concatenatedAllocationTable != None, 1, 0).sum() 
-        daysOfWeekAllocated = ~numpy.all(concatenatedAllocationTable == None, axis = 0)
-        numberOfDaysAllocated = daysOfWeekAllocated.sum()
-        if numberOfDaysAllocated <= ceil(numberOfBlocksAllocated/NUMBER_OF_BLOCKS_IN_SHIFT):
+        daysOfWeekAllocatedBoolean = ~numpy.all(concatenatedAllocationTable == None, axis = 0)
+        numberOfDaysAllocated = daysOfWeekAllocatedBoolean.sum()
+        if numberOfDaysAllocated <= ceil(numberOfBlocksAllocated/len(concatenatedAllocationTable)):
             return 0  #número de dias alocado já é mínimo, portanto não há penalidade
+        daysOfWeekAllocated = numpy.where(daysOfWeekAllocatedBoolean == True)[0]
+        firstDayAllocated = daysOfWeekAllocated[0]
+        lastDayAllocated = daysOfWeekAllocated[-1] #em python, indice -1 retorna o ultimo elemento
+
         print(teacherName)
         print(daysOfWeekAllocated)
-        print(numberOfDaysAllocated)
+        print(firstDayAllocated)
+        print(lastDayAllocated)
 
 #Concatena as tabelas de alocação por turno
 def __concatenateShiftsAllocationTables(allocatedTeacher):
