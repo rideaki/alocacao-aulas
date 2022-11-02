@@ -35,10 +35,34 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela h
             penaltiesTotalValue += __returnConflictPenalty(penaltyTable, indexesPair, block, allocationTable)
             penaltiesTotalValue += __returnUnavailableDayPenalty(penaltyTable, indexesPair, teacher, teacherName)
     
+    #para cada professor alocado
+    for teacherName, allocatedTeacher in allocatedTeachers.items():
+        concatenatedAllocationTable = __concatenateShiftsAllocationTables(allocatedTeacher)
+        numberOfBlocksAllocated = numpy.where(concatenatedAllocationTable != None, 1, 0).sum() 
+        daysOfWeekAllocated = ~numpy.all(concatenatedAllocationTable == None, axis = 0)
+        numberOfDaysAllocated = daysOfWeekAllocated.sum()
+        print(teacherName)
+        print(daysOfWeekAllocated)
+        print(numberOfDaysAllocated) 
+        
     print(penaltiesTablesDict)
     print(penaltiesTotalValue)
 
     return penaltiesTablesDict, penaltiesTotalValue
+
+#Concatena as tabelas de alocação por turno
+def __concatenateShiftsAllocationTables(allocatedTeacher):
+    returnConcatenedTable = None
+    #Para cada turno
+    for shift, allocationTableByShift in allocatedTeacher.allocationsTables.items():
+        if (numpy.array(allocationTableByShift) == None).all():  #Se não há alocação no turno, não concatena a tabela
+            continue
+        if returnConcatenedTable is None:
+            returnConcatenedTable = allocationTableByShift
+        else:
+            #axis=0 -> contatenação vertical                          
+            returnConcatenedTable = numpy.concatenate((returnConcatenedTable, allocationTableByShift), axis=0)
+    return numpy.array(returnConcatenedTable)
 
 #VERIFICACAO DE DISCIPLINA COM 3 BLOCOS SEGUIDOS NO MESMO TURNO
 def __returnConsecutivesThreeBlocksPenalty(blocks, timeTable, penaltyTable):
@@ -72,8 +96,6 @@ def __returnUnavailableDayPenalty(penaltyTable, indexesPair, teacher, teacherNam
     dayOfWeekAllocated = indexesPair[1]
     if (dayOfWeekAllocated in teacher.getAvailabilitiesCopy()):
         return 0    
-    print(teacherName)
-    print(dayOfWeekAllocated)
     penaltyTable[indexesPair[0]][indexesPair[1]] += AVAILABILITY_PENALTY
     return AVAILABILITY_PENALTY
 
