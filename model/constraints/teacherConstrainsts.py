@@ -1,8 +1,10 @@
 from http.client import CONFLICT
+from math import ceil
 import numpy
 import dataLoader
 from model.business.tableFactory import constructClassTable
 from model.constraints.entity.allocatedTeacher import AllocatedTeacher
+from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 
 CONFLICT_PENALTY = 1000
 THREE_CONSECUTIVE_BLOCKS_PENALTY = 30
@@ -36,19 +38,25 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela h
             penaltiesTotalValue += __returnUnavailableDayPenalty(penaltyTable, indexesPair, teacher, teacherName)
     
     #para cada professor alocado
-    for teacherName, allocatedTeacher in allocatedTeachers.items():
-        concatenatedAllocationTable = __concatenateShiftsAllocationTables(allocatedTeacher)
-        numberOfBlocksAllocated = numpy.where(concatenatedAllocationTable != None, 1, 0).sum() 
-        daysOfWeekAllocated = ~numpy.all(concatenatedAllocationTable == None, axis = 0)
-        numberOfDaysAllocated = daysOfWeekAllocated.sum()
-        print(teacherName)
-        print(daysOfWeekAllocated)
-        print(numberOfDaysAllocated) 
+    penaltiesTotalValue += __returnSparseDaysPenalty(penaltyTable, allocatedTeachers) 
         
     print(penaltiesTablesDict)
     print(penaltiesTotalValue)
 
     return penaltiesTablesDict, penaltiesTotalValue
+
+#VERIFICA SE A DISTRIBUIÇÃO DE ALOCAÇÕES SE ESPALHOU POR MUITOS DIAS PARA O PROFESSOR
+def __returnSparseDaysPenalty(penaltyTable, allocatedTeachers):
+    for teacherName, allocatedTeacher in allocatedTeachers.items():
+        concatenatedAllocationTable = __concatenateShiftsAllocationTables(allocatedTeacher)
+        numberOfBlocksAllocated = numpy.where(concatenatedAllocationTable != None, 1, 0).sum() 
+        daysOfWeekAllocated = ~numpy.all(concatenatedAllocationTable == None, axis = 0)
+        numberOfDaysAllocated = daysOfWeekAllocated.sum()
+        if numberOfDaysAllocated <= ceil(numberOfBlocksAllocated/NUMBER_OF_BLOCKS_IN_SHIFT):
+            return 0  #número de dias alocado já é mínimo, portanto não há penalidade
+        print(teacherName)
+        print(daysOfWeekAllocated)
+        print(numberOfDaysAllocated)
 
 #Concatena as tabelas de alocação por turno
 def __concatenateShiftsAllocationTables(allocatedTeacher):
@@ -60,8 +68,7 @@ def __concatenateShiftsAllocationTables(allocatedTeacher):
         if returnConcatenedTable is None:
             returnConcatenedTable = allocationTableByShift
         else:
-            #axis=0 -> contatenação vertical                          
-            returnConcatenedTable = numpy.concatenate((returnConcatenedTable, allocationTableByShift), axis=0)
+            returnConcatenedTable = numpy.concatenate((returnConcatenedTable, allocationTableByShift), axis=0) #axis=0 -> conc. vertical
     return numpy.array(returnConcatenedTable)
 
 #VERIFICACAO DE DISCIPLINA COM 3 BLOCOS SEGUIDOS NO MESMO TURNO
