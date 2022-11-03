@@ -39,13 +39,10 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
     
     #para cada professor alocado
     __checkSparseDays(penaltiesTablesDict, allocatedTeachers) 
+
+    penaltiesTotalValue = __calculatePenaltiesTotalValues(penaltiesTablesDict)
         
     print(penaltiesTablesDict)
-
-    penaltiesTotalValue = 0
-    for timeTable in penaltiesTablesDict.values():
-        penaltiesTotalValue += numpy.sum(timeTable)
-
     print(penaltiesTotalValue)
 
     return penaltiesTablesDict, penaltiesTotalValue
@@ -132,3 +129,9 @@ def __returnEmptyAllocatedTeachersDict():
     for teacherName, teacher in teachers.items():
         empytAllocatedTeachers[teacher.name] = AllocatedTeacher(teacherName, teacher.getAvailabilitiesCopy())
     return empytAllocatedTeachers
+
+def __calculatePenaltiesTotalValues(penaltiesTablesDict):
+    penaltiesTotalValue = 0
+    for timeTable in penaltiesTablesDict.values():
+        penaltiesTotalValue += numpy.sum(timeTable)
+    return penaltiesTotalValue
