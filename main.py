@@ -13,7 +13,7 @@ if __name__ == "__main__":
     dataLoader.loadAllData()
 
     while(True):
-        solution = heusristicConstruct()
+        solution = heusristicConstruct().copy()
         penaltiesTablesDict, solutionPenalty = calculatePenalties(solution)
         print(solutionPenalty)
         if(solutionPenalty <= globalSolutionPenalty):    

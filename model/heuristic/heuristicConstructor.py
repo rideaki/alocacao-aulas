@@ -12,7 +12,7 @@ def heusristicConstruct():
     while (len(classes) > 0):
         classData = random.choice(classes)
         classes.remove(classData) 
-        timeTables[classData] = constructClassTable(None)
+        timeTables[classData] = constructClassTable(None).copy()
         filteredBlocksIndexesByClass[classData] = filter.filterBlocksIndexesByClassData(
             dataLoader.getBlocks(), classData).copy()
         
