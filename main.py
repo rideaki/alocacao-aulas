@@ -1,6 +1,7 @@
 import dataLoader
 from model.constraints.teacherConstrainsts import calculatePenalties
 from model.exporter.csvCsjmExporter import exportToCSJMCsvFile
+from model.constraints.auxi.auxiPrinter import printPenaltiesTablesDict
 from model.exporter.csvGenericExporter import exportToGenericCsvFile
 from model.heuristic.heuristicConstructor import heusristicConstruct
 
@@ -10,8 +11,15 @@ globalSolutionPenalty = float('inf')  # penalidades positivas. Objetivo: MINIMIZ
 
 if __name__ == "__main__":
     dataLoader.loadAllData()
-    globalSolution = heusristicConstruct()
-    penaltiesTablesDict, globalSolutionPenalty = calculatePenalties(globalSolution)
 
-    exportToGenericCsvFile(globalSolution)  # Export para o arquiv outputTimeTable.csv na pasta raiz do projeto.
+    while(True):
+        solution = heusristicConstruct()
+        penaltiesTablesDict, solutionPenalty = calculatePenalties(solution)
+        print(solutionPenalty)
+        if(solutionPenalty <= globalSolutionPenalty):    
+            globalSolution = solution
+            globalSolutionPenalty = solutionPenalty
+            print("Uma solução viável foi encontrada. Aguarde para procurar soluções melhores.")
+            printPenaltiesTablesDict(penaltiesTablesDict)
+            exportToGenericCsvFile(globalSolution)  # Export para o arquiv outputTimeTable.csv na pasta raiz do projeto.
 

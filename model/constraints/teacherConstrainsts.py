@@ -2,7 +2,6 @@ from http.client import CONFLICT
 from math import ceil
 import numpy
 import dataLoader
-from model.constraints.auxi.auxiPrinter import printPenaltiesTablesDict
 from model.business.tableFactory import constructClassTable
 from model.constraints.entity.allocatedTeacher import AllocatedTeacher
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
@@ -42,8 +41,6 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
     __checkSparseDays(penaltiesTablesDict, allocatedTeachers) 
 
     penaltiesTotalValue = __calculatePenaltiesTotalValues(penaltiesTablesDict)
-        
-    printPenaltiesTablesDict(penaltiesTablesDict)
     print(penaltiesTotalValue)
 
     return penaltiesTablesDict, penaltiesTotalValue
@@ -53,10 +50,12 @@ def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
     #para cada professor alocado
     for teacherName, allocatedTeacher in allocatedTeachers.items():
         concatenatedAllocationTable = __concatenateShiftsAllocationTables(allocatedTeacher)
+        if(concatenatedAllocationTable is None):
+            return #professor não foi alocado, portanto não há penalidade
         numberOfBlocksAllocated = numpy.where(concatenatedAllocationTable != None, 1, 0).sum() 
         daysOfWeekAllocatedBoolean = ~numpy.all(concatenatedAllocationTable == None, axis = 0)
         numberOfDaysAllocated = daysOfWeekAllocatedBoolean.sum()
-        numberOfRowsInConcatenatedTable = concatenatedAllocationTable[:,0].size
+        numberOfRowsInConcatenatedTable = 6 #len(concatenatedAllocationTable) #[:,0].size
         minDaysToBeAllocated = ceil(numberOfBlocksAllocated/numberOfRowsInConcatenatedTable)
         if (numberOfDaysAllocated <= minDaysToBeAllocated) or (
             numberOfDaysAllocated == 2 and numberOfBlocksAllocated == numberOfRowsInConcatenatedTable):  #contem disciplinas com 3 blocos
@@ -84,7 +83,7 @@ def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
         print(teacherName)
         print(daysOfWeekAllocated)
 
-#Concatena as tabelas de alocação do vericalmente
+#Concatena as tabelas de alocação do verticalmente
 def __concatenateShiftsAllocationTables(allocatedTeacher):
     returnConcatenedTable = None
     #Para cada turno

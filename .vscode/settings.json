@@ -1,7 +1,4 @@
 {
-    "python.analysis.extraPaths": [
-        "./model/business"
-    ],
     "python.formatting.provider": "black",
     "python.formatting.blackArgs": [
         "--line-length",

@@ -12,17 +12,17 @@ def heusristicConstruct():
     while (len(classes) > 0):
         classData = random.choice(classes)
         classes.remove(classData) 
-        timeTables[classData] = constructClassTable()
+        timeTables[classData] = constructClassTable(None)
         filteredBlocksIndexesByClass[classData] = filter.filterBlocksIndexesByClassData(
-            dataLoader.getBlocks(), classData)
+            dataLoader.getBlocks(), classData).copy()
         
         #Para cada professor
         teachers =  dataLoader.getTeachersCopy()
         while (len(teachers) > 0):
             teacher = teachers.pop(random.choice(list(teachers)))
-            teacherBlocksToBeAllocated = filter.filterBlocksIndexesByTeacher(filteredBlocksIndexesByClass[classData], teacher.name)
+            teacherBlocksToBeAllocated = filter.filterBlocksIndexesByTeacher(filteredBlocksIndexesByClass[classData], teacher.name).copy()
             while(len(teacherBlocksToBeAllocated) > 0):
-                availableTeacherBlocksByShift = teacher.getAllSortedBlocksCopy()[classData.shift]
+                availableTeacherBlocksByShift = teacher.getAllSortedBlocksCopy()[classData.shift].copy()
                 for teacherAvailableBlock in availableTeacherBlocksByShift:
                     if(timeTables[classData][teacherAvailableBlock[0]][teacherAvailableBlock[1]] == None):
                         #alocar aula
