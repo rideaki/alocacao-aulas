@@ -2,13 +2,14 @@ from http.client import CONFLICT
 from math import ceil
 import numpy
 import dataLoader
+from model.constraints.auxi.auxiPrinter import printPenaltiesTablesDict
 from model.business.tableFactory import constructClassTable
 from model.constraints.entity.allocatedTeacher import AllocatedTeacher
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 
 CONFLICT_PENALTY = 1000000
-THREE_CONSECUTIVE_BLOCKS_PENALTY = 300
-AVAILABILITY_PENALTY = 100
+AVAILABILITY_PENALTY = 300
+THREE_CONSECUTIVE_BLOCKS_PENALTY = 200
 SPARSE_DAYS_PENALTY = 2
 
 def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela horária de cada turma (classData)
@@ -42,7 +43,7 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
 
     penaltiesTotalValue = __calculatePenaltiesTotalValues(penaltiesTablesDict)
         
-    print(penaltiesTablesDict)
+    printPenaltiesTablesDict(penaltiesTablesDict)
     print(penaltiesTotalValue)
 
     return penaltiesTablesDict, penaltiesTotalValue
@@ -55,7 +56,8 @@ def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
         numberOfBlocksAllocated = numpy.where(concatenatedAllocationTable != None, 1, 0).sum() 
         daysOfWeekAllocatedBoolean = ~numpy.all(concatenatedAllocationTable == None, axis = 0)
         numberOfDaysAllocated = daysOfWeekAllocatedBoolean.sum()
-        numberOfRowsInConcatenatedTable = len(concatenatedAllocationTable)
+        numberOfRowsInConcatenatedTable = concatenatedAllocationTable[:,0].size
+        print(numberOfRowsInConcatenatedTable)
         if (numberOfDaysAllocated <= ceil(numberOfBlocksAllocated/numberOfRowsInConcatenatedTable)) or (
             numberOfDaysAllocated == 2 and numberOfBlocksAllocated == numberOfRowsInConcatenatedTable):  #contem disciplinas com 3 blocos
             return #número de dias alocado já é mínimo, portanto não há penalidade
