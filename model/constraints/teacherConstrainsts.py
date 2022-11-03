@@ -57,8 +57,8 @@ def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
         daysOfWeekAllocatedBoolean = ~numpy.all(concatenatedAllocationTable == None, axis = 0)
         numberOfDaysAllocated = daysOfWeekAllocatedBoolean.sum()
         numberOfRowsInConcatenatedTable = concatenatedAllocationTable[:,0].size
-        print(numberOfRowsInConcatenatedTable)
-        if (numberOfDaysAllocated <= ceil(numberOfBlocksAllocated/numberOfRowsInConcatenatedTable)) or (
+        minDaysToBeAllocated = ceil(numberOfBlocksAllocated/numberOfRowsInConcatenatedTable)
+        if (numberOfDaysAllocated <= minDaysToBeAllocated) or (
             numberOfDaysAllocated == 2 and numberOfBlocksAllocated == numberOfRowsInConcatenatedTable):  #contem disciplinas com 3 blocos
             return #número de dias alocado já é mínimo, portanto não há penalidade
         daysOfWeekAllocated = numpy.where(daysOfWeekAllocatedBoolean == True)[0]
@@ -66,7 +66,7 @@ def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
         #Aplicando penalidades no primeiro dia alocado
         firstDayAllocated = daysOfWeekAllocated[0]
         numberOfBlocksInFirstDay = numpy.where(concatenatedAllocationTable[:,firstDayAllocated] != None, 1, 0).sum()
-        penaltyByBlockInFirstDay = SPARSE_DAYS_PENALTY/numberOfBlocksInFirstDay
+        penaltyByBlockInFirstDay = (numberOfDaysAllocated - minDaysToBeAllocated)*SPARSE_DAYS_PENALTY/numberOfBlocksInFirstDay
         for index, block in enumerate(list(zip(*concatenatedAllocationTable))[firstDayAllocated]): # zip(*matrix) = transposed of matrix
             if block == None:
                 continue
@@ -75,7 +75,7 @@ def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
         #Aplicando penalidades no ultimo dia alocado
         lastDayAllocated = daysOfWeekAllocated[-1] #em python, indice -1 retorna o ultimo elemento
         numberOfBlocksInLastDay = numpy.where(concatenatedAllocationTable[:,lastDayAllocated] != None, 1, 0).sum()
-        penaltyByBlockInLastDay = SPARSE_DAYS_PENALTY/numberOfBlocksInLastDay
+        penaltyByBlockInLastDay = (numberOfDaysAllocated - minDaysToBeAllocated)*SPARSE_DAYS_PENALTY/numberOfBlocksInLastDay
         for index, block in enumerate(list(zip(*concatenatedAllocationTable))[lastDayAllocated]): # zip(*matrix) = transposed of matrix
             if block == None:
                 continue
