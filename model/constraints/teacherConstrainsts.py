@@ -41,7 +41,12 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
     __checkSparseDays(penaltiesTablesDict, allocatedTeachers) 
         
     print(penaltiesTablesDict)
+
     penaltiesTotalValue = 0
+    for timeTable in penaltiesTablesDict.values():
+        penaltiesTotalValue += numpy.sum(timeTable)
+
+    print(penaltiesTotalValue)
 
     return penaltiesTablesDict, penaltiesTotalValue
 
