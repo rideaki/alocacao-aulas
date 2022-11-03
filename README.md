@@ -1,7 +1,7 @@
 # alocacao-aulas
 Projeto em Python para Alocação de Aulas
 
-Versão do python 3.9 ou mais recente
+Versão do python 3.11 ou mais recente
 
 Comando para iniciar o programa:
 
