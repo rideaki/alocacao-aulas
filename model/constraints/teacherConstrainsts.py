@@ -15,7 +15,7 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
     penaltiesTablesDict = {} #retorna dicionario[classData] = tabela de penalidades de cada turma (classData)
     penaltiesTotalValue = 0 
 
-    allocatedTeachers = __returnEmptyAllocationsTeachersDict()
+    allocatedTeachers = __returnEmptyAllocatedTeachersDict()
     blocks = dataLoader.getBlocksCopy()
 
     #para cada timeTable de cada turma
@@ -23,7 +23,7 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
         penaltiesTablesDict[classData] = constructClassTable(0)
         penaltyTable = penaltiesTablesDict[classData]
 
-        penaltiesTotalValue += __returnConsecutivesThreeBlocksPenalty(blocks, timeTable, penaltyTable)
+        penaltiesTotalValue += __checkConsecutivesThreeBlocks(blocks, timeTable, penaltyTable)
 
         #para cada bloco de cada do timeTable da turma
         for indexesPair, blockAllocation in numpy.ndenumerate(timeTable):
@@ -35,11 +35,11 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
             allocatedTeacher = allocatedTeachers[teacherName]
             allocationTable = allocatedTeacher.allocationsTables[block.classData.shift]
             
-            penaltiesTotalValue += __returnConflictPenalty(penaltyTable, indexesPair, block, allocationTable)
-            penaltiesTotalValue += __returnUnavailableDayPenalty(penaltyTable, indexesPair, teacher, teacherName)
+            penaltiesTotalValue += __checkConflict(penaltyTable, indexesPair, block, allocationTable)
+            penaltiesTotalValue += __checkUnavailableDay(penaltyTable, indexesPair, teacher)
     
     #para cada professor alocado
-    penaltiesTotalValue += __returnSparseDaysPenalty(penaltiesTablesDict, allocatedTeachers) 
+    penaltiesTotalValue += __checkSparseDays(penaltiesTablesDict, allocatedTeachers) 
         
     print(penaltiesTablesDict)
     print(penaltiesTotalValue)
@@ -47,7 +47,7 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
     return penaltiesTablesDict, penaltiesTotalValue
 
 #VERIFICA SE A DISTRIBUIÇÃO DE ALOCAÇÕES SE ESPALHOU POR MUITOS DIAS PARA O PROFESSOR
-def __returnSparseDaysPenalty(penaltiesTablesDict, allocatedTeachers):
+def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
     #para cada professor alocado
     for teacherName, allocatedTeacher in allocatedTeachers.items():
         concatenatedAllocationTable = __concatenateShiftsAllocationTables(allocatedTeacher)
@@ -82,7 +82,7 @@ def __returnSparseDaysPenalty(penaltiesTablesDict, allocatedTeachers):
         print(daysOfWeekAllocated)
     return 2*SPARSE_DAYS_PENALTY
 
-#Concatena as tabelas de alocação por turno
+#Concatena as tabelas de alocação do vericalmente
 def __concatenateShiftsAllocationTables(allocatedTeacher):
     returnConcatenedTable = None
     #Para cada turno
@@ -96,7 +96,7 @@ def __concatenateShiftsAllocationTables(allocatedTeacher):
     return numpy.array(returnConcatenedTable)
 
 #VERIFICACAO DE DISCIPLINA COM 3 BLOCOS SEGUIDOS NO MESMO TURNO
-def __returnConsecutivesThreeBlocksPenalty(blocks, timeTable, penaltyTable):
+def __checkConsecutivesThreeBlocks(blocks, timeTable, penaltyTable):
     penaltiesLocalValue = 0
     for dayOfWeek in range(5):
         if((timeTable[0][dayOfWeek] != None) and (timeTable[1][dayOfWeek] != None) and (timeTable[2][dayOfWeek] != None)):
@@ -114,7 +114,7 @@ def __returnConsecutivesThreeBlocksPenalty(blocks, timeTable, penaltyTable):
     return penaltiesLocalValue
 
 # VERIFICACAO DE CONFLITO e ATUALIZA TABELA DE ALOCACAO DO PROFESSOR
-def __returnConflictPenalty(penaltyTable, indexesPair, block, allocationTable):
+def __checkConflict(penaltyTable, indexesPair, block, allocationTable):
     if (allocationTable[indexesPair[0]][indexesPair[1]] != None):  #conflito: horário já alocado para o professor!
         penaltyTable[indexesPair[0]][indexesPair[1]] += CONFLICT_PENALTY
         return CONFLICT_PENALTY
@@ -123,7 +123,7 @@ def __returnConflictPenalty(penaltyTable, indexesPair, block, allocationTable):
         return 0
 
 # VERIFICACAO DE ALOCACAO FORA DA DISPONIBILIDADE DO PROFESSOR
-def __returnUnavailableDayPenalty(penaltyTable, indexesPair, teacher, teacherName):
+def __checkUnavailableDay(penaltyTable, indexesPair, teacher):
     dayOfWeekAllocated = indexesPair[1]
     if (dayOfWeekAllocated in teacher.getAvailabilitiesCopy()):
         return 0    
@@ -132,7 +132,7 @@ def __returnUnavailableDayPenalty(penaltyTable, indexesPair, teacher, teacherNam
 
 
 
-def __returnEmptyAllocationsTeachersDict():
+def __returnEmptyAllocatedTeachersDict():
     empytAllocatedTeachers = {}
     teachers =  dataLoader.getTeachersCopy()
     for teacherName, teacher in teachers.items():
