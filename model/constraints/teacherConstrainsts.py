@@ -11,17 +11,17 @@ THREE_CONSECUTIVE_BLOCKS_PENALTY = 300
 AVAILABILITY_PENALTY = 100
 SPARSE_DAYS_PENALTY = 2
 
-def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela horária de cada turma (dataClass)
-    penaltiesTablesDict = {} #retorna dicionario[dataClass] = tabela de penalidades de cada turma (dataClass)
+def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela horária de cada turma (classData)
+    penaltiesTablesDict = {} #retorna dicionario[classData] = tabela de penalidades de cada turma (classData)
     penaltiesTotalValue = 0 
 
     allocatedTeachers = __returnEmptyAllocationsTeachersDict()
     blocks = dataLoader.getBlocksCopy()
 
     #para cada timeTable de cada turma
-    for dataClass, timeTable in timeTablesDict.items():
-        penaltiesTablesDict[dataClass] = constructClassTable(0)
-        penaltyTable = penaltiesTablesDict[dataClass]
+    for classData, timeTable in timeTablesDict.items():
+        penaltiesTablesDict[classData] = constructClassTable(0)
+        penaltyTable = penaltiesTablesDict[classData]
 
         penaltiesTotalValue += __returnConsecutivesThreeBlocksPenalty(blocks, timeTable, penaltyTable)
 
@@ -39,7 +39,7 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela h
             penaltiesTotalValue += __returnUnavailableDayPenalty(penaltyTable, indexesPair, teacher, teacherName)
     
     #para cada professor alocado
-    penaltiesTotalValue += __returnSparseDaysPenalty(penaltyTable, allocatedTeachers) 
+    penaltiesTotalValue += __returnSparseDaysPenalty(penaltiesTablesDict, allocatedTeachers) 
         
     print(penaltiesTablesDict)
     print(penaltiesTotalValue)
@@ -47,24 +47,35 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[dataClass] = tabela h
     return penaltiesTablesDict, penaltiesTotalValue
 
 #VERIFICA SE A DISTRIBUIÇÃO DE ALOCAÇÕES SE ESPALHOU POR MUITOS DIAS PARA O PROFESSOR
-def __returnSparseDaysPenalty(penaltyTable, allocatedTeachers):
+def __returnSparseDaysPenalty(penaltiesTablesDict, allocatedTeachers):
     #para cada professor alocado
     for teacherName, allocatedTeacher in allocatedTeachers.items():
         concatenatedAllocationTable = __concatenateShiftsAllocationTables(allocatedTeacher)
         numberOfBlocksAllocated = numpy.where(concatenatedAllocationTable != None, 1, 0).sum() 
         daysOfWeekAllocatedBoolean = ~numpy.all(concatenatedAllocationTable == None, axis = 0)
         numberOfDaysAllocated = daysOfWeekAllocatedBoolean.sum()
-        if (numberOfDaysAllocated <= ceil(numberOfBlocksAllocated/len(concatenatedAllocationTable))) or (
-            numberOfBlocksAllocated == len(concatenatedAllocationTable) and numberOfDaysAllocated == 2):  #contem disciplinas com 3 blocos
+        numberOfRowsInConcatenatedTable = len(concatenatedAllocationTable)
+        if (numberOfDaysAllocated <= ceil(numberOfBlocksAllocated/numberOfRowsInConcatenatedTable)) or (
+            numberOfDaysAllocated == 2 and numberOfBlocksAllocated == numberOfRowsInConcatenatedTable):  #contem disciplinas com 3 blocos
             return 0  #número de dias alocado já é mínimo, portanto não há penalidade
         daysOfWeekAllocated = numpy.where(daysOfWeekAllocatedBoolean == True)[0]
+        
+        #Aplicando penalidades no primeiro dia alocado
         firstDayAllocated = daysOfWeekAllocated[0]
+        numberOfBlocksInFirstDay = numpy.where(concatenatedAllocationTable[:,firstDayAllocated] != None, 1, 0).sum()
+        penaltyByBlockInFirstDay = SPARSE_DAYS_PENALTY/numberOfBlocksInFirstDay
+        for index, block in enumerate(list(zip(*concatenatedAllocationTable))[firstDayAllocated]): # zip(*matrix) = transposed of matrix
+            if block == None:
+                continue
+            penaltiesTablesDict[block.classData][index % NUMBER_OF_BLOCKS_IN_SHIFT][firstDayAllocated] += penaltyByBlockInFirstDay
+        
         lastDayAllocated = daysOfWeekAllocated[-1] #em python, indice -1 retorna o ultimo elemento
+        numberOfBlocksInLastDay = numpy.where(concatenatedAllocationTable[:,lastDayAllocated] != None, 1, 0).sum()
+        penaltyByBlockInLastDay = SPARSE_DAYS_PENALTY/numberOfBlocksInLastDay
 
         print(teacherName)
         print(daysOfWeekAllocated)
-        print(firstDayAllocated)
-        print(lastDayAllocated)
+    return 2*SPARSE_DAYS_PENALTY
 
 #Concatena as tabelas de alocação por turno
 def __concatenateShiftsAllocationTables(allocatedTeacher):
