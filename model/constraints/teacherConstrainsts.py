@@ -54,7 +54,8 @@ def __returnSparseDaysPenalty(penaltyTable, allocatedTeachers):
         numberOfBlocksAllocated = numpy.where(concatenatedAllocationTable != None, 1, 0).sum() 
         daysOfWeekAllocatedBoolean = ~numpy.all(concatenatedAllocationTable == None, axis = 0)
         numberOfDaysAllocated = daysOfWeekAllocatedBoolean.sum()
-        if numberOfDaysAllocated <= ceil(numberOfBlocksAllocated/len(concatenatedAllocationTable)):
+        if (numberOfDaysAllocated <= ceil(numberOfBlocksAllocated/len(concatenatedAllocationTable))) or (
+            numberOfBlocksAllocated == len(concatenatedAllocationTable) and numberOfDaysAllocated == 2):  #contem disciplinas com 3 blocos
             return 0  #número de dias alocado já é mínimo, portanto não há penalidade
         daysOfWeekAllocated = numpy.where(daysOfWeekAllocatedBoolean == True)[0]
         firstDayAllocated = daysOfWeekAllocated[0]
