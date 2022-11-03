@@ -69,9 +69,14 @@ def __returnSparseDaysPenalty(penaltiesTablesDict, allocatedTeachers):
                 continue
             penaltiesTablesDict[block.classData][index % NUMBER_OF_BLOCKS_IN_SHIFT][firstDayAllocated] += penaltyByBlockInFirstDay
         
+        #Aplicando penalidades no ultimo dia alocado
         lastDayAllocated = daysOfWeekAllocated[-1] #em python, indice -1 retorna o ultimo elemento
         numberOfBlocksInLastDay = numpy.where(concatenatedAllocationTable[:,lastDayAllocated] != None, 1, 0).sum()
         penaltyByBlockInLastDay = SPARSE_DAYS_PENALTY/numberOfBlocksInLastDay
+        for index, block in enumerate(list(zip(*concatenatedAllocationTable))[lastDayAllocated]): # zip(*matrix) = transposed of matrix
+            if block == None:
+                continue
+            penaltiesTablesDict[block.classData][index % NUMBER_OF_BLOCKS_IN_SHIFT][lastDayAllocated] += penaltyByBlockInLastDay
 
         print(teacherName)
         print(daysOfWeekAllocated)
