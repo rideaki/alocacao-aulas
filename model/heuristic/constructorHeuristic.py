@@ -3,7 +3,7 @@ import dataLoader
 from model.business import filter
 from model.business.tableFactory import constructClassTable
 
-def constructHeusristic():
+def constructHeusristicSolution():
     timeTables = {}
     filteredBlocksIndexesByClass = {}
     
