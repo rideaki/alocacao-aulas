@@ -1,5 +1,6 @@
 import copy
 import dataLoader
+import numpy
 import random
 from model.business import filter
 from model.business.tableFactory import constructClassTable
@@ -27,10 +28,21 @@ def constructHeusristicSolution():
             teacherBlocksToBeAllocated = copy.deepcopy(filter.filterBlocksIndexesByTeacher(filteredBlocksIndexesByClass[classData], teacher.name))
             availableTeacherBlocksByShift = teacher.getAllSortedBlocksCopy()[classData.shift]
             while(len(teacherBlocksToBeAllocated) > 0):
+                allocated = False
+                classTimeTable = timeTables[classData]
                 for teacherAvailableBlock in availableTeacherBlocksByShift:
-                    if(timeTables[classData][teacherAvailableBlock[0]][teacherAvailableBlock[1]] == None):
+                    if(classTimeTable[teacherAvailableBlock[0]][teacherAvailableBlock[1]] == None):
                         #alocar aula
-                        timeTables[classData][teacherAvailableBlock[0]][teacherAvailableBlock[1]] = teacherBlocksToBeAllocated.pop(0)
+                        classTimeTable[teacherAvailableBlock[0]][teacherAvailableBlock[1]] = teacherBlocksToBeAllocated.pop(0)
                         availableTeacherBlocksByShift.remove(teacherAvailableBlock)
-                        break  #sai do laco -> teacherAvailableBlock in availableTeacherBlocksByShift:
+                        allocated = True
+                        break  #sai do laco -> for teacherAvailableBlock in availableTeacherBlocksByShift:
+
+                #Se chegar neste ponto, não será possível alocar o bloco sem conflito de horário.
+                #pois o professor não tem disponibilidade, nos horários disponíveis da turma.
+                #Portanto, alocar a aula em qualquer horário disponível da turma.
+                if(not allocated):
+                    availableIndex = numpy.where(numpy.array(classTimeTable) == None)
+                    classTimeTable[int(availableIndex[0][0])][int(availableIndex[1][0])] = teacherBlocksToBeAllocated.pop(0)
+                 
     return timeTables    
