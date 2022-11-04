@@ -24,4 +24,4 @@ if __name__ == "__main__":
             exportToGenericCsvFile(globalSolution)  # Export para o arquiv outputTimeTable.csv na pasta raiz do projeto.
             print("Aguarde para procurar soluções melhores ou tecle CTRL + C para finalizar.")
 
-        solution = searchMetaHeuristicSolution(solution.copy(), penaltiesTablesDict.copy())
+        #solution = searchMetaHeuristicSolution(solution.copy(), penaltiesTablesDict.copy())
