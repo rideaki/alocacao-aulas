@@ -7,6 +7,9 @@ from model.business.tableFactory import constructClassTable
 def constructHeusristicSolution():
     timeTables = {}
     filteredBlocksIndexesByClass = {}
+
+    for teacher in dataLoader.getTeachersCopy().values():
+        teacher.constructSortedBlocks() #constroi as disponibilidades (por blocos) do professor
     
     # Para cada turma
     classes = dataLoader.getClassesCopy()

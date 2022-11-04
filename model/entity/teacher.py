@@ -10,7 +10,8 @@ class Teacher:
     def __init__(self, nameArg, availabilitiesArg):
         self.name = nameArg
         self.__availabilities = availabilitiesArg
-        self.__sortedBlocks = self.__constructAllSortedBlocks()
+        self.__sortedBlocks = {}
+        self.constructSortedBlocks()
 
     def getAvailabilitiesCopy(self):
         return numpy.array(self.__availabilities).copy()
@@ -18,12 +19,12 @@ class Teacher:
     def getAllSortedBlocksCopy(self):
         return self.__sortedBlocks.copy()    #cópia do dicionário para evitar efeito colateral
 
-    def __constructAllSortedBlocks(self):
-        allSortedBlocks = {}
+    #Constroi o dicionario de blocos por turno, ordenados de acordo com a disponibilidade do professor
+    def constructSortedBlocks(self):
+        self.__sortedBlocks = {}
         shifts = [MORNING, AFTERNOON, NIGHT]
         for shift in shifts:
-            allSortedBlocks[shift] = self.__constructSortedBlocksByShift(shift == MORNING)
-        return allSortedBlocks
+            self.__sortedBlocks[shift] = self.__constructSortedBlocksByShift(shift == MORNING)
 
     def __constructSortedBlocksByShift(self, isMorning):
         sortedBlocksByShift = []
