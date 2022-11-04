@@ -13,9 +13,10 @@ globalSolutionPenalty = float('inf')  # penalidades positivas. Objetivo: MINIMIZ
 if __name__ == "__main__":
     dataLoader.loadAllData()
 
-    if(True):
+    while(True):
         solution = constructHeusristicSolution().copy()
         penaltiesTablesDict, solutionPenalty = calculatePenalties(solution)
+        print(solutionPenalty)
         if(solutionPenalty <= globalSolutionPenalty):    
             globalSolution = solution
             globalSolutionPenalty = solutionPenalty
