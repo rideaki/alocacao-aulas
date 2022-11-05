@@ -2,15 +2,16 @@ import copy
 import numpy
 
 def searchMetaHeuristicSolution(initialSolutionArg, penaltiesTablesDict):
-
     maxClassData = None
     maxPenaltyIndexes = None
-    
     maxClassData, maxPenaltyIndexes = __searchMaxPenalty(penaltiesTablesDict)
     print(str(maxClassData.periodNumber) + maxClassData.shift)
     print(maxPenaltyIndexes)
-    
-    #Gerando permutações da timeTable[maxClassData] com indices maxPenaltyIndexes
+    neighborSolutions = __generateNeighborSolutions(initialSolutionArg, maxClassData, maxPenaltyIndexes)
+
+
+#Gerando permutações da timeTable[maxClassData] com indices maxPenaltyIndexes
+def __generateNeighborSolutions(initialSolutionArg, maxClassData, maxPenaltyIndexes):
     neighborSolutions = []
     timeTableWithMaxPenalty = copy.deepcopy(initialSolutionArg[maxClassData])
     maxBlockValue = timeTableWithMaxPenalty[maxPenaltyIndexes[0]][maxPenaltyIndexes[1]]
@@ -21,10 +22,8 @@ def searchMetaHeuristicSolution(initialSolutionArg, penaltiesTablesDict):
             classNeighborSolution[maxPenaltyIndexes[0]][maxPenaltyIndexes[1]] = classNeighborSolution[i][j]
             classNeighborSolution[i][j] = maxBlockValue
             neighborSolution[maxClassData] = copy.deepcopy(classNeighborSolution) 
-
             neighborSolutions.append(neighborSolution)
-
-        print(neighborSolution)
+    return neighborSolutions
 
 def __searchMaxPenalty(penaltiesTablesDict):
     maxGlobalPenalty = 0
