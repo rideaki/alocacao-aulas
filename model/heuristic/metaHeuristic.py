@@ -7,8 +7,8 @@ def searchMetaHeuristicSolution(initialSolution, penaltiesTablesDict):
     maxPenaltyIndexes = None
     
     maxClassData, maxPenaltyIndexes = __searchMaxPenalty(penaltiesTablesDict)
-    print(str(maxClassData.semesterNumber) + maxClassData.shift)
-    print(maxPenaltyIndexes)
+    #print(str(maxClassData.periodNumber) + maxClassData.shift)
+    #print(maxPenaltyIndexes)
     
 
 

@@ -67,7 +67,7 @@ def __allocateBlocksWithConflicts(classData, teacherBlocksToBeAllocated, allocat
             teacherBlocksToBeAllocated.pop(0)
             warnings.warn(
                             "Não foi possível alocar todas as aulas na turma: "
-                            + str(classData.semesterNumber)
+                            + str(classData.periodNumber)
                             + " "
                             + str(classData.shift)
                             + " - "

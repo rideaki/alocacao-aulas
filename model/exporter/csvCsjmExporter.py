@@ -12,9 +12,9 @@ def exportToCSJMCsvFile(timeTables):
     period3AfternoonTimeTable = timeTables[classes[5]].copy()
 
     # MATUTINO ###############################################################################
-    csvString = "," + str(classes[0].semesterNumber) + " Período - " + classes[0].courseName + " - " + classes[0].shift + ",,,,,," 
-    csvString +=      str(classes[2].semesterNumber) + " Período - " + classes[2].courseName + " - " + classes[2].shift + ",,,,,," 
-    csvString +=      str(classes[4].semesterNumber) + " Período - " + classes[4].courseName + " - " + classes[4].shift + " ,,,,\n"
+    csvString = "," + str(classes[0].periodNumber) + " Período - " + classes[0].courseName + " - " + classes[0].shift + ",,,,,," 
+    csvString +=      str(classes[2].periodNumber) + " Período - " + classes[2].courseName + " - " + classes[2].shift + ",,,,,," 
+    csvString +=      str(classes[4].periodNumber) + " Período - " + classes[4].courseName + " - " + classes[4].shift + " ,,,,\n"
     csvString += ",Segunda,Terça,Quarta,Quinta,Sexta,,Segunda,Terça,Quarta,Quinta,Sexta,,Segunda,Terça,Quarta,Quinta,Sexta\n"
 
     ##########################################################################################
@@ -73,9 +73,9 @@ def exportToCSJMCsvFile(timeTables):
 
     # VESPERTINO ###############################################################################
     csvString +="\n"
-    csvString +="," + str(classes[1].semesterNumber) + " Período - " + classes[1].courseName + " - " + classes[1].shift + ",,,,,," 
-    csvString +=      str(classes[3].semesterNumber) + " Período - " + classes[3].courseName + " - " + classes[3].shift + ",,,,,," 
-    csvString +=      str(classes[5].semesterNumber) + " Período - " + classes[5].courseName + " - " + classes[5].shift + " ,,,,\n"
+    csvString +="," + str(classes[1].periodNumber) + " Período - " + classes[1].courseName + " - " + classes[1].shift + ",,,,,," 
+    csvString +=      str(classes[3].periodNumber) + " Período - " + classes[3].courseName + " - " + classes[3].shift + ",,,,,," 
+    csvString +=      str(classes[5].periodNumber) + " Período - " + classes[5].courseName + " - " + classes[5].shift + " ,,,,\n"
     csvString += ",Segunda,Terça,Quarta,Quinta,Sexta,,Segunda,Terça,Quarta,Quinta,Sexta,,Segunda,Terça,Quarta,Quinta,Sexta\n"
 
     ##########################################################################################

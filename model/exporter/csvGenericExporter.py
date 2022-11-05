@@ -12,7 +12,7 @@ def exportToGenericCsvFile(timeTables):
     csvString = ""
     for classData in classes:     
         # Para cada Turma (class)
-        csvString += ", Turma: " + str(classData.semesterNumber) + " - Curso: " + classData.courseName + " - " + classData.shift + "\n"
+        csvString += ", Turma: " + str(classData.periodNumber) + " - Curso: " + classData.courseName + " - " + classData.shift + "\n"
         classTimeTable = timeTables[classData]
         for blockNumber in range(NUMBER_OF_BLOCKS_IN_SHIFT): 
             csvString += "Aula " + str(blockNumber) + ", "

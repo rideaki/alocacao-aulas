@@ -7,12 +7,12 @@ class ClassData:
     def __init__(
         self,
         courseNameArg,
-        semesterNumberArg,
+        periodNumberArg,
         shiftArg,  #turno: MORNING, AFTERNOON ou NIGHT
         timeTableArg = constructClassTable(),
     ):
         self.courseName = courseNameArg    
-        self.semesterNumber = semesterNumberArg
+        self.periodNumber = periodNumberArg
         self.shift = shiftArg    #turno: MORNING, AFTERNOON ou NIGHT
         self.timeTable = timeTableArg
 
