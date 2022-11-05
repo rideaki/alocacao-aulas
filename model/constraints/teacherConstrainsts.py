@@ -62,26 +62,28 @@ def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
             continue #número de dias alocado já é mínimo, portanto não há penalidade. Pula para o próx. professor
         daysOfWeekAllocated = numpy.where(daysOfWeekAllocatedBoolean == True)[0]
         
-        #Aplicando penalidades no primeiro dia alocado
-        firstDayAllocated = daysOfWeekAllocated[0]
-        numberOfBlocksInFirstDay = numpy.where(concatenatedAllocationTable[:,firstDayAllocated] != None, 1, 0).sum()
-        penaltyByBlockInFirstDay = (numberOfDaysAllocated - minDaysToBeAllocated)*SPARSE_DAYS_PENALTY/numberOfBlocksInFirstDay
-        for index, block in enumerate(list(zip(*concatenatedAllocationTable))[firstDayAllocated]): # zip(*matrix) = transposed of matrix
-            if block == None:
-                continue
-            penaltiesTablesDict[block.classData][index % NUMBER_OF_BLOCKS_IN_SHIFT][firstDayAllocated] += penaltyByBlockInFirstDay
-        
-        #Aplicando penalidades no ultimo dia alocado
-        lastDayAllocated = daysOfWeekAllocated[-1] #em python, indice -1 retorna o ultimo elemento
-        numberOfBlocksInLastDay = numpy.where(concatenatedAllocationTable[:,lastDayAllocated] != None, 1, 0).sum()
-        penaltyByBlockInLastDay = (numberOfDaysAllocated - minDaysToBeAllocated)*SPARSE_DAYS_PENALTY/numberOfBlocksInLastDay
-        for index, block in enumerate(list(zip(*concatenatedAllocationTable))[lastDayAllocated]): # zip(*matrix) = transposed of matrix
-            if block == None:
-                continue
-            penaltiesTablesDict[block.classData][index % NUMBER_OF_BLOCKS_IN_SHIFT][lastDayAllocated] += penaltyByBlockInLastDay
+        __applyPenaltiesOnFirstDay(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated)
+        __applyPenaltiesOnLastDaty(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated)
 
-        print(teacherName)
-        print(daysOfWeekAllocated)
+#Aplica penalidades no primeiro dia esparco alocado
+def __applyPenaltiesOnFirstDay(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated):
+    firstDayAllocated = daysOfWeekAllocated[0]
+    numberOfBlocksInFirstDay = numpy.where(concatenatedAllocationTable[:,firstDayAllocated] != None, 1, 0).sum()
+    penaltyByBlockInFirstDay = (numberOfDaysAllocated - minDaysToBeAllocated)*SPARSE_DAYS_PENALTY/numberOfBlocksInFirstDay
+    for index, block in enumerate(list(zip(*concatenatedAllocationTable))[firstDayAllocated]): # zip(*matrix) = transposed of matrix
+        if block == None:
+            continue
+        penaltiesTablesDict[block.classData][index % NUMBER_OF_BLOCKS_IN_SHIFT][firstDayAllocated] += penaltyByBlockInFirstDay
+
+#Aplica penalidades no ultimo dia esparco alocado
+def __applyPenaltiesOnLastDaty(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated):
+    lastDayAllocated = daysOfWeekAllocated[-1] #em python, indice -1 retorna o ultimo elemento
+    numberOfBlocksInLastDay = numpy.where(concatenatedAllocationTable[:,lastDayAllocated] != None, 1, 0).sum()
+    penaltyByBlockInLastDay = (numberOfDaysAllocated - minDaysToBeAllocated)*SPARSE_DAYS_PENALTY/numberOfBlocksInLastDay
+    for index, block in enumerate(list(zip(*concatenatedAllocationTable))[lastDayAllocated]): # zip(*matrix) = transposed of matrix
+        if block == None:
+            continue
+        penaltiesTablesDict[block.classData][index % NUMBER_OF_BLOCKS_IN_SHIFT][lastDayAllocated] += penaltyByBlockInLastDay
 
 #Concatena as tabelas de alocação do verticalmente
 def __concatenateShiftsAllocationTables(allocatedTeacher):
