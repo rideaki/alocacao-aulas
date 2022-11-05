@@ -28,7 +28,9 @@ def constructHeusristicSolution():
         teachers = dataLoader.getTeachersCopy()
         while len(teachers) > 0:
             teacher = teachers.pop(random.choice(list(teachers)))
-            teacherBlocksToBeAllocated = copy.deepcopy(filter.filterBlocksIndexesByTeacher(filteredBlocksIndexesByClass[classData], teacher.name))
+            teacherBlocksToBeAllocated = copy.deepcopy(
+                filter.filterBlocksIndexesByTeacher(filteredBlocksIndexesByClass[classData], teacher.name)
+            )
             availableTeacherBlocksByShift = teacher.getAllSortedBlocksCopy()[classData.shift]
             while len(teacherBlocksToBeAllocated) > 0:
                 allocated = False
