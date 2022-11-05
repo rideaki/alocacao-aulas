@@ -51,7 +51,7 @@ def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
     for teacherName, allocatedTeacher in allocatedTeachers.items():
         concatenatedAllocationTable = __concatenateShiftsAllocationTables(allocatedTeacher)
         if(concatenatedAllocationTable is None):
-            return #professor não foi alocado, portanto não há penalidade
+            continue #professor não foi alocado, portanto não há penalidade. Pula para o próx. professor
         numberOfBlocksAllocated = numpy.where(concatenatedAllocationTable != None, 1, 0).sum() 
         daysOfWeekAllocatedBoolean = ~numpy.all(concatenatedAllocationTable == None, axis = 0)
         numberOfDaysAllocated = daysOfWeekAllocatedBoolean.sum()
@@ -59,7 +59,7 @@ def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
         minDaysToBeAllocated = ceil(numberOfBlocksAllocated/numberOfRowsInConcatenatedTable)
         if (numberOfDaysAllocated <= minDaysToBeAllocated) or (
             numberOfDaysAllocated == 2 and numberOfBlocksAllocated == numberOfRowsInConcatenatedTable):  #contem disciplinas com 3 blocos
-            return #número de dias alocado já é mínimo, portanto não há penalidade
+            continue #número de dias alocado já é mínimo, portanto não há penalidade. Pula para o próx. professor
         daysOfWeekAllocated = numpy.where(daysOfWeekAllocatedBoolean == True)[0]
         
         #Aplicando penalidades no primeiro dia alocado
