@@ -43,17 +43,24 @@ def constructHeusristicSolution():
                         allocated = True
                         break  # sai do laco -> for teacherAvailableBlock in availableTeacherBlocksByShift:
 
-                # Se chegar neste ponto, não será possível alocar o bloco sem conflito de horário.
-                # pois o professor não tem disponibilidade, nos horários disponíveis da turma.
-                # Portanto, alocar a aula em qualquer horário disponível da turma.
-                if not allocated:
-                    try:
-                        availableIndex = numpy.where(numpy.array(classTimeTable) == None)
-                        classTimeTable[int(availableIndex[0][0])][
+                allocateBlocksWithConflicts(classData, teacherBlocksToBeAllocated, allocated, classTimeTable)
+    return timeTables
+
+def allocateBlocksWithConflicts(classData, teacherBlocksToBeAllocated, allocated, classTimeTable):
+    if not allocated:
+        # Se chegar neste ponto, não será possível alocar o bloco sem conflito de horário.
+        # pois o professor não tem disponibilidade, nos horários disponíveis da turma.
+        # Portanto, alocar a aula em qualquer horário disponível da turma.
+        try:
+            availableIndex = numpy.where(numpy.array(classTimeTable) == None)
+            classTimeTable[int(availableIndex[0][0])][
                             int(availableIndex[1][0])
                         ] = teacherBlocksToBeAllocated.pop(0)
-                    except:
-                        warnings.warn(
+        except:
+            # Quantidade de disciplinas, excede CH da turma! 
+            # Sugestão ao usuário: configurar aula no contraturno 
+            teacherBlocksToBeAllocated.pop(0)
+            warnings.warn(
                             "Não foi possível alocar todas as aulas na turma: "
                             + str(classData.semesterNumber)
                             + " "
@@ -62,5 +69,4 @@ def constructHeusristicSolution():
                             + str(classData.courseName)
                             + "\n Sugestão: CONFIGURAR AULAS PARA SEREM ALOCADAS NO CONTRATURNO."
                         )
-                        exit()
-    return timeTables
+            exit()
