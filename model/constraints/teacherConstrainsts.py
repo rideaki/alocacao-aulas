@@ -41,7 +41,6 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
     __checkSparseDays(penaltiesTablesDict, allocatedTeachers) 
 
     penaltiesTotalValue = __calculatePenaltiesTotalValues(penaltiesTablesDict)
-    print(penaltiesTotalValue)
 
     return penaltiesTablesDict, penaltiesTotalValue
 
