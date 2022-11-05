@@ -16,11 +16,11 @@ def searchMetaHeuristicSolution(initialSolutionArg, penaltiesTablesDict):
     maxBlockValue = timeTableWithMaxPenalty[maxPenaltyIndexes[0]][maxPenaltyIndexes[1]]
     for i in range(len(timeTableWithMaxPenalty)): #percorre todas celulas da matriz
         for j in range(len(timeTableWithMaxPenalty[i])):
-            neighborSolution = initialSolutionArg
-            classNeighborSolution = copy.deepcopy(neighborSolution[maxClassData])
+            neighborSolution = initialSolutionArg.copy()
+            classNeighborSolution = copy.deepcopy(timeTableWithMaxPenalty)
             classNeighborSolution[maxPenaltyIndexes[0]][maxPenaltyIndexes[1]] = classNeighborSolution[i][j]
             classNeighborSolution[i][j] = maxBlockValue
-            neighborSolution[maxClassData] = classNeighborSolution 
+            neighborSolution[maxClassData] = copy.deepcopy(classNeighborSolution) 
 
             neighborSolutions.append(neighborSolution)
 
