@@ -10,7 +10,6 @@ from model.business.tableFactory import constructClassTable
 def constructHeusristicSolution():
     timeTables = {}
     filteredBlocksIndexesByClass = {}
-
     __constructTeachersAvailabilitiesBlocks()
 
     # Para cada turma
