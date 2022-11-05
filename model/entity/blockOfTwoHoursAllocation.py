@@ -6,5 +6,7 @@ class BlockOfTwoHoursAllocation():
         self.curricularComponentName = curricularComponentNameArg
         self.teacher = teacherArg
 
+    def __str__ (self):
+        return str(self.curricularComponentName) + " / " + self.teacher.name
     
         
