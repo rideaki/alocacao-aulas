@@ -23,8 +23,6 @@ class ClassData:
         return str(self.periodNumber) + " " + self.shift + " - " + self.courseName
 
     def __eq__(self, other):
-        #if ~isinstance(other, ClassData):
-        #    return False
         return (
             self.courseName == other.courseName
             and self.periodNumber == other.periodNumber

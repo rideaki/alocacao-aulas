@@ -13,7 +13,7 @@ globalSolutionPenalty = float('inf')  # penalidades positivas. Objetivo: MINIMIZ
 if __name__ == "__main__":
     dataLoader.loadAllData()
 
-    if(globalSolutionPenalty > 0):
+    while(globalSolutionPenalty > 0):
         solution = constructHeusristicSolution().copy()
         penaltiesTablesDict, solutionPenalty = calculatePenalties(solution)
         print(int(solutionPenalty))
@@ -25,4 +25,4 @@ if __name__ == "__main__":
             exportToGenericCsvFile(globalSolution)  # Export para o arquivo outputTimeTable.csv na pasta raiz do projeto.
             print("Aguarde para procurar soluções melhores ou tecle CTRL + C para finalizar.")
 
-        solution = searchMetaHeuristicSolution(solution.copy(), penaltiesTablesDict.copy())
+        #solution = searchMetaHeuristicSolution(solution.copy(), penaltiesTablesDict.copy())
