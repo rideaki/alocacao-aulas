@@ -22,6 +22,9 @@ class ClassData:
     def __str__ (self):
         return str(self.periodNumber) + " " + self.shift + " - " + self.courseName
 
+    def __lt__(self, other):
+        return str(self) < str(other)
+
     def __eq__(self, other):
         return (
             self.courseName == other.courseName

@@ -1,6 +1,8 @@
+import copy
 import numpy
 
-def printPenaltiesTablesDict(penaltiesTablesDict):
+def printPenaltiesTablesDict(penaltiesTablesDictArg):
+    penaltiesTablesDict = dict(sorted(copy.deepcopy(penaltiesTablesDictArg).items()))
     for classData, penaltyTable in penaltiesTablesDict.items():
-        print(", Turma: " + str(classData.periodNumber) + " - Curso: " + classData.courseName + " - " + classData.shift)
+        print(", Turma: " + str(classData.periodNumber) + " " + classData.shift + " - Curso: " + classData.courseName)
         print(numpy.matrix(penaltyTable))

@@ -29,5 +29,6 @@ if __name__ == "__main__":
         solution = constructHeusristicSolution().copy()
         penaltiesTablesDict = analyzeSolution(solution)
 
-        solution = searchMetaHeuristicSolution(solution.copy(), penaltiesTablesDict.copy())
-        penaltiesTablesDict = analyzeSolution(solution)
+        for i in range(400):
+            solution = searchMetaHeuristicSolution(solution.copy(), penaltiesTablesDict.copy())
+            penaltiesTablesDict = analyzeSolution(solution)
