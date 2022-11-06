@@ -9,6 +9,12 @@ globalSolutionPenalty = float('inf')  # penalidades positivas. Objetivo: MINIMIZ
 def analyzeSolution(solution):
     penaltiesTablesDict, solutionPenalty = calculatePenalties(solution)
     print(int(solutionPenalty))
+    if solutionPenalty == 0:
+        print("A solução ótima global foi encontrada!!!!!!")
+        exportToGenericCsvFile(solution)  # Export para o arquivo outputTimeTable.csv na pasta raiz do projeto.
+        print("Finalizando programa.")
+        exit()
+    
     global globalSolutionPenalty
     if(solutionPenalty < globalSolutionPenalty):    
         globalSolution = solution

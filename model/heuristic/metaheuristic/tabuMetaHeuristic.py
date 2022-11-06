@@ -5,7 +5,9 @@ from collections import deque
 from model.business.comparator import areDifferentBlocks
 from model.constraints.teacherConstrainsts import calculatePenalties
 
-tabu = deque(maxlen=20)
+TABU_SIZE = 20
+
+tabu = deque(maxlen=TABU_SIZE)
 
 def searchTabuHeuristicSolution(initialSolution, penaltiesTablesDict):
     tabu.append(initialSolution)
