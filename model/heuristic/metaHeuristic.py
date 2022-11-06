@@ -30,12 +30,16 @@ def __generateNeighborSolutions(initialSolution, maxClassData, maxPenaltyIndexes
         for j in range(len(timeTableWithMaxPenalty[i])):
             neighborSolution = initialSolution.copy()
             classNeighborSolution = copy.deepcopy(timeTableWithMaxPenalty)
-            if areDifferentBlocks(maxBlockValue, classNeighborSolution[i][j]):
-                classNeighborSolution[maxPenaltyIndexes[0]][maxPenaltyIndexes[1]] = classNeighborSolution[i][j]
-                classNeighborSolution[i][j] = maxBlockValue
-                neighborSolution[maxClassData] = copy.deepcopy(classNeighborSolution) 
-                neighborSolutions.append(neighborSolution)
+            __includeSolution(maxClassData, maxPenaltyIndexes, neighborSolutions, maxBlockValue, i, j, neighborSolution, classNeighborSolution)
     return neighborSolutions
+
+#Inclui nova solução vizinha, se blocos permutados são diferentes
+def __includeSolution(maxClassData, maxPenaltyIndexes, neighborSolutions, maxBlockValue, i, j, neighborSolution, classNeighborSolution):
+    if areDifferentBlocks(maxBlockValue, classNeighborSolution[i][j]):
+        classNeighborSolution[maxPenaltyIndexes[0]][maxPenaltyIndexes[1]] = classNeighborSolution[i][j]
+        classNeighborSolution[i][j] = maxBlockValue
+        neighborSolution[maxClassData] = copy.deepcopy(classNeighborSolution) 
+        neighborSolutions.append(neighborSolution)
 
 def __searchMaxPenalty(penaltiesTablesDict):
     maxGlobalPenalty = 0
