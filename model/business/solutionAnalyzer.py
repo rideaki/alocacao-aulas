@@ -13,7 +13,7 @@ def analyzeSolution(solution):
         print("A solução ótima global foi encontrada!!!!!!")
         exportToGenericCsvFile(solution)  # Export para o arquivo outputTimeTable.csv na pasta raiz do projeto.
         print("Finalizando programa.")
-        exit()
+        exit() #finaliza programa
     
     global globalSolutionPenalty
     if(solutionPenalty < globalSolutionPenalty):    
