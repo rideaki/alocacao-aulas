@@ -7,14 +7,14 @@ def areEquivalentTables(timeTable1, timeTable2):
         return True
     for i in range(len(timeTable1)):
         for j in range(len(timeTable1[i])):
-            if __areDifferentBlocks(timeTable1[i][j], timeTable2[i][j]):
+            if areDifferentBlocks(timeTable1[i][j], timeTable2[i][j]):
                 return False
     return True
 
 #Recebe indices de dois blocos, e retorna: 
 # False: se os indices são iguais, ou se são blocos do mesmo componente curricular e mesmo professor
 # True: caso contrário
-def __areDifferentBlocks(block1Index, block2Index):
+def areDifferentBlocks(block1Index, block2Index):
     if block1Index == block2Index:
         return False
     if (block1Index == None and block2Index != None) or (block1Index != None and block2Index == None):
