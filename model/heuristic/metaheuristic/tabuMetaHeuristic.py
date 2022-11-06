@@ -1,24 +1,29 @@
 import copy
 import numpy
 
+from collections import deque
 from model.business.comparator import areDifferentBlocks
 from model.constraints.teacherConstrainsts import calculatePenalties
 
-def searchTabuHeuristicSolution(initialSolutionArg, penaltiesTablesDict):
+tabu = deque(maxlen=400)
+
+def searchTabuHeuristicSolution(initialSolution, penaltiesTablesDict):
+    tabu.append(initialSolution)
     maxClassData = None
     maxPenaltyIndexes = None
     maxClassData, maxPenaltyIndexes = __searchMaxPenalty(penaltiesTablesDict)
     print(str(maxClassData.periodNumber) + maxClassData.shift)
     print(maxPenaltyIndexes)
-    neighborSolutions = __generateNeighborSolutions(initialSolutionArg, maxClassData, maxPenaltyIndexes)
+    neighborSolutions = __generateNeighborSolutions(initialSolution, maxClassData, maxPenaltyIndexes)
 
     bestSolution = None
     bestSolutionPenalty = float('inf')
     for solution in neighborSolutions:
         penaltiesTablesDict, solutionPenalty = calculatePenalties(solution)
-        if(solutionPenalty <= bestSolutionPenalty):    
+        if (solutionPenalty <= bestSolutionPenalty) and (solution not in tabu):    
             bestSolution = solution
             bestSolutionPenalty = solutionPenalty
+    
     return bestSolution
 
 #Gerando permutações da timeTable[maxClassData] com indices maxPenaltyIndexes
