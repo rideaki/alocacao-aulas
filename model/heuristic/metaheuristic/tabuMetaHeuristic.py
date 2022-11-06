@@ -4,7 +4,7 @@ import numpy
 from model.business.comparator import areDifferentBlocks
 from model.constraints.teacherConstrainsts import calculatePenalties
 
-def searchMetaHeuristicSolution(initialSolutionArg, penaltiesTablesDict):
+def searchTabuHeuristicSolution(initialSolutionArg, penaltiesTablesDict):
     maxClassData = None
     maxPenaltyIndexes = None
     maxClassData, maxPenaltyIndexes = __searchMaxPenalty(penaltiesTablesDict)
