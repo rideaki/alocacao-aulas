@@ -2,6 +2,7 @@ import copy
 import numpy
 
 from model.business.comparator import areEquivalentTables
+from model.constraints.teacherConstrainsts import calculatePenalties
 
 def searchMetaHeuristicSolution(initialSolutionArg, penaltiesTablesDict):
     maxClassData = None
@@ -11,7 +12,14 @@ def searchMetaHeuristicSolution(initialSolutionArg, penaltiesTablesDict):
     print(maxPenaltyIndexes)
     neighborSolutions = __generateNeighborSolutions(initialSolutionArg, maxClassData, maxPenaltyIndexes)
 
-
+    bestSolution = None
+    bestSolutionPenalty = float('inf')
+    for solution in neighborSolutions:
+        penaltiesTablesDict, solutionPenalty = calculatePenalties(solution)
+        if(solutionPenalty <= bestSolutionPenalty):    
+            bestSolution = solution
+            bestSolutionPenalty = solutionPenalty
+    return bestSolution
 
 #Gerando permutações da timeTable[maxClassData] com indices maxPenaltyIndexes
 def __generateNeighborSolutions(initialSolution, maxClassData, maxPenaltyIndexes):
@@ -27,6 +35,7 @@ def __generateNeighborSolutions(initialSolution, maxClassData, maxPenaltyIndexes
             __filterEqualSolution(maxClassData, neighborSolutions, timeTableWithMaxPenalty, neighborSolution, classNeighborSolution)
     return neighborSolutions
 
+#Filtra se duas timeTables são iguais ou equivalentes, ou seja, cuja alocação de blocos são as mesmas
 def __filterEqualSolution(maxClassData, neighborSolutions, timeTableWithMaxPenalty, neighborSolution, classNeighborSolution):
     if not areEquivalentTables(classNeighborSolution, timeTableWithMaxPenalty):
         neighborSolution[maxClassData] = copy.deepcopy(classNeighborSolution) 
