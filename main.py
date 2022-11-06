@@ -4,7 +4,7 @@ from model.business.solutionAnalyzer import analyzeSolution
 from model.heuristic.constructorHeuristic import constructHeusristicSolution
 from model.heuristic.metaheuristic.tabuMetaHeuristic import searchTabuHeuristicSolution
 
-META_HEURISTIC_CYCLES = 80
+META_HEURISTIC_CYCLES = 60
 
 if __name__ == "__main__":
     dataLoader.loadAllData()
