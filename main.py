@@ -1,6 +1,6 @@
 import dataLoader
 
-from model.business.solutionAnalyzer import analyzeSolution
+from model.business.solutionAnalyzer import analyzeSolution, globalSolutionPenalty
 from model.heuristic.constructorHeuristic import constructHeusristicSolution
 from model.heuristic.metaheuristic.tabuMetaHeuristic import searchTabuHeuristicSolution
 
@@ -11,10 +11,11 @@ def searchHeuristicSolution():
     penaltiesTablesDict = analyzeSolution(solution)
 
     for i in range(META_HEURISTIC_CYCLES):
+        print(" Ciclo: " + str(i))
         solution = searchTabuHeuristicSolution(solution.copy(), penaltiesTablesDict.copy())
         penaltiesTablesDict = analyzeSolution(solution)
 
 if __name__ == "__main__":
     dataLoader.loadAllData()
-    while(True):
+    while(globalSolutionPenalty > 0):
         searchHeuristicSolution()
