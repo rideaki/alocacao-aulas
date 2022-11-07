@@ -6,9 +6,10 @@ from model.constraints.entity.allocatedTeacher import AllocatedTeacher
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 
 CONFLICT_PENALTY = 1000000
-AVAILABILITY_PENALTY = 300
-CONSECUTIVE_BLOCKS_PENALTY = 200
-SPARSE_DAYS_PENALTY = 30
+AVAILABILITY_PENALTY = 3000
+CONSECUTIVE_BLOCKS_PENALTY = 2000
+SPARSE_DAYS_PENALTY = 300
+SPARSE_HOURS_PENALTY = 1
 
 def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela horária de cada turma (classData)
     penaltiesTablesDict = {} #retorna dicionario[classData] = tabela de penalidades de cada turma (classData)
@@ -44,7 +45,7 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
 #VERIFICA SE A DISTRIBUIÇÃO DE ALOCAÇÕES SE ESPALHOU POR MUITOS DIAS PARA O PROFESSOR
 def __hasSparseDays(penaltiesTablesDict, allocatedTeachers):
     #para cada professor alocado
-    for teacherName, allocatedTeacher in allocatedTeachers.items():
+    for allocatedTeacher in allocatedTeachers.values():
         concatenatedAllocationTable = __concatenateShiftsAllocationTables(allocatedTeacher)
         if(concatenatedAllocationTable is None):
             continue #professor não foi alocado, portanto não há penalidade. Pula para o próx. professor
