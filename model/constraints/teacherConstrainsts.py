@@ -75,7 +75,9 @@ def __checkSparseHours(penaltiesTablesDict, concatenatedAllocationTable, daysOfW
         firstClassData = firstAllocatedBlock.classData
         penaltiesTablesDict[firstClassData][firstAllocatedHourIndex % NUMBER_OF_BLOCKS_IN_SHIFT][dayOfWeek] += penalty/2
 
-
+        lastAllocatedBlock = concatenatedAllocationTable[lastAllocatedHourIndex][dayOfWeek]
+        lastClassData = lastAllocatedBlock.classData
+        penaltiesTablesDict[lastClassData][lastAllocatedHourIndex % NUMBER_OF_BLOCKS_IN_SHIFT][dayOfWeek] += penalty/2
 
 #VERIFICA SE A DISTRIBUIÇÃO DE ALOCAÇÕES SE ESPALHOU POR MUITOS DIAS PARA O PROFESSOR
 def __checkSparseDays(penaltiesTablesDict, concatenatedAllocationTable, daysOfWeekAllocatedBoolean):
