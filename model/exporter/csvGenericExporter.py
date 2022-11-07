@@ -1,6 +1,7 @@
 import dataLoader
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 from typing import Final
+from model.constraints.teacherConstrainsts import calculatePenalties
 
 MAX_CELL_SIZE: Final = 20
 
@@ -10,6 +11,8 @@ def exportToGenericCsvFile(timeTables):
     classes = dataLoader.getClassesCopy()
 
     csvString = ""
+    penaltiesTablesDict, solutionPenalty = calculatePenalties(timeTables)
+    csvString = "Penalty: " + str(solutionPenalty) + "\n"
     for classData in classes:     
         # Para cada Turma (class)
         csvString += ", Turma: " + str(classData.periodNumber) + " - Curso: " + classData.courseName + " - " + classData.shift + "\n"
