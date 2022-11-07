@@ -4,7 +4,7 @@ from model.business.solutionAnalyzer import analyzeSolution, globalSolutionPenal
 from model.heuristic.constructorHeuristic import constructHeusristicSolution
 from model.heuristic.metaheuristic.tabuMetaHeuristic import searchTabuHeuristicSolution
 
-META_HEURISTIC_CYCLES = 60
+META_HEURISTIC_CYCLES = 180
 
 def searchHeuristicSolution():
     solution = constructHeusristicSolution().copy()

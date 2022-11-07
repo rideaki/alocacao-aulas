@@ -50,8 +50,32 @@ def __checkSparseDistribution(penaltiesTablesDict, allocatedTeachers):
             continue #professor não foi alocado, portanto não há penalidade. Pula para o próx. professor
         daysOfWeekAllocatedBoolean = ~numpy.all(concatenatedAllocationTable == None, axis = 0)
         __checkSparseDays(penaltiesTablesDict, concatenatedAllocationTable, daysOfWeekAllocatedBoolean)
+        __checkSparseHours(penaltiesTablesDict, concatenatedAllocationTable, daysOfWeekAllocatedBoolean)
 
-        
+def __checkSparseHours(penaltiesTablesDict, concatenatedAllocationTable, daysOfWeekAllocatedBoolean):
+    if not hasattr(daysOfWeekAllocatedBoolean, "__len__"):
+        return # daysOfWeekAllocatedBoolean não é uma lista, professor não foi alocado
+    for dayOfWeek in range(len(daysOfWeekAllocatedBoolean)):
+        isAllocated = daysOfWeekAllocatedBoolean[dayOfWeek]
+        if not isAllocated:
+            continue #dia não alocado, pula proximo dia da semana
+        hoursOfDay = concatenatedAllocationTable[:,dayOfWeek] #array que recebe a coluna do dia
+        allocatedHoursIndexes = numpy.nonzero(hoursOfDay != None)[0]
+        if (allocatedHoursIndexes is None) or len(allocatedHoursIndexes) <= 1:
+            continue #não há alocacao no dia, há apenas uma aula. Pula para proximo dia
+        firstAllocatedHourIndex = allocatedHoursIndexes[0]
+        lastAllocatedHourIndex = allocatedHoursIndexes[-1]
+        deltaAllocation = lastAllocatedHourIndex - firstAllocatedHourIndex + 1
+        vacantHours = deltaAllocation - len(allocatedHoursIndexes)
+        if vacantHours == 0:
+            continue #não há horário vago, pula para próximo dia
+        penalty = (vacantHours**2)*SPARSE_HOURS_PENALTY  
+
+        firstAllocatedBlock = concatenatedAllocationTable[firstAllocatedHourIndex][dayOfWeek]
+        firstClassData = firstAllocatedBlock.classData
+        penaltiesTablesDict[firstClassData][firstAllocatedHourIndex % NUMBER_OF_BLOCKS_IN_SHIFT][dayOfWeek] += penalty/2
+
+
 
 #VERIFICA SE A DISTRIBUIÇÃO DE ALOCAÇÕES SE ESPALHOU POR MUITOS DIAS PARA O PROFESSOR
 def __checkSparseDays(penaltiesTablesDict, concatenatedAllocationTable, daysOfWeekAllocatedBoolean):

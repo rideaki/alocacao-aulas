@@ -5,7 +5,7 @@ from collections import deque
 from model.business.comparator import areDifferentBlocks
 from model.constraints.teacherConstrainsts import calculatePenalties
 
-TABU_SIZE = 40
+TABU_SIZE = 120
 
 tabu = deque(maxlen=TABU_SIZE)
 
