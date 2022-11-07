@@ -37,29 +37,36 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
                 return penaltiesTablesDict, AVAILABILITY_PENALTY
         if __hasConsecutivesBlocks(blocks, timeTable, penaltyTable):
             return penaltiesTablesDict, CONSECUTIVE_BLOCKS_PENALTY
-    __checkSparseDays(penaltiesTablesDict, allocatedTeachers)
+    __checkSparseDistribution(penaltiesTablesDict, allocatedTeachers)
 
     return penaltiesTablesDict, __calculatePenaltiesTotalValues(penaltiesTablesDict)
 
-#VERIFICA SE A DISTRIBUIÇÃO DE ALOCAÇÕES SE ESPALHOU POR MUITOS DIAS PARA O PROFESSOR
-def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
+#VERIFICA SE A DISTRIBUIÇÃO DE ALOCAÇÕES SE ESPALHOU POR MUITOS DIAS E HORÁRIOS PARA O PROFESSOR
+def __checkSparseDistribution(penaltiesTablesDict, allocatedTeachers):
     #para cada professor alocado
     for allocatedTeacher in allocatedTeachers.values():
         concatenatedAllocationTable = __concatenateShiftsAllocationTables(allocatedTeacher)
         if(concatenatedAllocationTable is None):
             continue #professor não foi alocado, portanto não há penalidade. Pula para o próx. professor
-        numberOfBlocksAllocated = numpy.where(concatenatedAllocationTable != None, 1, 0).sum() 
         daysOfWeekAllocatedBoolean = ~numpy.all(concatenatedAllocationTable == None, axis = 0)
-        numberOfDaysAllocated = daysOfWeekAllocatedBoolean.sum()
-        numberOfRowsInConcatenatedTable = 6 #len(concatenatedAllocationTable) #[:,0].size
-        minDaysToBeAllocated = ceil(numberOfBlocksAllocated/numberOfRowsInConcatenatedTable)
-        if (numberOfDaysAllocated <= minDaysToBeAllocated) or (
-            numberOfDaysAllocated == 2 and numberOfBlocksAllocated == numberOfRowsInConcatenatedTable):  #contem disciplinas com 3 blocos
-            continue #número de dias alocado já é mínimo, portanto não há penalidade. Pula para o próx. professor
-        daysOfWeekAllocated = numpy.where(daysOfWeekAllocatedBoolean == True)[0]
+        __checkSparseDays(penaltiesTablesDict, concatenatedAllocationTable, daysOfWeekAllocatedBoolean)
+
         
-        __applyPenaltiesOnFirstDay(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated)
-        __applyPenaltiesOnLastDaty(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated)
+
+#VERIFICA SE A DISTRIBUIÇÃO DE ALOCAÇÕES SE ESPALHOU POR MUITOS DIAS PARA O PROFESSOR
+def __checkSparseDays(penaltiesTablesDict, concatenatedAllocationTable, daysOfWeekAllocatedBoolean):
+    numberOfBlocksAllocated = numpy.where(concatenatedAllocationTable != None, 1, 0).sum() 
+    numberOfDaysAllocated = daysOfWeekAllocatedBoolean.sum()
+    numberOfRowsInConcatenatedTable = 6 #len(concatenatedAllocationTable) #[:,0].size
+    minDaysToBeAllocated = ceil(numberOfBlocksAllocated/numberOfRowsInConcatenatedTable)
+    if (numberOfDaysAllocated <= minDaysToBeAllocated) or (
+            numberOfDaysAllocated == 2 and numberOfBlocksAllocated == numberOfRowsInConcatenatedTable): #contem disciplinas com 3 blocos
+        return #número de dias alocado já é mínimo, portanto não há penalidade.
+    daysOfWeekAllocated = numpy.where(daysOfWeekAllocatedBoolean == True)[0]
+        
+    __applyPenaltiesOnFirstDay(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated)
+    __applyPenaltiesOnLastDaty(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated)
+
 
 #Aplica penalidades no primeiro dia esparco alocado
 def __applyPenaltiesOnFirstDay(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated):
