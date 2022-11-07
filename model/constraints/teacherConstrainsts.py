@@ -37,13 +37,12 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
                 return penaltiesTablesDict, AVAILABILITY_PENALTY
         if __hasConsecutivesBlocks(blocks, timeTable, penaltyTable):
             return penaltiesTablesDict, CONSECUTIVE_BLOCKS_PENALTY
-    if __hasSparseDays(penaltiesTablesDict, allocatedTeachers):
-        return penaltiesTablesDict, SPARSE_DAYS_PENALTY 
+    __checkSparseDays(penaltiesTablesDict, allocatedTeachers)
 
     return penaltiesTablesDict, __calculatePenaltiesTotalValues(penaltiesTablesDict)
 
 #VERIFICA SE A DISTRIBUIÇÃO DE ALOCAÇÕES SE ESPALHOU POR MUITOS DIAS PARA O PROFESSOR
-def __hasSparseDays(penaltiesTablesDict, allocatedTeachers):
+def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
     #para cada professor alocado
     for allocatedTeacher in allocatedTeachers.values():
         concatenatedAllocationTable = __concatenateShiftsAllocationTables(allocatedTeacher)
@@ -61,8 +60,6 @@ def __hasSparseDays(penaltiesTablesDict, allocatedTeachers):
         
         __applyPenaltiesOnFirstDay(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated)
         __applyPenaltiesOnLastDaty(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated)
-        return True
-    return False
 
 #Aplica penalidades no primeiro dia esparco alocado
 def __applyPenaltiesOnFirstDay(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated):
