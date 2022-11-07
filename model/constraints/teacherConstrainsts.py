@@ -1,4 +1,3 @@
-from http.client import CONFLICT
 from math import ceil
 import numpy
 import dataLoader
@@ -8,8 +7,8 @@ from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 
 CONFLICT_PENALTY = 1000000
 AVAILABILITY_PENALTY = 300
-THREE_CONSECUTIVE_BLOCKS_PENALTY = 200
-SPARSE_DAYS_PENALTY = 2
+CONSECUTIVE_BLOCKS_PENALTY = 200
+SPARSE_DAYS_PENALTY = 30
 
 def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela horária de cada turma (classData)
     penaltiesTablesDict = {} #retorna dicionario[classData] = tabela de penalidades de cada turma (classData)
@@ -22,8 +21,6 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
         penaltiesTablesDict[classData] = constructClassTable(0)
         penaltyTable = penaltiesTablesDict[classData]
 
-        __checkConsecutivesThreeBlocks(blocks, timeTable, penaltyTable)
-
         #para cada bloco de cada do timeTable da turma
         for indexesPair, blockAllocation in numpy.ndenumerate(timeTable):
             if(blockAllocation == None):
@@ -33,19 +30,19 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
             teacherName = teacher.name
             allocatedTeacher = allocatedTeachers[teacherName]
             allocationTable = allocatedTeacher.allocationsTables[block.classData.shift]
-            
-            __checkConflict(penaltyTable, indexesPair, block, allocationTable)
-            __checkUnavailableDay(penaltyTable, indexesPair, teacher)
-    
-    #para cada professor alocado
-    __checkSparseDays(penaltiesTablesDict, allocatedTeachers) 
+            if __hasConflict(penaltyTable, indexesPair, block, allocationTable):
+                return penaltiesTablesDict, CONFLICT_PENALTY
+            if __hasUnavailableDay(penaltyTable, indexesPair, teacher):
+                return penaltiesTablesDict, AVAILABILITY_PENALTY
+        if __hasConsecutivesBlocks(blocks, timeTable, penaltyTable):
+            return penaltiesTablesDict, CONSECUTIVE_BLOCKS_PENALTY
+    if __hasSparseDays(penaltiesTablesDict, allocatedTeachers):
+        return penaltiesTablesDict, SPARSE_DAYS_PENALTY 
 
-    penaltiesTotalValue = __calculatePenaltiesTotalValues(penaltiesTablesDict)
-
-    return penaltiesTablesDict, penaltiesTotalValue
+    return penaltiesTablesDict, __calculatePenaltiesTotalValues(penaltiesTablesDict)
 
 #VERIFICA SE A DISTRIBUIÇÃO DE ALOCAÇÕES SE ESPALHOU POR MUITOS DIAS PARA O PROFESSOR
-def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
+def __hasSparseDays(penaltiesTablesDict, allocatedTeachers):
     #para cada professor alocado
     for teacherName, allocatedTeacher in allocatedTeachers.items():
         concatenatedAllocationTable = __concatenateShiftsAllocationTables(allocatedTeacher)
@@ -63,6 +60,8 @@ def __checkSparseDays(penaltiesTablesDict, allocatedTeachers):
         
         __applyPenaltiesOnFirstDay(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated)
         __applyPenaltiesOnLastDaty(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated)
+        return True
+    return False
 
 #Aplica penalidades no primeiro dia esparco alocado
 def __applyPenaltiesOnFirstDay(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated):
@@ -98,7 +97,7 @@ def __concatenateShiftsAllocationTables(allocatedTeacher):
     return numpy.array(returnConcatenedTable)
 
 #VERIFICACAO DE DISCIPLINA COM 3 BLOCOS SEGUIDOS NO MESMO TURNO
-def __checkConsecutivesThreeBlocks(blocks, timeTable, penaltyTable):
+def __hasConsecutivesBlocks(blocks, timeTable, penaltyTable):
     for dayOfWeek in range(5):
         if((timeTable[0][dayOfWeek] != None) and (timeTable[1][dayOfWeek] != None) and (timeTable[2][dayOfWeek] != None)):
             firstBlockIndex =  timeTable[0][dayOfWeek]
@@ -109,21 +108,27 @@ def __checkConsecutivesThreeBlocks(blocks, timeTable, penaltyTable):
             thirdCurricularComponentName = blocks[thirdBlockIndex].curricularComponentName
             if(firstCurricularComponentName == secondCurricularComponentName == thirdCurricularComponentName):
                 #disciplina de 3 blocos está no mesmo dia
-                penaltyTable[0][dayOfWeek] += THREE_CONSECUTIVE_BLOCKS_PENALTY/2 #marca penalidade na primeira aula do turno
-                penaltyTable[2][dayOfWeek] += THREE_CONSECUTIVE_BLOCKS_PENALTY/2 #marca penalidade na u aula do turno
+                penaltyTable[0][dayOfWeek] += CONSECUTIVE_BLOCKS_PENALTY/2 #marca penalidade na primeira aula do turno
+                penaltyTable[2][dayOfWeek] += CONSECUTIVE_BLOCKS_PENALTY/2 #marca penalidade na u aula do turno
+                return True
+    return False
 
 # VERIFICACAO DE CONFLITO e ATUALIZA TABELA DE ALOCACAO DO PROFESSOR
-def __checkConflict(penaltyTable, indexesPair, block, allocationTable):
+def __hasConflict(penaltyTable, indexesPair, block, allocationTable):
     if (allocationTable[indexesPair[0]][indexesPair[1]] != None):  #conflito: horário já alocado para o professor!
         penaltyTable[indexesPair[0]][indexesPair[1]] += CONFLICT_PENALTY
+        return True
     else: #aloca bloco na allocationTable do professor
         allocationTable[indexesPair[0]][indexesPair[1]] = block
+        return False
 
 # VERIFICACAO DE ALOCACAO FORA DA DISPONIBILIDADE DO PROFESSOR
-def __checkUnavailableDay(penaltyTable, indexesPair, teacher):
+def __hasUnavailableDay(penaltyTable, indexesPair, teacher):
     dayOfWeekAllocated = indexesPair[1]
     if (dayOfWeekAllocated not in teacher.getAvailabilitiesCopy()):
         penaltyTable[indexesPair[0]][indexesPair[1]] += AVAILABILITY_PENALTY
+        return True
+    return False
 
 def __returnEmptyAllocatedTeachersDict():
     empytAllocatedTeachers = {}
