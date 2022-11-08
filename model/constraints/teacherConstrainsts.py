@@ -17,6 +17,7 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
     allocatedTeachers = __returnEmptyAllocatedTeachersDict()
     blocks = dataLoader.getBlocksCopy()
 
+    hasPenalty = False
     #para cada timeTable de cada turma
     for classData, timeTable in timeTablesDict.items():
         penaltiesTablesDict[classData] = constructClassTable(0)
@@ -32,12 +33,17 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
             allocatedTeacher = allocatedTeachers[teacherName]
             allocationTable = allocatedTeacher.allocationsTables[block.classData.shift]
             if __hasConflict(penaltyTable, indexesPair, block, allocationTable):
+                hasPenalty = True
                 break #sai do for de bloco e vai para próxima classData
             if __hasUnavailableDay(penaltyTable, indexesPair, teacher):
+                hasPenalty = True
                 break #sai do for de bloco e vai para próxima classData
         if __hasConsecutivesBlocks(blocks, timeTable, penaltyTable):
+            hasPenalty = True
             continue #pula para próxima classData
-    __checkSparseDistribution(penaltiesTablesDict, allocatedTeachers)
+
+    if not hasPenalty:
+        __checkSparseDistribution(penaltiesTablesDict, allocatedTeachers)
 
     return penaltiesTablesDict, __penaltiesSum(penaltiesTablesDict)
 
@@ -129,6 +135,7 @@ def __concatenateShiftsAllocationTables(allocatedTeacher):
 
 #VERIFICACAO DE DISCIPLINA COM 3 BLOCOS SEGUIDOS DO MESMO PROFESSOR NO MESMO TURNO
 def __hasConsecutivesBlocks(blocks, timeTable, penaltyTable):
+    hasConsecutivesBlocks = False
     for dayOfWeek in range(5):
         if((timeTable[0][dayOfWeek] != None) and (timeTable[1][dayOfWeek] != None) and (timeTable[2][dayOfWeek] != None)):
             firstBlockIndex =  timeTable[0][dayOfWeek]
@@ -141,8 +148,8 @@ def __hasConsecutivesBlocks(blocks, timeTable, penaltyTable):
                 #disciplina de 3 blocos está no mesmo dia
                 penaltyTable[0][dayOfWeek] += CONSECUTIVE_BLOCKS_PENALTY/2 #marca penalidade na primeira aula do turno
                 penaltyTable[2][dayOfWeek] += CONSECUTIVE_BLOCKS_PENALTY/2 #marca penalidade na u aula do turno
-                return True
-    return False
+                hasConsecutivesBlocks = True
+    return hasConsecutivesBlocks
 
 # VERIFICACAO DE CONFLITO e ATUALIZA TABELA DE ALOCACAO DO PROFESSOR
 def __hasConflict(penaltyTable, indexesPair, block, allocationTable):
