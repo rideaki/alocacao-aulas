@@ -1,4 +1,5 @@
 import copy
+import random
 import numpy
 
 from collections import deque
@@ -52,12 +53,13 @@ def __searchMaxPenalty(penaltiesTablesDict):
     maxGlobalPenalty = 0
     # Para cada turma
     for classData, penaltyTable in penaltiesTablesDict.copy().items():
-        penaltyTable = numpy.array(penaltyTable.copy())
-        maxTableValue = numpy.amax(penaltyTable)
-        if maxTableValue < maxGlobalPenalty:
+        maxLocalValue = numpy.amax(penaltyTable)
+        if maxLocalValue < maxGlobalPenalty:
             continue #maior penalidade da tabela não é o maximo de todas -> pula iteracao
-        maxGlobalPenalty = maxTableValue
+        maxGlobalPenalty = maxLocalValue
         maxClassData = classData
-        maxPenaltyIndexes = numpy.unravel_index(penaltyTable.argmax(), penaltyTable.shape)
-    return maxClassData, maxPenaltyIndexes
+        maxPenaltyIndexes = list(zip(*numpy.where(penaltyTable == maxLocalValue)))
+        maxPenaltyIndex = random.choice(maxPenaltyIndexes)
+
+    return maxClassData, maxPenaltyIndex
         
