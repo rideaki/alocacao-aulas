@@ -34,13 +34,13 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
             allocationTable = allocatedTeacher.allocationsTables[block.classData.shift]
             if __hasConflict(penaltyTable, indexesPair, block, allocationTable):
                 hasPenalty = True
-                break #sai do for de bloco e vai para próxima classData
+                #break #sai do for de bloco e vai para próxima classData
             if __hasUnavailableDay(penaltyTable, indexesPair, teacher):
                 hasPenalty = True
-                break #sai do for de bloco e vai para próxima classData
+                #break #sai do for de bloco e vai para próxima classData
         if __hasConsecutivesBlocks(blocks, timeTable, penaltyTable):
             hasPenalty = True
-            continue #pula para próxima classData
+            #continue #pula para próxima classData
 
     if not hasPenalty:
         __checkSparseDistribution(penaltiesTablesDict, allocatedTeachers)
