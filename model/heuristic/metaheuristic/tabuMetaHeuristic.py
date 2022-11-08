@@ -14,8 +14,6 @@ def searchTabuHeuristicSolution(initialSolution, penaltiesTablesDict):
     maxClassData = None
     maxPenaltyIndexes = None
     maxClassData, maxPenaltyIndexes = __searchMaxPenalty(penaltiesTablesDict)
-    print(str(maxClassData.periodNumber) + maxClassData.shift)
-    print(maxPenaltyIndexes)
     neighborSolutions = __generateNeighborSolutions(initialSolution, maxClassData, maxPenaltyIndexes)
 
     bestSolution = None
@@ -26,6 +24,8 @@ def searchTabuHeuristicSolution(initialSolution, penaltiesTablesDict):
             bestSolution = solution
             bestSolutionPenalty = solutionPenalty
     
+    print("\n" + str(maxClassData.periodNumber) + maxClassData.shift)
+    print(str(maxPenaltyIndexes) + "<-" + str(bestSolution[maxClassData][maxPenaltyIndexes[0]][maxPenaltyIndexes[1]]))
     return bestSolution
 
 #Gerando permutações da timeTable[maxClassData] com indices maxPenaltyIndexes
