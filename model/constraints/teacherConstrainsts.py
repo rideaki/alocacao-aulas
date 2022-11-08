@@ -132,12 +132,12 @@ def __hasConsecutivesBlocks(blocks, timeTable, penaltyTable):
     for dayOfWeek in range(5):
         if((timeTable[0][dayOfWeek] != None) and (timeTable[1][dayOfWeek] != None) and (timeTable[2][dayOfWeek] != None)):
             firstBlockIndex =  timeTable[0][dayOfWeek]
-            firstCurricularComponentName = blocks[firstBlockIndex].curricularComponentName
+            firstTeacher = blocks[firstBlockIndex].teacher.name
             secondBlockIndex = timeTable[1][dayOfWeek]
-            secondCurricularComponentName = blocks[secondBlockIndex].curricularComponentName
+            secondTeacher = blocks[secondBlockIndex].teacher.name
             thirdBlockIndex = timeTable[2][dayOfWeek]
-            thirdCurricularComponentName = blocks[thirdBlockIndex].curricularComponentName
-            if(firstCurricularComponentName == secondCurricularComponentName == thirdCurricularComponentName):
+            thirdTeacher = blocks[thirdBlockIndex].teacher.name
+            if(firstTeacher == secondTeacher == thirdTeacher):
                 #disciplina de 3 blocos está no mesmo dia
                 penaltyTable[0][dayOfWeek] += CONSECUTIVE_BLOCKS_PENALTY/2 #marca penalidade na primeira aula do turno
                 penaltyTable[2][dayOfWeek] += CONSECUTIVE_BLOCKS_PENALTY/2 #marca penalidade na u aula do turno
