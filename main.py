@@ -11,7 +11,7 @@ def searchHeuristicSolution():
     penaltiesTablesDict = analyzeSolution(solution)
 
     for i in range(META_HEURISTIC_CYCLES):
-        print(" Ciclo: " + str(i))
+        print("\n %d° Ciclo: " % i)
         solution = searchTabuHeuristicSolution(solution.copy(), penaltiesTablesDict.copy())
         penaltiesTablesDict = analyzeSolution(solution)
 

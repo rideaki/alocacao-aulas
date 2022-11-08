@@ -24,7 +24,7 @@ def searchTabuHeuristicSolution(initialSolution, penaltiesTablesDict):
             bestSolution = solution
             bestSolutionPenalty = solutionPenalty
     
-    print("\n" + str(maxClassData.periodNumber) + maxClassData.shift)
+    print(str(maxClassData.periodNumber) + maxClassData.shift)
     print(str(maxPenaltyIndexes) + "<-" + str(bestSolution[maxClassData][maxPenaltyIndexes[0]][maxPenaltyIndexes[1]]))
     return bestSolution
 
