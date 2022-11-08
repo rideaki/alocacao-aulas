@@ -22,24 +22,24 @@ def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela h
         penaltiesTablesDict[classData] = constructClassTable(0)
         penaltyTable = penaltiesTablesDict[classData]
 
-        #para cada bloco de cada do timeTable da turma
+        #para cada bloco do timeTable da turma
         for indexesPair, blockAllocation in numpy.ndenumerate(timeTable):
             if(blockAllocation == None):
-                continue #pula a iteração atual
+                continue #pula para próximo bloco
             block = blocks[blockAllocation]
             teacher = block.teacher
             teacherName = teacher.name
             allocatedTeacher = allocatedTeachers[teacherName]
             allocationTable = allocatedTeacher.allocationsTables[block.classData.shift]
             if __hasConflict(penaltyTable, indexesPair, block, allocationTable):
-                return penaltiesTablesDict, CONFLICT_PENALTY
+                break #sai do for de bloco e vai para próxima classData
             if __hasUnavailableDay(penaltyTable, indexesPair, teacher):
-                return penaltiesTablesDict, AVAILABILITY_PENALTY
+                break #sai do for de bloco e vai para próxima classData
         if __hasConsecutivesBlocks(blocks, timeTable, penaltyTable):
-            return penaltiesTablesDict, CONSECUTIVE_BLOCKS_PENALTY
+            continue #pula para próxima classData
     __checkSparseDistribution(penaltiesTablesDict, allocatedTeachers)
 
-    return penaltiesTablesDict, __calculatePenaltiesTotalValues(penaltiesTablesDict)
+    return penaltiesTablesDict, __penaltiesSum(penaltiesTablesDict)
 
 #VERIFICA SE A DISTRIBUIÇÃO DE ALOCAÇÕES SE ESPALHOU POR MUITOS DIAS E HORÁRIOS PARA O PROFESSOR
 def __checkSparseDistribution(penaltiesTablesDict, allocatedTeachers):
@@ -127,7 +127,7 @@ def __concatenateShiftsAllocationTables(allocatedTeacher):
             returnConcatenedTable = numpy.concatenate((returnConcatenedTable, allocationTableByShift), axis=0) #axis=0 -> conc. vertical
     return numpy.array(returnConcatenedTable)
 
-#VERIFICACAO DE DISCIPLINA COM 3 BLOCOS SEGUIDOS NO MESMO TURNO
+#VERIFICACAO DE DISCIPLINA COM 3 BLOCOS SEGUIDOS DO MESMO PROFESSOR NO MESMO TURNO
 def __hasConsecutivesBlocks(blocks, timeTable, penaltyTable):
     for dayOfWeek in range(5):
         if((timeTable[0][dayOfWeek] != None) and (timeTable[1][dayOfWeek] != None) and (timeTable[2][dayOfWeek] != None)):
@@ -146,20 +146,22 @@ def __hasConsecutivesBlocks(blocks, timeTable, penaltyTable):
 
 # VERIFICACAO DE CONFLITO e ATUALIZA TABELA DE ALOCACAO DO PROFESSOR
 def __hasConflict(penaltyTable, indexesPair, block, allocationTable):
+    hasConflict = False
     if (allocationTable[indexesPair[0]][indexesPair[1]] != None):  #conflito: horário já alocado para o professor!
         penaltyTable[indexesPair[0]][indexesPair[1]] += CONFLICT_PENALTY
-        return True
+        hasConflict = True
     else: #aloca bloco na allocationTable do professor
         allocationTable[indexesPair[0]][indexesPair[1]] = block
-        return False
+    return hasConflict
 
 # VERIFICACAO DE ALOCACAO FORA DA DISPONIBILIDADE DO PROFESSOR
 def __hasUnavailableDay(penaltyTable, indexesPair, teacher):
+    hasUnavailableDay = False
     dayOfWeekAllocated = indexesPair[1]
     if (dayOfWeekAllocated not in teacher.getAvailabilitiesCopy()):
         penaltyTable[indexesPair[0]][indexesPair[1]] += AVAILABILITY_PENALTY
-        return True
-    return False
+        hasUnavailableDay = True
+    return hasUnavailableDay
 
 def __returnEmptyAllocatedTeachersDict():
     empytAllocatedTeachers = {}
@@ -168,7 +170,7 @@ def __returnEmptyAllocatedTeachersDict():
         empytAllocatedTeachers[teacher.name] = AllocatedTeacher(teacherName, teacher.getAvailabilitiesCopy())
     return empytAllocatedTeachers
 
-def __calculatePenaltiesTotalValues(penaltiesTablesDict):
+def __penaltiesSum(penaltiesTablesDict):
     penaltiesTotalValue = 0
     for timeTable in penaltiesTablesDict.values():
         penaltiesTotalValue += numpy.sum(timeTable)
