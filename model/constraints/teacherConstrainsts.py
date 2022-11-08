@@ -122,16 +122,16 @@ def __applyPenaltiesOnLastDaty(penaltiesTablesDict, concatenatedAllocationTable,
 
 #Concatena as tabelas de alocação do verticalmente
 def __concatenateShiftsAllocationTables(allocatedTeacher):
-    returnConcatenedTable = None
+    concatenedTable = None
     #Para cada turno
     for shift, allocationTableByShift in allocatedTeacher.allocationsTables.items():
         if (numpy.array(allocationTableByShift) == None).all():  #Se não há alocação no turno, não concatena a tabela
             continue
-        if returnConcatenedTable is None:
-            returnConcatenedTable = allocationTableByShift
+        if concatenedTable is None:
+            concatenedTable = allocationTableByShift
         else:
-            returnConcatenedTable = numpy.concatenate((returnConcatenedTable, allocationTableByShift), axis=0) #axis=0 -> conc. vertical
-    return numpy.array(returnConcatenedTable)
+            concatenedTable = numpy.concatenate((concatenedTable, allocationTableByShift), axis=0) #axis=0 -> conc. vertical
+    return numpy.array(concatenedTable)
 
 #VERIFICACAO DE DISCIPLINA COM 3 BLOCOS SEGUIDOS DO MESMO PROFESSOR NO MESMO TURNO
 def __hasConsecutivesBlocks(blocks, timeTable, penaltyTable):
