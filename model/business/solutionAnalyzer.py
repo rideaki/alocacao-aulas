@@ -23,4 +23,4 @@ def analyzeSolution(solution):
         printPenaltiesTablesDict(penaltiesTablesDict)
         exportToGenericCsvFile(globalSolution)  # Export para o arquivo outputTimeTable.csv na pasta raiz do projeto.
         print("Aguarde para procurar soluções melhores ou tecle CTRL + C para finalizar.")
-    return penaltiesTablesDict
+    return penaltiesTablesDict, solutionPenalty

@@ -7,7 +7,7 @@ from model.heuristic.metaheuristic.tabuMetaHeuristic import searchTabuHeuristicS
 
 def searchHeuristicSolution():
     solution = constructHeusristicSolution().copy()
-    penaltiesTablesDict = analyzeSolution(solution)
+    penaltiesTablesDict, _ = analyzeSolution(solution)
 
     searchTabuHeuristicSolution(solution, penaltiesTablesDict)
 

@@ -7,24 +7,64 @@ from model.business.solutionAnalyzer import globalSolutionPenalty, globalSolutio
 from model.business.comparator import areDifferentBlocks
 from model.business.solutionAnalyzer import analyzeSolution
 from model.constraints.teacherConstrainsts import SPARSE_DAYS_PENALTY, calculatePenalties
+from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 
 META_HEURISTIC_CYCLES = 90
+FINAL_OPTIMIZATION_CYCLES = 5
 TABU_SIZE = 40
 
 tabu = deque(maxlen=TABU_SIZE)
 
-def searchTabuHeuristicSolution(solution, globalPenaltiesTables):
-    __searchSolutionsInCycles(solution, globalPenaltiesTables)
-    if globalSolutionPenalty < SPARSE_DAYS_PENALTY:
-        globalPenaltiesTables = calculatePenalties(globalSolution)    
-        __searchSolutionsInCycles(globalSolution, globalPenaltiesTables)
-
-def __searchSolutionsInCycles(solution, penaltiesTablesDict):
+def searchTabuHeuristicSolution(solution, penaltiesTablesDict):
     tabu.clear()
     for i in range(META_HEURISTIC_CYCLES):
         print("\n %d° Ciclo: " % i)
         solution = __searchBestNeighborSolution(solution.copy(), penaltiesTablesDict.copy())
-        penaltiesTablesDict = analyzeSolution(solution)
+        penaltiesTablesDict, penaltyValue = analyzeSolution(solution)
+        if penaltyValue < SPARSE_DAYS_PENALTY:
+            for j in range(FINAL_OPTIMIZATION_CYCLES):
+                __optimizeLocalSolution(solution.copy(), penaltiesTablesDict, penaltyValue)
+            return
+
+def __optimizeLocalSolution(solutionArg, penaltiesTablesDict, penaltyValueArg):
+    tabu.clear()
+    officialSolution = solutionArg.copy()
+    officialPenaltyValue = penaltyValueArg
+    # Para cada turma
+    for classData, penaltyTable in penaltiesTablesDict.copy().items(): #TODO iterar dict randomicamente
+        #Para cada penalidade escolhida randomicamente
+        rowsNumber = len(penaltyTable)
+        columnsNumber = len(penaltyTable[0])
+        coords = [(x,y) for x in range(rowsNumber) for y in range(columnsNumber)]
+        random.shuffle(coords)
+        for i,j in coords:
+            cellPenalty = penaltyTable[i][j]
+            if(cellPenalty == 0):
+                continue    
+            penaltyIndex = [i,j]
+            print("\n Melhoria local: ", penaltyIndex)
+            print(str(classData))
+            bestNeighborSolution = __searchSolutionPermutingOneIndex(officialSolution.copy(), classData, penaltyIndex)
+            _, neighborPenalty = analyzeSolution(bestNeighborSolution)
+            if neighborPenalty < officialPenaltyValue:
+                officialSolution = bestNeighborSolution
+                officialPenaltyValue = neighborPenalty
+
+def __searchSolutionPermutingOneIndex(initialSolution, classData, index):
+    neighborSolutions = __generateNeighborSolutions(initialSolution, classData, index)
+
+    bestSolution = None
+    bestSolutionPenalty = float('inf')
+    for solution in neighborSolutions:
+        _, solutionPenalty = calculatePenalties(solution)
+        if (solutionPenalty <= bestSolutionPenalty):    
+            bestSolution = solution
+            bestSolutionPenalty = solutionPenalty
+    
+    print(str(classData.periodNumber) + classData.shift)
+    print(str(index) + "<-" + str(bestSolution[classData][index[0]][index[1]]))
+    return bestSolution
+
 
 def __searchBestNeighborSolution(initialSolution, penaltiesTablesDict):
     tabu.append(initialSolution)
