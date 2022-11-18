@@ -6,12 +6,14 @@ from model.exporter.csvGenericExporter import exportToGenericCsvFile
 globalSolution = {}   #dicionario: dicionario[dataClass] = tabela horária de cada turma (dataClass)
 globalSolutionPenalty = float('inf')  # penalidades positivas. Objetivo: MINIMIZAR penalty
 
+OUTPUT_FILE_NAME = "melhor-solucao.csv"
+
 def analyzeSolution(solution):
     penaltiesTablesDict, solutionPenalty = calculatePenalties(solution)
     print("%dpontos de penalty " % int(solutionPenalty))
     if solutionPenalty == 0:
         print("A solução ótima global foi encontrada!!!!!!")
-        exportToGenericCsvFile(solution)  # Export para o arquivo outputTimeTable.csv na pasta raiz do projeto.
+        exportToGenericCsvFile(solution, OUTPUT_FILE_NAME)
         print("Finalizando programa.")
         exit() #finaliza programa
     
@@ -21,6 +23,6 @@ def analyzeSolution(solution):
         globalSolutionPenalty = solutionPenalty
         print("Uma solução viável foi encontrada.")
         printPenaltiesTablesDict(penaltiesTablesDict)
-        exportToGenericCsvFile(globalSolution)  # Export para o arquivo outputTimeTable.csv na pasta raiz do projeto.
+        exportToGenericCsvFile(globalSolution, OUTPUT_FILE_NAME)
         print("Aguarde para procurar soluções melhores ou tecle CTRL + C para finalizar.")
     return penaltiesTablesDict, solutionPenalty

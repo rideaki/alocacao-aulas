@@ -7,6 +7,7 @@ from model.business.solutionAnalyzer import globalSolutionPenalty, globalSolutio
 from model.business.comparator import areDifferentBlocks
 from model.business.solutionAnalyzer import analyzeSolution
 from model.constraints.teacherConstrainsts import SPARSE_DAYS_PENALTY, calculatePenalties
+from model.exporter.csvGenericExporter import exportToGenericCsvFile
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 
 META_HEURISTIC_CYCLES = 90
@@ -18,6 +19,7 @@ tabu = deque(maxlen=TABU_SIZE)
 def searchTabuHeuristicSolution(solution, penaltiesTablesDict):
     tabu.clear()
     for i in range(META_HEURISTIC_CYCLES):
+        exportToGenericCsvFile(solution, "log.csv")
         print("\n %d° Ciclo: " % i)
         solution = __searchBestNeighborSolution(solution.copy(), penaltiesTablesDict.copy())
         penaltiesTablesDict, penaltyValue = analyzeSolution(solution)
@@ -106,11 +108,11 @@ def __includeSolution(maxClassData, maxPenaltyIndexes, neighborSolutions, maxBlo
         neighborSolutions.append(neighborSolution)
 
 def __searchMaxPenalty(penaltiesTablesDict):
-    maxGlobalPenalty = 0
+    maxGlobalPenalty = -1
     # Para cada turma
     for classData, penaltyTable in penaltiesTablesDict.copy().items():
         maxLocalValue = numpy.amax(penaltyTable)
-        if maxLocalValue < maxGlobalPenalty:
+        if maxLocalValue <= maxGlobalPenalty:
             continue #maior penalidade da tabela não é o maximo de todas -> pula iteracao
         maxGlobalPenalty = maxLocalValue
         maxClassData = classData

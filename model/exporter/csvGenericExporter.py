@@ -6,7 +6,7 @@ from model.constraints.teacherConstrainsts import calculatePenalties
 MAX_CELL_SIZE: Final = 20
 
 # Exporter que pode ser utilizado por qualquer campus
-def exportToGenericCsvFile(timeTables):
+def exportToGenericCsvFile(timeTables, outputFileName):
 
     classes = dataLoader.getClassesCopy()
 
@@ -24,7 +24,6 @@ def exportToGenericCsvFile(timeTables):
             csvString += " \n"
         csvString += " \n"
 
-    outputFileName = "outputTimeTable.csv"  #grava na raiz do projeto
     file = open(outputFileName, "w")
     file.write(csvString)
     file.close()
