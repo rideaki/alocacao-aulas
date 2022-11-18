@@ -18,12 +18,12 @@ tabu = deque(maxlen=TABU_SIZE)
 def searchTabuHeuristicSolution(solution, penaltiesTablesDict):
     for i in range(META_HEURISTIC_CYCLES):
         tabu.clear()
-        #exportToGenericCsvFile(solution, "log.csv")
+        exportToGenericCsvFile(solution, "log.csv")
         print("\n %d° Ciclo: " % i)
         solution = __searchBestNeighborSolution(solution.copy(), penaltiesTablesDict.copy())
         penaltiesTablesDict, penaltyValue = analyzeSolution(solution)
 
-        #Refinamento para otimização local final - eliminação de janelas (horários vagos)
+        #Refinamento final para otimização local: eliminação de janelas (horários vagos) do professor
         if penaltyValue < SPARSE_DAYS_PENALTY:
             isImproved = True
             while isImproved:
@@ -86,7 +86,7 @@ def __searchBestNeighborSolution(initialSolution, penaltiesTablesDict):
     bestSolutionPenalty = float('inf')
     random.shuffle(neighborSolutions)
     for solution in neighborSolutions:
-        #exportToGenericCsvFile(solution, "log.csv")
+        exportToGenericCsvFile(solution, "log.csv")
         penaltiesTablesDict, solutionPenalty = calculatePenalties(solution)
         if (solutionPenalty < bestSolutionPenalty) and (
         solution not in tabu
