@@ -10,30 +10,33 @@ from model.constraints.teacherConstrainsts import SPARSE_DAYS_PENALTY, calculate
 from model.exporter.csvGenericExporter import exportToGenericCsvFile
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 
-META_HEURISTIC_CYCLES = 90
+META_HEURISTIC_CYCLES = 20
 FINAL_OPTIMIZATION_CYCLES = 5
-TABU_SIZE = 40
+TABU_SIZE = 20
 
 tabu = deque(maxlen=TABU_SIZE)
 
 def searchTabuHeuristicSolution(solution, penaltiesTablesDict):
-    tabu.clear()
     for i in range(META_HEURISTIC_CYCLES):
-        exportToGenericCsvFile(solution, "log.csv")
+        tabu.clear()
+        #exportToGenericCsvFile(solution, "log.csv")
         print("\n %d° Ciclo: " % i)
         solution = __searchBestNeighborSolution(solution.copy(), penaltiesTablesDict.copy())
         penaltiesTablesDict, penaltyValue = analyzeSolution(solution)
         if penaltyValue < SPARSE_DAYS_PENALTY:
-            for j in range(FINAL_OPTIMIZATION_CYCLES):
-                __optimizeLocalSolution(solution.copy(), penaltiesTablesDict, penaltyValue)
+            isImproved = True
+            while isImproved:
+                solution, isImproved = __optimizeLocalSolution(solution.copy(), penaltiesTablesDict, penaltyValue)
+                penaltiesTablesDict, penaltyValue = analyzeSolution(solution)
             return
 
 def __optimizeLocalSolution(solutionArg, penaltiesTablesDict, penaltyValueArg):
     tabu.clear()
+    isImproved = False
     officialSolution = solutionArg.copy()
     officialPenaltyValue = penaltyValueArg
     # Para cada turma
-    for classData, penaltyTable in penaltiesTablesDict.copy().items(): #TODO iterar dict randomicamente
+    for classData, penaltyTable in penaltiesTablesDict.copy().items():
         #Para cada penalidade escolhida randomicamente
         rowsNumber = len(penaltyTable)
         columnsNumber = len(penaltyTable[0])
@@ -51,6 +54,9 @@ def __optimizeLocalSolution(solutionArg, penaltiesTablesDict, penaltyValueArg):
             if neighborPenalty < officialPenaltyValue:
                 officialSolution = bestNeighborSolution
                 officialPenaltyValue = neighborPenalty
+                isImproved = True
+
+    return officialSolution, isImproved
 
 def __searchSolutionPermutingOneIndex(initialSolution, classData, index):
     neighborSolutions = __generateNeighborSolutions(initialSolution, classData, index)
@@ -77,9 +83,13 @@ def __searchBestNeighborSolution(initialSolution, penaltiesTablesDict):
 
     bestSolution = None
     bestSolutionPenalty = float('inf')
+    random.shuffle(neighborSolutions)
     for solution in neighborSolutions:
+        #exportToGenericCsvFile(solution, "log.csv")
         penaltiesTablesDict, solutionPenalty = calculatePenalties(solution)
-        if (solutionPenalty <= bestSolutionPenalty) and (solution not in tabu):    
+        if (solutionPenalty < bestSolutionPenalty) and (
+        solution not in tabu
+        ):    
             bestSolution = solution
             bestSolutionPenalty = solutionPenalty
     

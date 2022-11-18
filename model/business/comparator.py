@@ -22,6 +22,6 @@ def areDifferentBlocks(block1Index, block2Index):
     blocks = dataLoader.getBlocksCopy()
     block1 = blocks[block1Index]
     block2 = blocks[block2Index]
-    return (block1.curricularComponentName != block2.curricularComponentName) or (
-        block1.teacher.name != block2.teacher.name
-    )       
+    return block1.teacher.name != block2.teacher.name
+    
+     
