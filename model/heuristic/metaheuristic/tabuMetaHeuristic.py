@@ -22,6 +22,8 @@ def searchTabuHeuristicSolution(solution, penaltiesTablesDict):
         print("\n %d° Ciclo: " % i)
         solution = __searchBestNeighborSolution(solution.copy(), penaltiesTablesDict.copy())
         penaltiesTablesDict, penaltyValue = analyzeSolution(solution)
+
+        #Refinamento para otimização local final - eliminação de janelas (horários vagos)
         if penaltyValue < SPARSE_DAYS_PENALTY:
             isImproved = True
             while isImproved:
