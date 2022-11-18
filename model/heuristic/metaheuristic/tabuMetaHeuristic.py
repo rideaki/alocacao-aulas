@@ -11,7 +11,6 @@ from model.exporter.csvGenericExporter import exportToGenericCsvFile
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 
 META_HEURISTIC_CYCLES = 20
-FINAL_OPTIMIZATION_CYCLES = 5
 TABU_SIZE = 20
 
 tabu = deque(maxlen=TABU_SIZE)
