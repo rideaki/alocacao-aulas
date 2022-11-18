@@ -6,7 +6,7 @@ from collections import deque
 from model.business.solutionAnalyzer import globalSolutionPenalty, globalSolution
 from model.business.comparator import areDifferentBlocks
 from model.business.solutionAnalyzer import analyzeSolution
-from model.constraints.teacherConstrainsts import SPARSE_DAYS_PENALTY, calculatePenalties
+from model.constraints.teacherConstrainsts import *
 from model.exporter.csvGenericExporter import exportToGenericCsvFile
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 
@@ -24,7 +24,7 @@ def searchTabuHeuristicSolution(solution, penaltiesTablesDict):
         penaltiesTablesDict, penaltyValue = analyzeSolution(solution)
 
         #Refinamento final para otimização local: eliminação de janelas (horários vagos) do professor
-        if penaltyValue < SPARSE_DAYS_PENALTY:
+        if penaltyValue < CONSECUTIVE_BLOCKS_PENALTY:
             isImproved = True
             while isImproved:
                 solution, isImproved = __optimizeLocalSolution(solution.copy(), penaltiesTablesDict, penaltyValue)

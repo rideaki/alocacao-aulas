@@ -5,11 +5,11 @@ from model.business.tableFactory import constructClassTable
 from model.constraints.entity.allocatedTeacher import AllocatedTeacher
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 
-CONFLICT_PENALTY = 1000000
-AVAILABILITY_PENALTY = 3000
-CONSECUTIVE_BLOCKS_PENALTY = 2000
-SPARSE_DAYS_PENALTY = 300
-SPARSE_HOURS_PENALTY = 1
+CONFLICT_PENALTY =        9999999999
+AVAILABILITY_PENALTY =       3000000
+CONSECUTIVE_BLOCKS_PENALTY = 2000000
+SPARSE_DAYS_PENALTY =            100
+SPARSE_HOURS_PENALTY =             1
 
 def calculatePenalties(timeTablesDict): #recebe dicionario[classData] = tabela horária de cada turma (classData)
     penaltiesTablesDict = {} #retorna dicionario[classData] = tabela de penalidades de cada turma (classData)
