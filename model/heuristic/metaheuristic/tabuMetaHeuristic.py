@@ -11,14 +11,14 @@ from model.exporter.csvGenericExporter import exportToGenericCsvFile
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 
 META_HEURISTIC_CYCLES = 20
-TABU_SIZE = 20
+TABU_SIZE = 10
 
 tabu = deque(maxlen=TABU_SIZE)
 
 def searchTabuHeuristicSolution(solution, penaltiesTablesDict):
     for i in range(META_HEURISTIC_CYCLES):
         tabu.clear()
-        exportToGenericCsvFile(solution, "log.csv")
+        #exportToGenericCsvFile(solution, "log.csv")
         print("\n %d° Ciclo: " % i)
         solution = __searchBestNeighborSolution(solution.copy(), penaltiesTablesDict.copy())
         penaltiesTablesDict, penaltyValue = analyzeSolution(solution)
@@ -86,7 +86,7 @@ def __searchBestNeighborSolution(initialSolution, penaltiesTablesDict):
     bestSolutionPenalty = float('inf')
     random.shuffle(neighborSolutions)
     for solution in neighborSolutions:
-        exportToGenericCsvFile(solution, "log.csv")
+        #exportToGenericCsvFile(solution, "log.csv")
         penaltiesTablesDict, solutionPenalty = calculatePenalties(solution)
         if (solutionPenalty < bestSolutionPenalty) and (
         solution not in tabu
