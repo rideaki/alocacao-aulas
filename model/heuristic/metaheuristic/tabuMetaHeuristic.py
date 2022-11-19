@@ -66,12 +66,10 @@ def __searchSolutionPermutingOneIndex(initialSolution, classData, index):
     bestSolutionPenalty = float('inf')
     for solution in neighborSolutions:
         _, solutionPenalty = calculatePenalties(solution)
-        if (solutionPenalty <= bestSolutionPenalty):    
+        if (solutionPenalty < bestSolutionPenalty):    
             bestSolution = solution
             bestSolutionPenalty = solutionPenalty
     
-    print(str(classData.periodNumber) + classData.shift)
-    print(str(index) + "<-" + str(bestSolution[classData][index[0]][index[1]]))
     return bestSolution
 
 

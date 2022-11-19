@@ -103,22 +103,18 @@ def __checkSparseDays(penaltiesTablesDict, concatenatedAllocationTable, daysOfWe
 #Aplica penalidades no primeiro dia esparco alocado
 def __applyPenaltiesOnFirstDay(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated):
     firstDayAllocated = daysOfWeekAllocated[0]
-    numberOfBlocksInFirstDay = numpy.where(concatenatedAllocationTable[:,firstDayAllocated] != None, 1, 0).sum()
-    penaltyByBlockInFirstDay = (numberOfDaysAllocated - minDaysToBeAllocated)*SPARSE_DAYS_PENALTY/numberOfBlocksInFirstDay
     for index, block in enumerate(list(zip(*concatenatedAllocationTable))[firstDayAllocated]): # zip(*matrix) = transposed of matrix
         if block == None:
             continue
-        penaltiesTablesDict[block.classData][index % NUMBER_OF_BLOCKS_IN_SHIFT][firstDayAllocated] += penaltyByBlockInFirstDay
+        penaltiesTablesDict[block.classData][index % NUMBER_OF_BLOCKS_IN_SHIFT][firstDayAllocated] += SPARSE_DAYS_PENALTY
 
 #Aplica penalidades no ultimo dia esparco alocado
 def __applyPenaltiesOnLastDaty(penaltiesTablesDict, concatenatedAllocationTable, numberOfDaysAllocated, minDaysToBeAllocated, daysOfWeekAllocated):
     lastDayAllocated = daysOfWeekAllocated[-1] #em python, indice -1 retorna o ultimo elemento
-    numberOfBlocksInLastDay = numpy.where(concatenatedAllocationTable[:,lastDayAllocated] != None, 1, 0).sum()
-    penaltyByBlockInLastDay = (numberOfDaysAllocated - minDaysToBeAllocated)*SPARSE_DAYS_PENALTY/numberOfBlocksInLastDay
     for index, block in enumerate(list(zip(*concatenatedAllocationTable))[lastDayAllocated]): # zip(*matrix) = transposed of matrix
         if block == None:
             continue
-        penaltiesTablesDict[block.classData][index % NUMBER_OF_BLOCKS_IN_SHIFT][lastDayAllocated] += penaltyByBlockInLastDay
+        penaltiesTablesDict[block.classData][index % NUMBER_OF_BLOCKS_IN_SHIFT][lastDayAllocated] += SPARSE_DAYS_PENALTY
 
 #Concatena as tabelas de alocação do verticalmente
 def __concatenateShiftsAllocationTables(allocatedTeacher):
