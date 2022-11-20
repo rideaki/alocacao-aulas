@@ -17,6 +17,7 @@ def analyzeSolution(solution):
         print("Finalizando programa.")
         exit() #finaliza programa
     
+    global globalSolution
     global globalSolutionPenalty
     if(solutionPenalty < globalSolutionPenalty):    
         globalSolution = solution
@@ -26,3 +27,6 @@ def analyzeSolution(solution):
         exportToGenericCsvFile(globalSolution, OUTPUT_FILE_NAME)
         print("Aguarde para procurar soluções melhores ou tecle CTRL + C para finalizar.")
     return penaltiesTablesDict, solutionPenalty
+
+def getGlobalSolution():
+    return globalSolution

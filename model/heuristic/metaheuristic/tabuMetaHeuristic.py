@@ -3,19 +3,17 @@ import random
 import numpy
 
 from collections import deque
-from model.business.solutionAnalyzer import globalSolutionPenalty, globalSolution
 from model.business.comparator import areDifferentBlocks
 from model.business.solutionAnalyzer import analyzeSolution
 from model.constraints.teacherConstrainsts import *
-from model.exporter.csvGenericExporter import exportToGenericCsvFile
-from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 
 META_HEURISTIC_CYCLES = 20
 TABU_SIZE = 10
 
 tabu = deque(maxlen=TABU_SIZE)
 
-def searchTabuHeuristicSolution(solution, penaltiesTablesDict):
+def searchTabuHeuristicSolution(solution):
+    penaltiesTablesDict, _ = calculatePenalties(solution)
     for i in range(META_HEURISTIC_CYCLES):
         tabu.clear()
         #exportToGenericCsvFile(solution, "log.csv")
