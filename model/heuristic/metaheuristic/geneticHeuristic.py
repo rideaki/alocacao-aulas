@@ -16,7 +16,7 @@ def searchGeneticHeuristicSolution(solution):
     #Permuta de cromossomos para dias esparsos
     hasSparseDays = permuteChromosomes(mother, fatherPenalties, son, SPARSE_DAYS_PENALTY -1)
     if not hasSparseDays:
-        #Permuta de cromosssomos para horários esparsos (horários vagos)
+        #Permuta para horários esparsos (horários vagos): penalinalidades acima de 0
         permuteChromosomes(mother, fatherPenalties, son, 0)
 
     return son
