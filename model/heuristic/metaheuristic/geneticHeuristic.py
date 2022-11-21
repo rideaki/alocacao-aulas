@@ -16,20 +16,22 @@ def searchGeneticHeuristicSolution(solution):
     exportToGenericCsvFile(father, "log.csv")
     exportToGenericCsvFile(mother, "log.csv")
     
-    #O cromossomo é a classData cujo timeTable será permutado
-    for chromosome, penaltyTable in fatherPenalties.copy().items():
-        localSumValue = numpy.sum(penaltyTable)
-        if localSumValue >= SPARSE_DAYS_PENALTY:
-            son[chromosome] = mother[chromosome]
-            hasSparseDays = True
-    
+    #Permuta de cromossomos para dias esparsos
+    hasSparseDays = permuteChromosomes(mother, fatherPenalties, son, SPARSE_DAYS_PENALTY -1)
     if not hasSparseDays:
-        for chromosome, penaltyTable in fatherPenalties.copy().items():
-            localSumValue = numpy.sum(penaltyTable)
-            if localSumValue > 0:
-                son[chromosome] = mother[chromosome]
+        #Permuta de cromosssomos para horários esparsos (horários vagos)
+        permuteChromosomes(mother, fatherPenalties, son, 0)
 
     exportToGenericCsvFile(son, "log.csv")
 
     return son
+
+def permuteChromosomes(mother, fatherPenalties, son, penaltySumCriteria):
+    #O cromossomo é a classData cujo timeTable será permutado
+    for chromosome, penaltyTable in fatherPenalties.copy().items():
+        classPenaltySum = numpy.sum(penaltyTable)
+        if classPenaltySum > penaltySumCriteria :
+            son[chromosome] = mother[chromosome]
+            hasSparseDays = True
+    return hasSparseDays
 
