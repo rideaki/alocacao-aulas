@@ -58,7 +58,7 @@ def __optimizeLocalSolution(solutionArg, penaltiesTablesDict, penaltyValueArg):
     return officialSolution, isImproved
 
 def __searchSolutionPermutingOneIndex(initialSolution, classData, index):
-    neighborSolutions = __generateNeighborSolutions(initialSolution, classData, index)
+    neighborSolutions = __generateFinalNeighborSolutions(initialSolution, classData, index)
 
     bestSolution = None
     bestSolutionPenalty = float('inf')
@@ -93,6 +93,21 @@ def __searchBestNeighborSolution(initialSolution, penaltiesTablesDict):
     print(str(maxClassData.periodNumber) + maxClassData.shift)
     print(str(maxPenaltyIndexes) + "<-" + str(bestSolution[maxClassData][maxPenaltyIndexes[0]][maxPenaltyIndexes[1]]))
     return bestSolution
+
+#Gerando permutações da timeTable[classData] com indices indexToPermute, refinamento final
+def __generateFinalNeighborSolutions(initialSolution, classData, indexToPermute):
+    neighborSolutions = []
+    timeTable = copy.deepcopy(initialSolution[classData])
+    blockIndex = timeTable[indexToPermute[0]][indexToPermute[1]]
+    block = dataLoader.getBlocks()[blockIndex]
+    for i in range(len(timeTable)): 
+        teacherAvailabilities = block.teacher.getAvailabilitiesCopy()
+        for j in teacherAvailabilities:
+            neighborSolution = initialSolution.copy()
+            classNeighborSolution = copy.deepcopy(timeTable)
+            __includeSolution(classData, indexToPermute, neighborSolutions, blockIndex, i, j, neighborSolution, classNeighborSolution)
+    return neighborSolutions
+
 
 #Gerando permutações da timeTable[maxClassData] com indices maxPenaltyIndexes
 def __generateNeighborSolutions(initialSolution, maxClassData, maxPenaltyIndexes):
