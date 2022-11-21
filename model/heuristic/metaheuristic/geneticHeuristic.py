@@ -13,16 +13,11 @@ def searchGeneticHeuristicSolution(solution):
     son = father.copy()
     hasSparseDays = False
     
-    exportToGenericCsvFile(father, "log.csv")
-    exportToGenericCsvFile(mother, "log.csv")
-    
     #Permuta de cromossomos para dias esparsos
     hasSparseDays = permuteChromosomes(mother, fatherPenalties, son, SPARSE_DAYS_PENALTY -1)
     if not hasSparseDays:
         #Permuta de cromosssomos para horários esparsos (horários vagos)
         permuteChromosomes(mother, fatherPenalties, son, 0)
-
-    exportToGenericCsvFile(son, "log.csv")
 
     return son
 
