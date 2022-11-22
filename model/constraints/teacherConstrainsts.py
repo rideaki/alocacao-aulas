@@ -1,6 +1,6 @@
 from math import ceil
 import numpy
-import dataLoader
+import model.loader.dataLoader as dataLoader
 from model.business.tableFactory import constructClassTable
 from model.constraints.entity.allocatedTeacher import AllocatedTeacher
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT

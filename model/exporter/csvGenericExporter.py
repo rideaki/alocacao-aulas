@@ -1,4 +1,4 @@
-import dataLoader
+import model.loader.dataLoader as dataLoader
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 from typing import Final
 from model.constraints.teacherConstrainsts import calculatePenalties

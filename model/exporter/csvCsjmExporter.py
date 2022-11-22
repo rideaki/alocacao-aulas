@@ -1,4 +1,4 @@
-import dataLoader
+import model.loader.dataLoader as dataLoader
 
 # Exporter especifico para o CSV do Campus São João de Meriti
 def exportToCSJMCsvFile(timeTables):

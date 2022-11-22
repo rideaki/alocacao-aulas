@@ -1,4 +1,4 @@
-import dataLoader
+import model.loader.dataLoader as dataLoader
 
 from model.business.solutionAnalyzer import globalSolutionPenalty
 from model.constraints.teacherConstrainsts import SPARSE_DAYS_PENALTY

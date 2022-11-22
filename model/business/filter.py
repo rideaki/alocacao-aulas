@@ -1,4 +1,4 @@
-import dataLoader
+import model.loader.dataLoader as dataLoader
 from model.utils.shifts import *
 
 def filterBlocksIndexesByClassData(blocksArg, classDataArg):

@@ -1,4 +1,4 @@
-import dataLoader
+import model.loader.dataLoader as dataLoader
 import numpy
 
 #Verifica se duas timeTables são iguais ou equivalentes, ou seja, cuja alocação de blocos são as mesmas
