@@ -99,10 +99,20 @@ def __generateFinalNeighborSolutions(initialSolution, classData, indexToPermute)
     neighborSolutions = []
     timeTable = copy.deepcopy(initialSolution[classData])
     blockIndex = timeTable[indexToPermute[0]][indexToPermute[1]]
-    block = dataLoader.getBlocks()[blockIndex]
-    for i in range(len(timeTable)): 
-        teacherAvailabilities = block.teacher.getAvailabilitiesCopy()
-        for j in teacherAvailabilities:
+    if blockIndex == None:
+        days = range(len(timeTable[0]))
+    else:    
+        penaltyTable, _ = calculatePenalties(initialSolution)
+        penaltyCell = penaltyTable[classData][indexToPermute[0]][indexToPermute[1]]
+        if penaltyCell < SPARSE_DAYS_PENALTY:
+            days = [indexToPermute[1]] #eliminar aulas vagas, apenas no mesmo dia alocado
+        else:
+            block = dataLoader.getBlocks()[blockIndex]
+            days = block.teacher.getAvailabilitiesCopy().tolist().copy()
+            days.remove(indexToPermute[1]) #eliminação de dias esparsos, não precisa permutar no mesmo dia
+
+    for i in range(len(timeTable)):
+        for j in days:
             neighborSolution = initialSolution.copy()
             classNeighborSolution = copy.deepcopy(timeTable)
             __includeSolution(classData, indexToPermute, neighborSolutions, blockIndex, i, j, neighborSolution, classNeighborSolution)
