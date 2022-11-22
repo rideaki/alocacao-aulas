@@ -1,6 +1,6 @@
 import dataLoader
 
-from model.business.solutionAnalyzer import analyzeSolution, globalSolutionPenalty
+from model.business.solutionAnalyzer import globalSolutionPenalty
 from model.constraints.teacherConstrainsts import SPARSE_DAYS_PENALTY
 from model.heuristic.constructorHeuristic import constructHeusristicSolution
 from model.heuristic.metaheuristic.tabuMetaHeuristic import searchTabuHeuristicSolution
