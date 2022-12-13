@@ -5,7 +5,7 @@ from typing import Final
 from model.constraints.teacherConstrainsts import calculatePenalties
 
 MAX_CELL_SIZE: Final = 20
-REPORT_CELL_SIZE: Final = 40
+REPORT_CELL_SIZE: Final = 50
 RESOLVED_CELL_SIZE: Final = 12
 
 # Exporter que pode ser utilizado por qualquer campus
@@ -34,7 +34,11 @@ def exportToGenericCsvFile(timeTables, outputFileName):
 #SPARSE_DAYS_PENALTY =            100
 #SPARSE_HOURS_PENALTY =             1
 
-    csvString += reportRow("Tempo Vago", solutionPenalty)
+    csvString += reportRow("Tempo Vago", SPARSE_HOURS_PENALTY, SPARSE_DAYS_PENALTY, solutionPenalty)
+    csvString += reportRow("Professores alocados no mínimo de dias", SPARSE_DAYS_PENALTY, CONSECUTIVE_BLOCKS_PENALTY, solutionPenalty)
+    csvString += reportRow("Turma com todas aulas do mesmo prof. no dia", CONSECUTIVE_BLOCKS_PENALTY, AVAILABILITY_PENALTY, solutionPenalty)
+    csvString += reportRow("Professor alocado em dia não disponibilizado", AVAILABILITY_PENALTY, CONFLICT_PENALTY, solutionPenalty)
+
 
     file = open(outputFileName, "w")
     file.write(csvString)
@@ -42,16 +46,15 @@ def exportToGenericCsvFile(timeTables, outputFileName):
 
     print("Alocação de aulas salva na planilha: " + outputFileName)
 
-def reportRow(reportText, solutionPenalty):
+def reportRow(reportText, minLimit, maxLimit, solutionPenalty):
     solutionPercent = 0.0
-    if solutionPenalty < SPARSE_HOURS_PENALTY:
+    if solutionPenalty < minLimit:
         solutionPercent = 100.0
-    elif solutionPenalty > SPARSE_DAYS_PENALTY:
+    elif solutionPenalty >= maxLimit:
         solutionPercent = 0.0
     else:
-        solutionPercent = round(solutionPenalty/SPARSE_DAYS_PENALTY, 1)
- 
-    return (reportText).ljust(REPORT_CELL_SIZE) + ", " + (str(solutionPercent) + "%").rjust(RESOLVED_CELL_SIZE) + " \n"
+        solutionPercent = 100 - (solutionPenalty/maxLimit)
+    return (reportText).ljust(REPORT_CELL_SIZE) + ", " + (str(f'{solutionPercent:.5f}') + "%").rjust(RESOLVED_CELL_SIZE) + " \n"
 
 def blockIndexToString(index):
     blocks = dataLoader.getBlocksCopy()
