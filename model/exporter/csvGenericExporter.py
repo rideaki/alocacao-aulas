@@ -33,12 +33,11 @@ def exportToGenericCsvFile(timeTables, outputFileName):
 #CONSECUTIVE_BLOCKS_PENALTY = 2000000
 #SPARSE_DAYS_PENALTY =            100
 #SPARSE_HOURS_PENALTY =             1
-
     csvString += reportRow("Tempo Vago", SPARSE_HOURS_PENALTY, SPARSE_DAYS_PENALTY, solutionPenalty)
     csvString += reportRow("Professores alocados no mínimo de dias", SPARSE_DAYS_PENALTY, CONSECUTIVE_BLOCKS_PENALTY, solutionPenalty)
     csvString += reportRow("Turma com todas aulas do mesmo prof. no dia", CONSECUTIVE_BLOCKS_PENALTY, AVAILABILITY_PENALTY, solutionPenalty)
     csvString += reportRow("Professor alocado em dia não disponibilizado", AVAILABILITY_PENALTY, CONFLICT_PENALTY, solutionPenalty)
-
+    csvString += reportRow("Conflito de horário", CONFLICT_PENALTY, 10*CONFLICT_PENALTY, solutionPenalty)
 
     file = open(outputFileName, "w")
     file.write(csvString)
