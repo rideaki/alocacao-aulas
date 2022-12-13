@@ -1,5 +1,5 @@
 import model.loader.dataLoader as dataLoader
-import model.constraints.teacherConstrainsts as teacherConstrainsts
+from model.constraints.teacherConstrainsts import *
 from model.utils.shifts import NUMBER_OF_BLOCKS_IN_SHIFT
 from typing import Final
 from model.constraints.teacherConstrainsts import calculatePenalties
@@ -34,19 +34,24 @@ def exportToGenericCsvFile(timeTables, outputFileName):
 #SPARSE_DAYS_PENALTY =            100
 #SPARSE_HOURS_PENALTY =             1
 
-    solutionPercent = 0.0
-    if solutionPenalty > teacherConstrainsts.SPARSE_DAYS_PENALTY:
-        solutionPercent = 0.0
-    else:
-        solutionPercent = round(solutionPenalty/teacherConstrainsts.SPARSE_DAYS_PENALTY, 1)
- 
-    csvString += ("Tempo Vago").ljust(REPORT_CELL_SIZE) + ", " + (str(solutionPercent) + "%").rjust(RESOLVED_CELL_SIZE) + " \n"
+    csvString += reportRow("Tempo Vago", solutionPenalty)
 
     file = open(outputFileName, "w")
     file.write(csvString)
     file.close()
 
     print("Alocação de aulas salva na planilha: " + outputFileName)
+
+def reportRow(reportText, solutionPenalty):
+    solutionPercent = 0.0
+    if solutionPenalty < SPARSE_HOURS_PENALTY:
+        solutionPercent = 100.0
+    elif solutionPenalty > SPARSE_DAYS_PENALTY:
+        solutionPercent = 0.0
+    else:
+        solutionPercent = round(solutionPenalty/SPARSE_DAYS_PENALTY, 1)
+ 
+    return (reportText).ljust(REPORT_CELL_SIZE) + ", " + (str(solutionPercent) + "%").rjust(RESOLVED_CELL_SIZE) + " \n"
 
 def blockIndexToString(index):
     blocks = dataLoader.getBlocksCopy()
