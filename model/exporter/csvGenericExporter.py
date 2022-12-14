@@ -52,7 +52,7 @@ def reportRow(reportText, minLimit, maxLimit, solutionPenalty):
     elif solutionPenalty >= maxLimit:
         solutionPercent = 0.0
     else:
-        solutionPercent = 100 - (solutionPenalty/maxLimit)
+        solutionPercent = 100 - (solutionPenalty*100/maxLimit)
     return (reportText).ljust(REPORT_CELL_SIZE) + ", " + (str(f'{solutionPercent:.5f}') + "%").rjust(RESOLVED_CELL_SIZE) + " \n"
 
 def blockIndexToString(index):
