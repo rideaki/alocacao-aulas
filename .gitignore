@@ -4,8 +4,6 @@ __pycache__/
 
 #CSV and Excel Sheet Files
 *.csv
-*.xls
-*.xlsx
 
 # C extensions
 *.so
